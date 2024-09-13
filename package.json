@@ -1,0 +1,85 @@
+{
+  "name": "spider-cloud-frontend-vue",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:pc": "pnpm run --filter @web/pc build",
+    "clean:pc": "pnpm run --filter @web/pc clean",
+    "start:pc": "pnpm run --filter @web/pc start",
+    "start:ie": "pnpm run --filter @web/ie dev",
+    "build:ie": "pnpm run --filter @web/ie build-test",
+    "preview:pc": "pnpm run --filter @web/pc preview",
+    "build:h5": "pnpm run --filter @web/h5 build",
+    "build:h5-test": "pnpm run --filter @web/h5 build-test",
+    "clean:h5": "pnpm run --filter @web/h5 clean",
+    "start:h5": "pnpm run --filter @web/h5 start",
+    "preview:h5": "pnpm run --filter @web/h5 preview",
+    "test:unit": "vitest",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write src/",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install",
+    "commit": "git add . && git-cz"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "lint-staged": "^12.5.0",
+    "unplugin-auto-import": "^0.15.3",
+    "unplugin-vue-components": "^0.24.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.26.0",
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/cz-commitlint": "^19.4.0",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^20.16.0",
+    "@unocss/reset": "^0.58.5",
+    "@unocss/transformer-directives": "^0.58.5",
+    "@unocss/transformer-variant-group": "^0.58.5",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.5.1 ",
+    "commitizen": "^4.3.0",
+    "eslint": "^9.9.0",
+    "husky": "^9.1.4",
+    "jsdom": "^24.1.1",
+    "less": "^4.2.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "unocss": "^0.58.5",
+    "unocss-applet": "^0.8.2",
+    "vite": "^5.4.1",
+    "vite-plugin-imp": "^2.4.0",
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.0",
+    "vue-tsc": "^2.0.29"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,vue}": [
+      "eslint --cache --fix"
+    ],
+    "*.json": [
+      "prettier --parser=json --write"
+    ],
+    "*.css": [
+      "prettier --parser=css --write"
+    ],
+    "*.less": [
+      "prettier --parser=less --write"
+    ]
+  }
+}

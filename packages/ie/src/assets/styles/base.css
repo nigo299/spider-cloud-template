@@ -1,0 +1,155 @@
+/* color palette from <https://github.com/vuejs/theme> */
+/* @import './fonts.less'; */
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f2f2;
+
+  --vt-c-black: #181818;
+  --vt-c-black-soft: #222222;
+  --vt-c-black-mute: #282828;
+
+  --vt-c-indigo: #2c3e50;
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-dark-1: var(--vt-c-white);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+
+  --section-gap: 160px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+* {
+  font-family: 微软雅黑,ui-sans-serif,-apple-system,BlinkMacSystemFont,Segoe UI,system-ui;
+}
+
+body,
+#app {
+  min-height: 100vh;
+  font-family: 微软雅黑, "PingFang SC", serif;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 全局改变滚动条样式 */
+/* 滚动条容器 */
+/*::-webkit-scrollbar {*/
+/*  width: 6px;*/
+/*  height: 6px;*/
+/*  background-color: #f4f5f9;*/
+/*}*/
+/*!* 滚动条 *!*/
+/*::-webkit-scrollbar-thumb {*/
+/*  background-color: rgba(0, 0, 0, 0.2);*/
+/*  border-radius: 10px;*/
+/*}*/
+/*::-webkit-scrollbar-track {*/
+/*  background-color: transparent;*/
+/*}*/
+
+
+
+
+
+/*  ======== element start ======= */
+.el-select-dropdown__list {
+  padding: 6px;
+}
+
+.el-select-dropdown__item {
+  border-radius: 4px;
+  height: 32px;
+  padding: 5px 12px;
+  line-height: 22px;
+}
+
+.el-select-dropdown__list .selected {
+  color: var(--vt-c-black-soft);
+  background-color: #9fd4c8;
+}
+
+.table-chart-h{
+  height: 620px !important;
+}
+
+.el-year-table td.today .cell,
+.el-month-table td.today .cell,
+.el-date-table td.today span {
+  color: #606266;
+  font-weight: normal;
+}
+
+.el-date-table td.today span:hover {
+  color: #00706B;
+}
+
+.el-year-table td .cell:hover, .el-year-table td.current:not(.disabled) .cell,
+.el-month-table td .cell:hover, .el-month-table td.current:not(.disabled) .cell
+{
+  font-weight: 700 !important;
+  color: #00706B;
+}
+
+.el-date-table td.current:not(.disabled) span {
+  color: white;
+}
+
+.datepicker-popup-align-right, .select-popup-align-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.datepicker-popup-align-right .popper__arrow , .select-popup-align-right .popper__arrow {
+  left: auto !important;
+  right: 35px !important;
+}
+
+.el-date-table td.end-date span, .el-date-table td.start-date span {
+  width: 26px;
+}
+
+.datepicker-popup-align-right {
+  position: absolute;
+  top: 28px;
+  left: 0px;
+  transform-origin: center top;
+  z-index: 2051;
+}
+
+
+/*  ======== element end ======= */

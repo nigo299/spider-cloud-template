@@ -1,0 +1,26 @@
+stages:
+  - deploy
+
+variables:
+  PROJECT_NAME: spider-cloud-frontend-vue
+  WEB_APP_NAME: spider-cloud-frontend-vue
+
+deploy:
+  stage: deploy
+  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  only:
+    - /release\/.+$/
+    - dev
+  script:
+    - sudo mkdir -p /deploy_folder/${PROJECT_NAME}-pc
+    - sudo mkdir -p /deploy_folder/${PROJECT_NAME}-h5
+    - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-pc
+    - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-h5
+    - pnpm install
+    - pnpm run build:pc
+    - /bin/cp -rf packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
+    - pnpm run build:h5
+    - /bin/cp -rf packages/h5/dist/** /deploy_folder/${PROJECT_NAME}-h5
+
+  tags:
+    - share-beta-fe-package-runner
