@@ -1,9 +1,9 @@
-
 import { ref } from 'vue'
 
-import { BasicTarget, getTargetElement } from '../utils/domTarget'
+import type { BasicTarget } from '../utils/domTarget'
+import { getTargetElement } from '../utils/domTarget'
 import useDeepCompareEffectWithTarget from '../utils/useDeepCompareWithTarget'
-import { isNumber, isFunction, isString } from '../utils'
+import { isFunction, isNumber, isString } from '../utils'
 
 export type UseKeyPressKeyPredicate = (event: KeyboardEvent) => boolean
 export type UseKeyPressKeyType = number | string
@@ -16,7 +16,7 @@ export type UseKeyPressKeyEvent = 'keydown' | 'keyup'
 
 export type UseKeyPressTarget = BasicTarget<HTMLElement | Document | Window>
 
-export type UseKeyPressOptions = {
+export interface UseKeyPressOptions {
   /**
    * Trigger Events
    */
@@ -35,16 +35,16 @@ export type UseKeyPressOptions = {
 
 // 键盘事件 keyCode 别名
 const aliasKeyCodeMap = {
-  '0': 48,
-  '1': 49,
-  '2': 50,
-  '3': 51,
-  '4': 52,
-  '5': 53,
-  '6': 54,
-  '7': 55,
-  '8': 56,
-  '9': 57,
+  0: 48,
+  1: 49,
+  2: 50,
+  3: 51,
+  4: 52,
+  5: 53,
+  6: 54,
+  7: 55,
+  8: 56,
+  9: 57,
   backspace: 8,
   tab: 9,
   enter: 13,
@@ -196,7 +196,6 @@ function genFilterKey(event: KeyboardEvent, keyFilter: UseKeyPressKeyType, exact
   return genLen === genArr.length
 }
 
-
 function genKeyFormatter(
   keyFilter: UseKeyPressKeyFilter,
   exactMatch: boolean,
@@ -239,14 +238,14 @@ function useKeyPress(
       }
 
       for (const eventName of events) {
-        // @ts-ignore
+        // @ts-expect-error error
         el?.addEventListener?.(eventName, callbackHandler)
       }
       return () => {
         for (const eventName of events) {
           el?.removeEventListener?.(
             eventName,
-            // @ts-ignore
+            // @ts-expect-error error
             callbackHandler,
           )
         }

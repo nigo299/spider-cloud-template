@@ -41,7 +41,13 @@ function isReload() {
 
 function backHome() {
   const res = isReload()
-  res ? window.location.reload() : router.go(-1)
+
+  if (res) {
+    window.location.reload()
+  }
+  else {
+    router.go(-1)
+  }
 }
 </script>
 

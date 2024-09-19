@@ -254,7 +254,7 @@ const handleSubmitClick = async () => {
       message.success('操作成功')
     }
   }
-  catch (error) {
+  catch {
     if (isRoleInfoIncomplete(activeKey.value))
       return message.warning('请先完善角色信息')
   }
@@ -304,7 +304,7 @@ defineExpose({
   >
     <a-spin :spinning="detailLoading">
       <div>
-        <a-tabs v-model:activeKey="activeKey">
+        <a-tabs v-model:active-key="activeKey">
           <a-tab-pane key="roleInfo" tab="角色信息" force-render>
             <div class="h-50vh overflow-y-auto py-2">
               <a-form
@@ -387,7 +387,7 @@ defineExpose({
                   </template>
                   <template v-if="column.dataIndex === 'actions'">
                     <a-row :gutter="20" class="px-2">
-                      <a-col v-for="(item, index) in record.actions" :key="index">
+                      <a-col v-for="(item, recordIndex) in record.actions" :key="recordIndex">
                         <a-checkbox
                           :checked="isViewActionSelected(record as FormatPermissionList, item)"
                           :disabled="item.name === FEATURES_PERMISSIONS_TYPE.view"

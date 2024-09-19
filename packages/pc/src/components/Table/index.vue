@@ -157,16 +157,16 @@ function fatherExpand(expanded: boolean, props: any) {
       @change="changePaginationEvent"
       @expand="fatherExpand"
     >
-      <template #expandIcon="props">
+      <template #expandIcon="Iconprops">
         <span
-          v-if="props && props.record.children && props.record.children.length"
+          v-if="Iconprops && Iconprops.record.children && Iconprops.record.children.length"
           class="float-left ml-4 cursor-pointer"
         >
           <DownOutlined
-            v-if="props.expanded"
+            v-if="Iconprops.expanded"
             @click="
               (e: MouseEvent) => {
-                props.onExpand(props.record, e)
+                Iconprops.onExpand(Iconprops.record, e)
               }
             "
           />
@@ -174,7 +174,7 @@ function fatherExpand(expanded: boolean, props: any) {
             v-else
             @click="
               (e: MouseEvent) => {
-                props.onExpand(props.record, e)
+                Iconprops.onExpand(Iconprops.record, e)
               }
             "
           />

@@ -137,7 +137,7 @@ export const isBoolean = (val: unknown): val is boolean => typeof val === 'boole
  * @description
  * - 使用 `typeof` 判断值是否为 'function' 类型。
  */
-export const isFunction = <T extends Function>(val: unknown): val is T => typeof val === 'function'
+export const isFunction = (val: unknown): val is (...args: any[]) => any => typeof val === 'function'
 
 /**
  * Checks if a value is a number.

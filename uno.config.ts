@@ -14,6 +14,7 @@ import { presetApplet, presetRemRpx, transformerAttributify } from 'unocss-apple
 // @see https://unocss.dev/presets/legacy-compat
 // import { presetLegacyCompat } from '@unocss/preset-legacy-compat'
 
+// eslint-disable-next-line node/prefer-global/process
 const isMp = process.env?.UNI_PLATFORM?.startsWith('mp') ?? false
 
 const presets: Preset[] = []

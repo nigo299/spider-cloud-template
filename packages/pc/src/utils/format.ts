@@ -7,7 +7,7 @@ dayjs.extend(utc)
  *
  * @param utcString utc字符串
  * @param format 格式化展示形式
- * @returns
+ * @returns 格式化后的时间字符串
  */
 export function formatUTC(utcString: string, format = 'YYYY-MM-DD HH:mm:ss') {
   const res = dayjs.utc(utcString).utcOffset(8).format(format)
@@ -18,7 +18,7 @@ export function formatUTC(utcString: string, format = 'YYYY-MM-DD HH:mm:ss') {
  *
  * @param timeString 时间戳字符串
  * @param format 格式化展示形式
- * @returns
+ * @returns 格式化后的时间字符串
  */
 export function formatTime(timeString: string | number, format = 'YYYY-MM-DD HH:mm:ss') {
   let res: number | string = ''
@@ -31,7 +31,7 @@ export function formatTime(timeString: string | number, format = 'YYYY-MM-DD HH:
 
 // 清空cookie
 export function clearCookie() {
-  const keys = document.cookie.match(/[^ =;]+(?=\=)/g)
+  const keys = document.cookie.match(/[^ =;]+(?==)/g)
 
   if (keys) {
     for (let i = keys.length; i--;) {

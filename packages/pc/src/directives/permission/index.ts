@@ -6,8 +6,12 @@ export default (app: App) => {
       const { value } = binding
       const list = JSON.parse(sessionStorage.getItem('spider-permissionList')!)
       const exist = value.every((item: string) => list?.includes(item))
-      if (!exist)
-        el.parentNode && el.parentNode.removeChild(el)
+
+      if (!exist) {
+        if (el.parentNode) {
+          el.parentNode.removeChild(el)
+        }
+      }
     },
   })
 }

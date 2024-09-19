@@ -27,7 +27,6 @@ function useCookieState(cookieKey: string, options: UseCookieStateOptions = {}) 
     newValue: UseCookieStateType | ((prevState: UseCookieStateType) => UseCookieStateType),
     newOptions: Cookies.CookieAttributes = {},
   ) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { defaultValue, ...restOptions } = { ...options, ...newOptions }
     const getValue = () => {
       // @ts-expect-error xxx

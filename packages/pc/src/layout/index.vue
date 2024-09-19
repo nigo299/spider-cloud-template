@@ -53,7 +53,7 @@ function useLogout() {
 }
 
 // 使用组合式函数
-const route = useRoute()
+const currentRoute = useRoute()
 const { user } = useUser()
 const { SecretKey, changeSecretKeyStore } = useSecretKeyStore()
 const { currentRouterList } = useRoutes()
@@ -66,13 +66,13 @@ const handleCollapsed = () => {
 
 // 计算选中的菜单项
 const selectedKeys = computed(() => {
-  const paths = route.path.split('/')
+  const paths = currentRoute.path.split('/')
   return [paths[paths.length - 1]]
 })
 
 // 计算面包屑数据
 const breadcrumb = computed(() =>
-  route.matched.map(item => ({
+  currentRoute.matched.map(item => ({
     breadcrumbName: item.name,
     path: item.path,
     isStop: false,
@@ -133,7 +133,7 @@ const handleOpenChange = (openKeys: (string | number)[]) => {
                 <span>{{ menuChild.name }}</span>
               </a-menu-item>
             </a-sub-menu>
-            <a-menu-item v-else-if="!item.meta?.isHide && item.component" :key="item.path">
+            <a-menu-item v-else-if="!item.meta?.isHide && item.component" :key="item.name">
               <span>{{ item.name }}</span>
             </a-menu-item>
           </template>
@@ -146,7 +146,7 @@ const handleOpenChange = (openKeys: (string | number)[]) => {
     </a-layout-sider>
     <a-layout class="layout-base">
       <a-layout-header class="layout-base-header flex items-center justify-between">
-        <a-breadcrumb :routes="breadcrumb" separator=">">
+        <a-breadcrumb :routes="breadcrumb as any" separator=">">
           <template #itemRender="{ route }">
             <span>{{ route.breadcrumbName }}</span>
           </template>

@@ -35,6 +35,7 @@ Api.interceptors.request.use((config) => {
 Api.interceptors.response.use(
   (resp) => {
     const headers = resp.headers
+
     if (
       headers['content-type'] === 'application/octet-stream;charset=UTF-8'
       || headers['content-type'] === 'application/vnd.ms-excel;charset=utf-8'
@@ -42,8 +43,9 @@ Api.interceptors.response.use(
       === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'
       || headers['content-type']
       === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-    )
+    ) {
       return resp
+    }
 
     const { code, msg } = resp.data
 
@@ -91,10 +93,11 @@ MapApi.interceptors.response.use(
 
 FileOSS.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('SPIDER-TOKEN') ?? ''
-  typeof config.headers.set === 'function'
-  && config.headers.set('Authorization', `${token.replace(/"/g, '')}`, false)
-  typeof config.headers.set === 'function'
-  && config.headers.set('Content-Type', 'multipart/form-data', false)
+
+  if (typeof config.headers.set === 'function') {
+    config.headers.set('Authorization', `${token.replace(/"/g, '')}`, false)
+    config.headers.set('Content-Type', 'multipart/form-data', false)
+  }
   return config
 })
 

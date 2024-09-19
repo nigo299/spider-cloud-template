@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-   "build:pc": "pnpm run --filter @web/pc build",
+    "build:pc": "pnpm run --filter @web/pc build",
     "clean:pc": "pnpm run --filter @web/pc clean",
     "start:pc": "pnpm run --filter @web/pc start",
     "preview:pc": "pnpm run --filter @web/pc preview",
@@ -73,17 +73,9 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,vue}": [
-      "eslint --cache --fix"
-    ],
-    "*.json": [
-      "prettier --parser=json --write"
-    ],
-    "*.css": [
-      "prettier --parser=css --write"
-    ],
-    "*.less": [
-      "prettier --parser=less --write"
-    ]
+    "*.{ts,tsx,js,vue}": ["eslint --cache --fix"],
+    "*.json": ["prettier --parser=json --write"],
+    "*.css": ["prettier --parser=css --write"],
+    "*.less": ["prettier --parser=less --write"]
   }
 }

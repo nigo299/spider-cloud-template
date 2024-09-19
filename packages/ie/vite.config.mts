@@ -43,7 +43,7 @@ export default defineConfig({
   },
   plugins: [
     {
-      presets: [['es2015', { modules: false }]],
+      presets: [['es2016', { modules: false }]],
     },
     vue(),
 
