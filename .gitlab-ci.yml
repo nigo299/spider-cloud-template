@@ -1,26 +1,57 @@
 stages:
+  - install
+  - build
   - deploy
 
 variables:
-  PROJECT_NAME: spider-cloud-frontend-vue
-  WEB_APP_NAME: spider-cloud-frontend-vue
+  PROJECT_NAME: study-map
+  GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npmrc
 
-deploy:
+.default_rules: &default_rules
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^release\/.+$/
+      when: always
+    - when: manual
+
+install_dependencies:
+  stage: install
+  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  <<: *default_rules
+  script:
+    - pnpm install
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 day
+  tags:
+    - share-fe-package-runner
+
+build_pc:
+  stage: build
+  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  <<: *default_rules
+  script:
+    - pnpm run build:pc-test
+  artifacts:
+    paths:
+      - packages/pc/dist/
+    expire_in: 1 day
+  tags:
+    - share-fe-package-runner
+  needs:
+    - install_dependencies
+
+deploy_pc:
   stage: deploy
   image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
-  only:
-    - /release\/.+$/
-    - dev
+  <<: *default_rules
   script:
+    - sudo /bin/rm -rf /deploy_folder/${PROJECT_NAME}-pc
     - sudo mkdir -p /deploy_folder/${PROJECT_NAME}-pc
-    - sudo mkdir -p /deploy_folder/${PROJECT_NAME}-h5
     - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-pc
-    - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-h5
-    - pnpm install
-    - pnpm run build:pc
-    - /bin/cp -rf packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
-    - pnpm run build:h5
-    - /bin/cp -rf packages/h5/dist/** /deploy_folder/${PROJECT_NAME}-h5
-
+    - /bin/mv  packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
   tags:
     - share-beta-fe-package-runner
+  needs:
+    - build_pc
+
