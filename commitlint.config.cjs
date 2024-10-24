@@ -1,6 +1,9 @@
 module.exports = {
   parserPreset: {
-    parserOpts: { headerPattern: /^(.*)(?:\((.*)\))?!?: (.*)$/ },
+    parserOpts: {
+      headerPattern: /^(?:(\w+)-(\d+)\s)?(\S+)(?:\(([^)]+)\))?!?: (.*)$/,
+      headerCorrespondence: ['ticket', 'id', 'type', 'scope', 'subject'],
+    },
   },
   rules: {
     'body-leading-blank': [1, 'always'],
@@ -13,28 +16,12 @@ module.exports = {
       'never',
       ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
     ],
-    'subject-empty': [2, 'never'],
+    'subject-empty': [0],
     'subject-full-stop': [2, 'never', '.'],
-    'type-case': [2, 'always', 'lower-case'],
-    'type-empty': [2, 'never'],
-    'type-enum': [
-      2,
-      'always',
-      [
-        '✨feat',
-        '🐛fix',
-        '📚docs',
-        '💎style',
-        '📦refactor',
-        '🚀perf',
-        '🚨test',
-        '🛠build',
-        '⚙️ci',
-        '🗑revert',
-      ],
-    ],
+    'type-case': [0], // 关闭 type-case 规则
+    'type-empty': [0],
+    // 移除 type-enum 规则
   },
-
   prompt: {
     questions: {
       type: {
@@ -93,8 +80,7 @@ module.exports = {
         },
       },
       scope: {
-        description:
-          '变动访问，模块或者文件名(可skip)',
+        description: '变动访问，模块或者文件名(可skip)',
       },
       subject: {
         description: '写一个简短的描述',
