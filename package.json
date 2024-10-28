@@ -24,6 +24,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:vue": "vue-tsc --noEmit",
     "format": "prettier --write src/",
     "lint-staged": "lint-staged",
     "prepare": "husky",
@@ -83,7 +84,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint",
+    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint --fix",
     "*.json": ["prettier --parser=json --write"],
     "*.css": ["prettier --parser=css --write"],
     "*.less": ["prettier --parser=less --write"]
