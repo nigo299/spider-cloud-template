@@ -2,6 +2,7 @@ import { message, notification } from 'ant-design-vue'
 import type { AxiosError } from 'axios'
 import axios from 'axios'
 
+import { loginOutUrl } from '@/common/js/config'
 import router from '@/router'
 
 const Api = axios.create({
@@ -50,9 +51,12 @@ Api.interceptors.response.use(
     const { code, msg } = resp.data
 
     if (code === 401) {
-      sessionStorage.clear()
-      message.warning(msg)
-      router.push({ name: 'login' })
+      if (import.meta.env.MODE === 'build') {
+        const url = loginOutUrl
+        sessionStorage.clear()
+        window.location.href = url
+      }
+      else { router.replace({ path: '/login' }) }
     }
     if (code !== 200)
       return Promise.reject(new Error(msg))
@@ -77,9 +81,12 @@ MapApi.interceptors.response.use(
     const { code, msg } = resp.data
 
     if (code === 401) {
-      sessionStorage.clear()
-      message.warning(msg)
-      router.push({ name: 'login' })
+      if (import.meta.env.MODE === 'build') {
+        const url = loginOutUrl
+        sessionStorage.clear()
+        window.location.href = url
+      }
+      else { router.replace({ path: '/login' }) }
     }
     if (code !== 200)
       return Promise.reject(new Error(msg))

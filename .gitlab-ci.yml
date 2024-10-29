@@ -31,7 +31,7 @@ build_pc:
   image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
   <<: *default_rules
   script:
-    - pnpm run build:pc-test
+    - pnpm run build-test:pc
   artifacts:
     paths:
       - packages/pc/dist/

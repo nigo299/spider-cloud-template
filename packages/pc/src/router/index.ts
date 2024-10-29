@@ -85,6 +85,17 @@ export const routerList: RouteRecordRaw[] = [
     ],
   },
 ]
+let loginRouter: RouteRecordRaw[] = []
+
+if (import.meta.env.MODE !== 'build') {
+  loginRouter = [
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/layout/login.vue'),
+    },
+  ]
+}
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -92,11 +103,7 @@ const router = createRouter({
       path: '/',
       redirect: '/home/index',
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/login/index.vue'),
-    },
+    ...loginRouter,
     {
       path: '/layout',
       component: () => import('@/layout/index.vue'),
