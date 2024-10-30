@@ -70,7 +70,9 @@ export default defineConfig({
     Components({
       dts: true,
       resolvers: [
-        ElementUiResolver(),
+        ElementUiResolver({
+          importStyle: false,
+        }),
       ],
     }),
 
