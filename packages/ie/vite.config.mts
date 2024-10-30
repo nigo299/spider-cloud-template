@@ -16,6 +16,7 @@ import transformerVariantGroup from '@unocss/transformer-variant-group'
 import postcssCustomProperties from 'postcss-custom-properties'
 import postcssColorFunction from 'postcss-color-function'
 import autoprefixer from 'autoprefixer'
+import { ElementUiResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -56,6 +57,7 @@ export default defineConfig({
       dts: true,
       dirs: ['./src/composables'],
       vueTemplate: true,
+      resolvers: [ElementUiResolver()],
     }),
     createSvgIconsPlugin({
       // 指定目录
@@ -67,6 +69,9 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-components
     Components({
       dts: true,
+      resolvers: [
+        ElementUiResolver(),
+      ],
     }),
 
     legacy({
