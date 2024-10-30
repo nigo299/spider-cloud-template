@@ -1,64 +1,97 @@
 # spider-cloud-frontend-vue
 
-## 推荐的 IDE 设置
+<p align='center'>
+基于 Vue 3 + TypeScript 的现代化前端开发模板
+</p>
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+<br>
 
-## 用于`.vue`导入的 TS 类型支持
+## 特性
 
-由于 TypeScript 默认无法处理`.vue`导入的类型信息，因此我们用`vue-tsc`替换了`tsc` CLI 进行类型检查。在编辑器中，我们需要[TypeScript Vue 插件（Volar）](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin)以使 TypeScript 语言服务了解`.vue`类型。
+- ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite](https://github.com/vitejs/vite), [pnpm](https://pnpm.io/) - 现代化的开发体验
 
-如果独立的 TypeScript 插件对您来说不够快，请注意 Volar 还实现了[Take Over 模式](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669)，这更具性能。您可以按照以下步骤启用它：
+- 📱 支持PC端和移动端两种模式
+
+- 🍍 [使用 Pinia 的状态管理](https://pinia.vuejs.org)
+
+- 🎨 [Less](https://lesscss.org/) - CSS 预处理器
+
+- 🔥 使用 [新的 `<script setup>` 语法](https://github.com/vuejs/rfcs/pull/227)
+
+- 📥 [Axios](https://axios-http.com/) - 请求库
+
+- 🔄 [SWRV](https://docs-swrv.netlify.app/) - 用于数据请求的 Vue Hooks 库
+
+## IDE 推荐
+
+- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+### TypeScript Vue 插件设置
 
 1. 禁用内置的 TypeScript 扩展
    1. 从 VSCode 的命令面板运行 `Extensions: Show Built-in Extensions`
    2. 找到 `TypeScript and JavaScript Language Features`，右键单击并选择 `Disable (Workspace)`
-2. 通过运行 `Developer: Reload Window` 重新加载 VSCode 窗口。
+2. 通过运行 `Developer: Reload Window` 重新加载 VSCode 窗口
 
-## 自定义配置
+## 开始使用
 
-请参阅[Vite 配置参考](https://vitejs.dev/config/)。
+### 安装依赖
 
-## 项目设置
-
-```sh
+```bash
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### 开发
 
-```sh
+PC端开发:
+
+```bash
 pnpm start:pc
 ```
 
-```sh
+移动端开发:
+
+```bash
 pnpm start:h5
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### 测试
 
-```sh
+```bash
 pnpm test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### 代码检查
 
-```sh
+```bash
 pnpm lint
 ```
 
-### code commit
+### 提交代码
 
-```sh
+```bash
 pnpm commit
 ```
 
-### 工具库
+## 技术栈
 
-- [vue3](https://cn.vuejs.org/guide/introduction.html)
-- [pinia](https://pinia.vuejs.org/)
-- [axios](https://axios-http.com/docs/intro)
-- [swrv](https://docs-swrv.netlify.app/)
-- [less](https://lesscss.org/)
-- [typescript](https://www.typescriptlang.org/)
-- [Vitest](https://vitest.dev/)
+- [Vue 3](https://cn.vuejs.org/) - 渐进式 JavaScript 框架
+- [Pinia](https://pinia.vuejs.org/) - Vue 的状态管理库
+- [Axios](https://axios-http.com/) - 基于 Promise 的 HTTP 客户端
+- [SWRV](https://docs-swrv.netlify.app/) - 用于数据请求的 Vue Hooks 库
+- [Less](https://lesscss.org/) - CSS 预处理器
+- [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集
+- [UnoCSS](https://github.com/unocss/unocss) - 原子 CSS 引擎
+- [OxLint](https://github.com/oxc-project/oxlint) - 代码检查工具
+- [Ant-design-vue](https://antdv.com/docs/vue/introduce) - 企业级 UI 组件库
+- [VueUse](https://vueuse.org/) - Vue 的实用函数库
+
+## 配置
+
+查看 [Vite 配置参考](https://vitejs.dev/config/)。
+
+## 使用须知
+
+- 确保 Node.js 版本 >= 16.18
+- 推荐使用 pnpm 作为包管理器
+- 遵循项目既定的代码规范和提交规范
