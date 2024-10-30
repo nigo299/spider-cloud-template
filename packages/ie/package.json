@@ -29,7 +29,6 @@
     "vue-router": "^3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.4",
     "@iconify-json/carbon": "^1.1.30",
     "@types/echarts": "^4.9.22",
     "@types/lodash-es": "^4.17.12",
@@ -41,7 +40,6 @@
     "@vitejs/plugin-vue2": "^2.3.1",
     "autoprefixer": "^10.4.20",
     "babel-plugin-component": "^1.1.1",
-    "eslint": "^8.57.0",
     "jsdom": "^24.0.0",
     "less": "^3.13.1",
     "less-loader": "^12.2.0",

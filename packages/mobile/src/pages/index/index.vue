@@ -7,29 +7,6 @@
   },
 }
 </route>
-<template>
-  <view
-    class="bg-white overflow-hidden pt-2 px-4"
-    :style="{ marginTop: safeAreaInsets?.top + 'px' }"
-  >
-    <view class="mt-12">
-      <image src="/static/logo.svg" alt="" class="w-28 h-28 block mx-auto" />
-    </view>
-    <view class="text-center text-4xl main-title-color mt-4">unibest</view>
-    <view class="text-center text-2xl mt-2 mb-8">最好用的 uniapp 开发模板</view>
-
-    <view class="text-justify max-w-100 m-auto text-4 indent mb-2">{{ description }}</view>
-    <view class="text-center mt-8">
-      当前平台是：
-      <text class="text-green-500">{{ PLATFORM.platform }}</text>
-    </view>
-    <view class="text-center mt-4">
-      模板分支是：
-      <text class="text-green-500">base</text>
-    </view>
-  </view>
-</template>
-
 <script lang="ts" setup>
 import PLATFORM from '@/utils/platform'
 
@@ -48,6 +25,39 @@ onLoad(() => {
   console.log(author)
 })
 </script>
+
+<template>
+  <view
+    class="bg-white overflow-hidden pt-2 px-4"
+    :style="{ marginTop: `${safeAreaInsets?.top}px` }"
+  >
+    <view class="mt-12">
+      <image src="/static/logo.svg" alt="" class="w-28 h-28 block mx-auto" />
+    </view>
+    <view class="text-center text-4xl main-title-color mt-4">
+      unibest
+    </view>
+    <view class="text-center text-2xl mt-2 mb-8">
+      最好用的 uniapp 开发模板
+    </view>
+
+    <view class="text-justify max-w-100 m-auto text-4 indent mb-2">
+      {{ description }}
+    </view>
+    <view class="text-center mt-8">
+      当前平台是：
+      <text class="text-green-500">
+        {{ PLATFORM.platform }}
+      </text>
+    </view>
+    <view class="text-center mt-4">
+      模板分支是：
+      <text class="text-green-500">
+        base
+      </text>
+    </view>
+  </view>
+</template>
 
 <style>
 .main-title-color {
