@@ -1,97 +1,118 @@
 # spider-cloud-frontend-vue
 
 <p align='center'>
-Modern frontend development template based on Vue 3 + TypeScript
+基于 Vue 3 + TypeScript 的现代化前端开发模板
 </p>
 
 <br>
 
-## Features
+## 特性
 
-- ⚡️ [Vue 3](https://github.com/vuejs/core), [Vite](https://github.com/vitejs/vite), [pnpm](https://pnpm.io/) - Modern development experience
+- 🚀 基于 Monorepo 的项目结构,统一管理多端项目
 
-- 📱 Support for both PC and mobile modes
+- 📱 支持 PC、H5、小程序等多端开发
 
-- 🍍 [State management with Pinia](https://pinia.vuejs.org)
+- 🔄 支持 IE11 兼容版本构建
 
-- 🎨 [Less](https://lesscss.org/) - CSS preprocessor
+- 📦 组件库按需加载
 
-- 🔥 [New `<script setup>` syntax](https://github.com/vuejs/rfcs/pull/227)
+- 🎨 支持主题定制
 
-- 📥 [Axios](https://axios-http.com/) - HTTP client
+- 🔧 完善的开发工具链和规范
 
-- 🔄 [SWRV](https://docs-swrv.netlify.app/) - Vue Hooks library for data fetching
+## 项目结构
 
-## IDE Recommendation
+```bash
+packages
+├── pc/ # PC端项目
+├── h5/ # H5项目
+├── mobile/ # 移动端项目(uni-app)
+├── ie/ # IE兼容版本
+├── common/ # 公共代码
+└── components/ # 公共组件
+```
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## 开始使用
 
-### TypeScript Vue Plugin Setup
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window`
-
-## Getting Started
-
-### Install Dependencies
+### 安装依赖
 
 ```bash
 pnpm install
 ```
 
-### Development
+### 开发
 
-For PC development:
-
-```bash
-pnpm start:pc
-```
-
-For mobile development:
+PC端:
 
 ```bash
-pnpm start:h5
+开发： pnpm start:pc
+生产构建： pnpm build:pc
 ```
 
-### Testing
+移动端:
 
 ```bash
-pnpm test:unit
+开发：  pnpm start:h5
+生产构建： pnpm build:h5
 ```
 
-### Linting
+IE:
 
 ```bash
-pnpm lint
+开发： pnpm start:ie
+生产构建： pnpm build:ie
 ```
 
-### Commit Code
+小程序开发:
+
+```bash
+开发： pnpm start:mobile-mp
+生产构建： pnpm build:mobile-mp
+```
+
+### 提交代码
 
 ```bash
 pnpm commit
 ```
+## 开发规范
+### Git 提交规范
+本项目使用 commitlint 规范 git 提交信息:
+✨feat: 新功能
+🐛fix: 修复bug
+📚docs: 文档更新
+💎style: 代码格式调整
+📦refactor: 重构代码
+🚀perf: 性能优化
+🚨test: 测试相关
+🛠build: 构建相关
+⚙️ci: CI配置相关
+🗑revert: 回退提交
+### 代码规范
+使用 ESLint 进行代码检查
+使用 Prettier 进行代码格式化
+使用 StyleLint 进行样式代码检查
 
-## Tech Stack
+## 技术栈
 
-- [Vue 3](https://vuejs.org/) - Progressive JavaScript Framework
-- [Pinia](https://pinia.vuejs.org/) - State management for Vue
-- [Axios](https://axios-http.com/) - Promise based HTTP client
-- [SWRV](https://docs-swrv.netlify.app/) - Vue Hooks library for data fetching
-- [Less](https://lesscss.org/) - CSS preprocessor
-- [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
-- [UnoCSS](https://github.com/unocss/unocss) - Atomic CSS engine
-- [OxLint](https://github.com/oxc-project/oxlint) - Code linting tool
-- [Ant-design-vue](https://antdv.com/docs/vue/introduce) - Enterprise-class UI components
-- [VueUse](https://vueuse.org/) - Collection of Vue Composition Utilities
+- [Vue 3](https://cn.vuejs.org/) - 渐进式 JavaScript 框架
+- [Pinia](https://pinia.vuejs.org/) - Vue 的状态管理库
+- [Axios](https://axios-http.com/) - 基于 Promise 的 HTTP 客户端
+- [SWRV](https://docs-swrv.netlify.app/) - 用于数据请求的 Vue Hooks 库
+- [Less](https://lesscss.org/) - CSS 预处理器
+- [TypeScript](https://www.typescriptlang.org/) - JavaScript 的超集
+- [UnoCSS](https://github.com/unocss/unocss) - 原子 CSS 引擎
+- [OxLint](https://github.com/oxc-project/oxlint) - 代码检查工具
+- [Ant-design-vue](https://antdv.com/docs/vue/introduce) - 企业级 UI 组件库
+- [VueUse](https://vueuse.org/) - Vue 的实用函数库
 
-## Configuration
+## 配置
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+查看 [Vite 配置参考](https://vitejs.dev/config/)。
 
-## Usage Notes
+## 环境要求
 
-- Ensure Node.js version >= 16.18
-- Recommended to use pnpm as package manager
-- Follow the project's established code and commit conventions
+- Node.js >= 16.18
+- pnpm >= 7.x
+- Vue >= 3.4
+- TypeScript >= 5.0
