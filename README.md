@@ -109,6 +109,7 @@ pnpm commit
 ## 配置
 
 查看 [Vite 配置参考](https://vitejs.dev/config/)。
+查看 [UnoCSS 入门参考](https://juejin.cn/post/7388672594483249203?searchId=202411011439031A6A7E993F636D0B7371)。
 
 ## 环境要求
 
