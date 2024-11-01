@@ -47,6 +47,7 @@ PC端:
 ```bash
 开发： pnpm start:pc
 生产构建： pnpm build:pc
+测试构建： pnpm build-test:pc
 ```
 
 移动端:
@@ -54,6 +55,7 @@ PC端:
 ```bash
 开发：  pnpm start:h5
 生产构建： pnpm build:h5
+测试构建： pnpm build-test:h5
 ```
 
 IE:
