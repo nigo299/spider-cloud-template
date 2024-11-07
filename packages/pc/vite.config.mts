@@ -1,7 +1,6 @@
-import type { UserConfigFn } from 'vite'
-
 import path from 'node:path'
-import { fileURLToPath, URL } from 'node:url'
+import { URL, fileURLToPath } from 'node:url'
+import type { UserConfigFn } from 'vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
@@ -41,8 +40,8 @@ const defineCustomConfig: UserConfigFn = env => ({
       customDomId: '__svg__icons__dom__',
     }),
     Components({
-      dts: true,
       dirs: ['src/components'],
+      dts: 'src/components.d.ts', // 自定义 dts 文件导出路径
       resolvers: [
         AntDesignVueResolver({
           importStyle: false,
