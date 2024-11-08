@@ -2,6 +2,8 @@
 import 'dayjs/locale/zh-cn'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import { RouterView } from 'vue-router'
+
+import { layoutConfig } from './config/layout'
 </script>
 
 <template>
@@ -19,6 +21,11 @@ import { RouterView } from 'vue-router'
         wireframe: true,
       } }"
   >
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <keep-alive v-if="layoutConfig.tabConfig.keepAlive">
+        <component :is="Component" />
+      </keep-alive>
+      <component :is="Component" v-else />
+    </RouterView>
   </a-config-provider>
 </template>
