@@ -49,3 +49,10 @@ else {
 // Antd 注入全部图标
 app.config.globalProperties.$icons = Icons
 for (const key in Icons) app.component(key, Icons[key as keyof typeof Icons])
+// 监听应用加载完成
+const appLoading = document.getElementById('__app-loading__')
+
+if (appLoading) {
+  // 添加 hidden class 来隐藏 loading
+  appLoading.classList.add('hidden')
+}

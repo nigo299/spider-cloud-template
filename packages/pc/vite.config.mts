@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig, mergeConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { defaultViteConfig } from '../../scripts/vite'
+import { viteInjectAppLoadingPlugin } from './src/plugins/inject-app-loading'
 
 const defineCustomConfig: UserConfigFn = env => ({
   define: {
@@ -27,6 +28,7 @@ const defineCustomConfig: UserConfigFn = env => ({
     },
   },
   plugins: [
+    viteInjectAppLoadingPlugin(env),
     AutoImport({
       imports: ['vue', 'vue-router'],
       dts: true,
