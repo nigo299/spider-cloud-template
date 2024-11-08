@@ -1,6 +1,6 @@
 export const layoutConfig = {
   // 是否启用多页签模式
-  enableTabs: false,
+  enableTabs: true,
 
   // 多页签配置
   tabConfig: {
