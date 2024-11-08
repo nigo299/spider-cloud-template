@@ -92,7 +92,7 @@ if (import.meta.env.MODE !== 'build') {
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/layout/login.vue'),
+      component: () => import('@/views/login/index.vue'),
     },
   ]
 }

@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { defineConfig, mergeConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { defaultViteConfig } from '../../scripts/vite'
+import { viteInjectAppLoadingPlugin } from './src/plugins/inject-app-loading'
 
 const defineCustomConfig: UserConfigFn = env => ({
   define: {
@@ -27,13 +28,32 @@ const defineCustomConfig: UserConfigFn = env => ({
     },
   },
   plugins: [
+    viteInjectAppLoadingPlugin(env),
     AutoImport({
-      imports: ['vue', 'vue-router'],
-      dts: true,
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      eslintrc: {
+        enabled: false,
+        filepath: './auto-import/.eslintrc-auto-import.json',
+        globalsPropValue: true,
+      },
+      imports: [
+        'vue',
+        'vue-router',
+        // {
+        //   vuex: ['useStore'],
+        // },
+      ],
       resolvers: [AntDesignVueResolver()],
+      dts: './src/auto-import/auto-import.d.ts',
     }),
     createSvgIconsPlugin({
       // 指定目录
+      // eslint-disable-next-line node/prefer-global/process
       iconDirs: [path.resolve(process.cwd(), 'src/icons')],
       // 使用svg图标的格式
       symbolId: 'icon-[dir]-[name]',
@@ -41,13 +61,16 @@ const defineCustomConfig: UserConfigFn = env => ({
     }),
     Components({
       dirs: ['src/components'],
-      dts: 'src/components.d.ts', // 自定义 dts 文件导出路径
+      // 搜索子目录
+      deep: true,
+      extensions: ['vue', 'js', 'jsx', 'ts', 'tsx'],
+      include: [/\.vue$/, /\.vue\?vue/, /\.js$/, /\.jsx$/, /\.ts$/, /\.tsx$/],
       resolvers: [
         AntDesignVueResolver({
           importStyle: false,
         }),
       ],
-      extensions: ['vue'],
+      dts: './src/auto-import/components.d.ts',
     }),
   ],
   build: {
