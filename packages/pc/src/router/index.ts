@@ -1,5 +1,7 @@
 import { type RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 
+import { useTabStore } from '@/stores/tabs'
+
 export const routerList: RouteRecordRaw[] = [
   // 仪表盘
   {
@@ -148,6 +150,18 @@ const router = createRouter({
       component: () => import('@/views/commonError/404.vue'),
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  // 其他逻辑...
+
+  const tabStore = useTabStore()
+
+  if (to.name && !to.meta.isHide) {
+    tabStore.addTab(to as unknown as RouteRecordRaw)
+  }
+
+  next()
 })
 
 export default router
