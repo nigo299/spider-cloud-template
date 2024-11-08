@@ -35,6 +35,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Search: typeof import('./../components/Search/index.vue')['default']
     SecretKey: typeof import('./../components/secretKey.vue')['default']
+    SEllipsis: typeof import('./../components/S-Ellipsis/index.tsx')['default']
     SvgIcon: typeof import('./../components/SvgIcon/SvgIcon.vue')['default']
     Table: typeof import('./../components/Table/index.vue')['default']
     TableDefaultConfig: typeof import('./../components/Table/tableDefaultConfig.ts')['default']

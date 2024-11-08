@@ -24,7 +24,7 @@ const FileOSS = axios.create({
 })
 
 Api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('SPIDER-TOKEN') ?? ''
+  const token = sessionStorage.getItem(import.meta.env.VITE_TOKEN) ?? ''
   Object.assign(config.headers, {
     'Authorization': `${token.replace(/"/g, '')}`,
     'Content-Type':
@@ -69,7 +69,7 @@ Api.interceptors.response.use(
 )
 
 MapApi.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('SPIDER-TOKEN') ?? ''
+  const token = sessionStorage.getItem(import.meta.env.VITE_TOKEN) ?? ''
   Object.assign(config.headers, {
     'Authorization': `${token.replace(/"/g, '')}`,
     'Content-Type': 'application/json;charset=utf-8',
@@ -99,7 +99,7 @@ MapApi.interceptors.response.use(
 )
 
 FileOSS.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('SPIDER-TOKEN') ?? ''
+  const token = sessionStorage.getItem(import.meta.env.VITE_TOKEN) ?? ''
 
   if (typeof config.headers.set === 'function') {
     config.headers.set('Authorization', `${token.replace(/"/g, '')}`, false)

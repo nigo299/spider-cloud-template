@@ -30,7 +30,7 @@ async function loginIn() {
   const [data, err] = await to(login(formState))
 
   if (!err) {
-    sessionStorage.setItem('SPIDER-TOKEN', data.token)
+    sessionStorage.setItem(import.meta.env.VITE_TOKEN, data.token)
     submitToggle(false)
     router.replace('/')
   }

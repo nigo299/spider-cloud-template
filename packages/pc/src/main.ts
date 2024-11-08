@@ -35,7 +35,7 @@ async function init() {
 if (import.meta.env.MODE === 'build') {
   getToken()
     .then(async (res) => {
-      sessionStorage.setItem('SPIDER-TOKEN', res.token)
+      sessionStorage.setItem(import.meta.env.VITE_TOKEN, res.token)
       init()
     })
     .catch(() => {
