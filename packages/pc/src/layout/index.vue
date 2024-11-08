@@ -6,9 +6,11 @@ import { computed, ref } from 'vue'
 import { type RouteRecordRaw, useRoute } from 'vue-router'
 
 import { logOut } from '@/api/login'
+import { layoutConfig } from '@/config/layout'
 import useUser from '@/hooks/useUser'
 import router, { routerList } from '@/router'
 import { useSecretKeyStore } from '@/stores/secretKey'
+import { useTabStore } from '@/stores/tabs'
 import { clearCookie } from '@/utils/format'
 import './index.less'
 
@@ -58,6 +60,7 @@ const { user } = useUser()
 const { SecretKey, changeSecretKeyStore } = useSecretKeyStore()
 const { currentRouterList } = useRoutes()
 const { handleLogOut } = useLogout()
+const tabStore = useTabStore()
 
 // 处理折叠按钮点击事件
 const handleCollapsed = () => {
@@ -98,6 +101,19 @@ const handleOpenChange = (openKeys: (string | number)[]) => {
   else {
     openKeysArr.value = latestOpenKey ? [latestOpenKey.toString()] : []
   }
+}
+
+// 处理页签编辑(关闭)
+const onEdit = (targetKey: string | MouseEvent, action: 'add' | 'remove') => {
+  if (action === 'remove' && typeof targetKey === 'string') {
+    tabStore.closeTab(targetKey)
+    router.push(tabStore.activeTab)
+  }
+}
+
+// 处理页签点击
+const handleTabClick = (key: string) => {
+  router.push(key)
 }
 </script>
 
@@ -163,8 +179,30 @@ const handleOpenChange = (openKeys: (string | number)[]) => {
         </a-popover>
       </a-layout-header>
       <a-layout-content class="layout-base-container">
+        <!-- 根据配置显示页签 -->
+        <div v-if="layoutConfig.enableTabs" class="tabs-wrapper bg-white px-2 py-1">
+          <a-tabs
+            v-model:active-key="tabStore.activeTab"
+            hide-add
+            type="editable-card"
+            @edit="onEdit as any"
+            @tab-click="handleTabClick as any"
+          >
+            <a-tab-pane
+              v-for="tab in tabStore.tabs"
+              :key="tab.path"
+              :tab="tab.title"
+              :closable="tab.closable"
+            />
+          </a-tabs>
+        </div>
+
+        <!-- 路由视图 -->
         <router-view v-slot="{ Component }">
-          <component :is="Component" />
+          <keep-alive v-if="layoutConfig.tabConfig.keepAlive">
+            <component :is="Component" />
+          </keep-alive>
+          <component :is="Component" v-else />
         </router-view>
       </a-layout-content>
       <a-layout-footer>

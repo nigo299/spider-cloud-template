@@ -84,6 +84,7 @@ const defineCustomConfig: UserConfigFn = env => ({
         },
       },
     },
+    minify: 'terser',
   },
 })
 
