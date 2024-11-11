@@ -4,12 +4,12 @@ stages:
   - deploy
 
 variables:
-  PROJECT_NAME: study-map
+  PROJECT_NAME: spider-cloud-frontend-vue
   GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npmrc
 
 .default_rules: &default_rules
   rules:
-    - if: $CI_COMMIT_BRANCH =~ /^release\/.+$/
+    - if: $CI_COMMIT_BRANCH = main
       when: always
     - when: manual
 
@@ -18,7 +18,8 @@ install_dependencies:
   image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
   <<: *default_rules
   script:
-    - pnpm install
+    - sudo pnpm config set store-dir /share_pnpm_store
+    - sudo pnpm install
   artifacts:
     paths:
       - node_modules/
@@ -51,7 +52,7 @@ deploy_pc:
     - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-pc
     - /bin/mv  packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
   tags:
-    - share-beta-fe-package-runner
+    - share-fe-package-runner
   needs:
     - build_pc
 
