@@ -7,7 +7,7 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import Components from 'unplugin-vue-components/vite'
 
 import { VantResolver } from 'unplugin-vue-components/resolvers'
-import pxtovw from 'postcss-px-to-viewport'
+import pxtovw from 'postcss-px-to-viewport-8-plugin'
 import legacy from '@vitejs/plugin-legacy'
 import { defaultViteConfig } from '../../scripts/vite'
 
