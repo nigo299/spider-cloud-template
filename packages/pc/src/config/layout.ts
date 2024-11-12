@@ -1,7 +1,6 @@
 export const layoutConfig = {
   // 是否启用多页签模式
-  enableTabs: true,
-
+  enableTabs: false,
   // 多页签配置
   tabConfig: {
     // 是否缓存组件

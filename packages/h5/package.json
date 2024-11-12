@@ -23,7 +23,7 @@
     "lodash": "^4.17.21",
     "neverthrow": "^5.1.0",
     "pinia": "^2.2.2",
-    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-px-to-viewport-8-plugin": "^1.2.5",
     "qs": "^6.13.0",
     "swrv": "^1.0.4",
     "terser": "^5.31.6",
