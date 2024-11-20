@@ -10,6 +10,7 @@ import { login } from '@/api/login'
 import CopyRight from '@/components/CopyRight/index.vue'
 import type { LoginParam } from '@/interface/login'
 
+const appTitle = import.meta.env.VITE_APP_TITLE
 const formState = reactive<LoginParam>({
   account: '',
   password: '',
@@ -18,7 +19,8 @@ const formState = reactive<LoginParam>({
 const [submit, submitToggle] = useToggle(false)
 
 function onFinish() {
-  if (submit.value) return
+  if (submit.value)
+    return
   loginIn()
 }
 
@@ -32,7 +34,8 @@ async function loginIn() {
     sessionStorage.setItem(import.meta.env.VITE_TOKEN, data.token)
     submitToggle(false)
     router.replace('/')
-  } else {
+  }
+  else {
     message.error(err.message)
     submitToggle(false)
   }
@@ -46,7 +49,9 @@ async function loginIn() {
       <span class="text-24px text-light-100"> 丰富的的页面模板，覆盖大多数典型业务场景 </span>
     </a-col>
     <a-col :span="12" class="bg-[#ffffff] flex flex-col w-full justify-center items-center">
-      <h2 class="font-bold mb-30px text-3xl text-gray-800">欢迎登录 Spider Design</h2>
+      <h2 class="font-bold mb-30px text-3xl text-gray-800">
+        欢迎登录 {{ appTitle }}
+      </h2>
       <div class="flex flex-col w-full justify-center items-center">
         <a-form class="w-1/2" :model="formState" name="basic" autocomplete="off" @finish="onFinish">
           <a-form-item name="account" :rules="[{ required: true, message: '请输入账号' }]">

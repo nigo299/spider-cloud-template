@@ -115,6 +115,7 @@ const onEdit = (targetKey: string | MouseEvent, action: 'add' | 'remove') => {
 const handleTabClick = (key: string) => {
   router.push(key)
 }
+const appTitle = import.meta.env.VITE_APP_TITLE
 </script>
 
 <template>
@@ -125,7 +126,7 @@ const handleTabClick = (key: string) => {
     >
       <div class="sidebar-title">
         <GithubOutlined class="text-[#333333]" />
-        <span v-if="!SecretKey.isCollapsed">Spider Design</span>
+        <span v-if="!SecretKey.isCollapsed">{{ appTitle }}</span>
       </div>
       <div class="sidebar-content">
         <a-menu
