@@ -109,7 +109,7 @@ const router = createRouter({
     {
       path: '/layout',
       component: () => import('@/layout/index.vue'),
-      name: 'Spider Design',
+      name: import.meta.env.VITE_APP_TITLE,
       meta: {
         isNative: true,
       },
