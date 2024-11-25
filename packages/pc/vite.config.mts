@@ -6,6 +6,7 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, mergeConfig } from 'vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import VueDevtools from 'vite-plugin-vue-devtools'
 import { defaultViteConfig } from '../../scripts/vite'
 import { viteInjectAppLoadingPlugin } from './src/plugins/inject-app-loading'
 
@@ -29,6 +30,7 @@ const defineCustomConfig: UserConfigFn = env => ({
   },
   plugins: [
     viteInjectAppLoadingPlugin(env),
+    VueDevtools(),
     AutoImport({
       include: [
         /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
