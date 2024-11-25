@@ -34,6 +34,7 @@ importers:
       npm-run-all: ^4.1.5
       oxlint: ^0.10.3
       prettier: ^3.3.3
+      taze: ^0.18.0
       typescript: ^5.6.3
       unocss: ^0.64.0
       unocss-applet: ^0.8.5
@@ -74,6 +75,7 @@ importers:
       npm-run-all: 4.1.5
       oxlint: 0.10.3
       prettier: 3.3.3
+      taze: 0.18.0
       typescript: 5.6.3
       unocss: 0.64.0_g72zkfuxafxdm26ar4nxacmnre
       unocss-applet: 0.8.5_n4g6v326p2w6qxtdhgq74cxz7m
@@ -566,6 +568,11 @@ packages:
     dependencies:
       package-manager-detector: 0.2.2
       tinyexec: 0.3.1
+    dev: true
+
+  /@antfu/ni/0.23.1:
+    resolution: {integrity: sha512-VFAvMTJhjP6L7CuBKT5FioDCSpdmZxJ4POKTJOrFNicI2CK6mlaRwVEBGWLGm2V6BtQgdbBn9X68piHSbw5wQQ==}
+    hasBin: true
     dev: true
 
   /@antfu/utils/0.7.10:
@@ -6115,7 +6122,7 @@ packages:
     dependencies:
       '@vue/compiler-ssr': 3.5.12
       '@vue/shared': 3.5.12
-      vue: 3.5.12
+      vue: 3.5.12_typescript@5.6.3
 
   /@vue/shared/3.4.21:
     resolution: {integrity: sha512-PuJe7vDIi6VYSinuEbUIQgMIRZGgM8e4R+G+/dQTk0X1NEdvgvvgv7m+rfmDH1gZzyA1OjjoWskvHlfRNfQf3g==}
@@ -7974,6 +7981,7 @@ packages:
     resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
     engines: {node: '>=0.10'}
     hasBin: true
+    dev: true
 
   /detect-newline/3.1.0:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
@@ -10300,6 +10308,19 @@ packages:
       - supports-color
     dev: true
 
+  /importx/0.5.0:
+    resolution: {integrity: sha512-qROz3rSOjQYclmEQAajH9RhBuqpAGHM+5CNd9fk+TsF4JKmQsAI1egafW8XZZv8vARCo4nAmmt5d0eI2B8GUsA==}
+    dependencies:
+      bundle-require: 5.0.0_esbuild@0.23.1
+      debug: 4.3.7
+      esbuild: 0.23.1
+      jiti: 2.4.0
+      pathe: 1.1.2
+      tsx: 4.19.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /imurmurhash/0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
@@ -11305,6 +11326,11 @@ packages:
     hasBin: true
     dev: true
 
+  /jiti/2.4.0:
+    resolution: {integrity: sha512-H5UpaUI+aHOqZXlYOaFP/8AzKsg+guWu+Pr3Y8i7+Y3zr1aXAvCvTAQ1RxSc6oVD8R8c7brgNtTVP91E7upH/g==}
+    hasBin: true
+    dev: true
+
   /jpeg-js/0.3.7:
     resolution: {integrity: sha512-9IXdWudL61npZjvLuVe/ktHiA41iE8qFyLB+4VDTblEsWBzeg8WQTlktdUK4CdncUqtUgUg0bbOmTE2bKBKaBQ==}
     dev: false
@@ -11586,6 +11612,7 @@ packages:
       mime: 1.6.0
       native-request: 1.1.2
       source-map: 0.6.1
+    dev: true
 
   /less/4.2.0:
     resolution: {integrity: sha512-P3b3HJDBtSzsXUl0im2L7gTO5Ubg8mEN6G8qoTS77iXxXX4Hvu4Qj540PZDvQ8V6DmX6iXo98k7Md0Cm1PrLaA==}
@@ -11626,6 +11653,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-darwin-x64/1.28.1:
@@ -11634,6 +11662,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-freebsd-x64/1.28.1:
@@ -11642,6 +11671,7 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-linux-arm-gnueabihf/1.28.1:
@@ -11650,6 +11680,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-linux-arm64-gnu/1.28.1:
@@ -11659,6 +11690,7 @@ packages:
     os: [linux]
     libc: [glibc]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-linux-arm64-musl/1.28.1:
@@ -11668,6 +11700,7 @@ packages:
     os: [linux]
     libc: [musl]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-linux-x64-gnu/1.28.1:
@@ -11677,6 +11710,7 @@ packages:
     os: [linux]
     libc: [glibc]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-linux-x64-musl/1.28.1:
@@ -11686,6 +11720,7 @@ packages:
     os: [linux]
     libc: [musl]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-win32-arm64-msvc/1.28.1:
@@ -11694,6 +11729,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss-win32-x64-msvc/1.28.1:
@@ -11702,6 +11738,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /lightningcss/1.28.1:
@@ -11720,6 +11757,7 @@ packages:
       lightningcss-linux-x64-musl: 1.28.1
       lightningcss-win32-arm64-msvc: 1.28.1
       lightningcss-win32-x64-msvc: 1.28.1
+    dev: true
 
   /lilconfig/2.0.5:
     resolution: {integrity: sha512-xaYmXZtTHPAw5m+xLN8ab9C+3a8YmV3asNSPOATITbtwrfbwaLJj8h66H1WMIpALCkqsIzK3h7oQ+PdX+LQ9Eg==}
@@ -12340,6 +12378,7 @@ packages:
   /native-request/1.1.2:
     resolution: {integrity: sha512-/etjwrK0J4Ebbcnt35VMWnfiUX/B04uwGJxyJInagxDqf2z5drSt/lsOvEMWGYunz1kaLZAFrV4NDAbOoDKvAQ==}
     requiresBuild: true
+    dev: true
     optional: true
 
   /natural-compare-lite/1.4.0:
@@ -14762,6 +14801,21 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /taze/0.18.0:
+    resolution: {integrity: sha512-aL8g+4tZvfhsn147u9dRP2eUE2MV+HfJe1sAtSJp46b0Gd8AjyqlJ2uDwnJfM1XNv301Mvh98RkXQw27sco5tQ==}
+    hasBin: true
+    dependencies:
+      '@antfu/ni': 0.23.1
+      js-yaml: 4.1.0
+      ofetch: 1.4.1
+      package-manager-detector: 0.2.2
+      tinyexec: 0.3.1
+      unconfig: 0.6.0
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /temp/0.9.4:
     resolution: {integrity: sha512-yYrrsWnrXMcdsnu/7YMYAofM1ktpL5By7vZhf15CrXijWWrEYZks5AXBudalfSWJLlnen/QUJUB5aoB0kqZUGA==}
     engines: {node: '>=6.0.0'}
@@ -14987,6 +15041,7 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
 
   /tslib/2.3.0:
     resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
@@ -15143,6 +15198,16 @@ packages:
       '@antfu/utils': 0.7.10
       defu: 6.1.4
       importx: 0.4.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /unconfig/0.6.0:
+    resolution: {integrity: sha512-4C67J0nIF2QwSXty2kW3zZx1pMZ3iXabylvJWWgHybWVUcMf9pxwsngoQt0gC+AVstRywFqrRBp3qOXJayhpOw==}
+    dependencies:
+      '@antfu/utils': 0.7.10
+      defu: 6.1.4
+      importx: 0.5.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -15733,7 +15798,7 @@ packages:
       pathe: 0.2.0
       svg-baker: 1.7.0
       svgo: 2.8.0
-      vite: 5.4.11_ca6ovytzlds6aq6uc7hd4ls7ki
+      vite: 5.4.11_od5ocwqknzoaakyvgz4aiisjwu
     transitivePeerDependencies:
       - supports-color
 
@@ -15906,6 +15971,7 @@ packages:
       terser: 5.36.0
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
 
   /vite/5.4.11_less@4.2.0:
     resolution: {integrity: sha512-c7jFQRklXua0mTzneGW9QVyxFjUgwcihC4bXEtujIo2ouWCe1Ajt/amn2PCxYnhYfd5k09JX3SB7OYWFKYqj8Q==}
@@ -15984,7 +16050,6 @@ packages:
       rollup: 4.26.0
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitest/1.6.0_wpcttcul3kodpxtfiqnvkqdxpa:
     resolution: {integrity: sha512-H5r/dN06swuFnzNFhq/dnz37bPXnq8xB2xB5JOVk8K09rUtoeNN+LHWkoQ0A/i3hvbUKKcCei9KpbxqHMLhLLA==}

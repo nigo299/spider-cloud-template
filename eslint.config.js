@@ -10,8 +10,9 @@ export default antfu(
     files: ['packages/**/src/**/*.vue', 'packages/**/src/**/*.ts'],
     rules: {
       'vue/operator-linebreak': ['error', 'before'],
+      'jsonc/no-comments': 'off', // 允许 JSON 文件中的注释
       'vue/v-on-event-hyphenation': 0,
-      '"vue/attribute-hyphenation"': 0,
+      'vue/attribute-hyphenation"': 0,
       'vue/custom-event-name-casing': 0,
       'antfu/top-level-function': 0,
       'vue/padding-line-between-blocks': 0,
