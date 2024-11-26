@@ -8,6 +8,7 @@ import { type RouteRecordRaw, useRoute } from 'vue-router'
 import { logOut } from '@/api/login'
 import { layoutConfig } from '@/config/layout'
 import useUser from '@/hooks/useUser'
+import MenuItems from '@/layout/menuItems.vue'
 import router, { routerList } from '@/router'
 import { useSecretKeyStore } from '@/stores/secretKey'
 import { useTabStore } from '@/stores/tabs'
@@ -121,7 +122,9 @@ const appTitle = import.meta.env.VITE_APP_TITLE
 <template>
   <a-layout class="text-dark-900 min-h-100vh">
     <a-layout-sider
-      v-model:collapsed="SecretKey.isCollapsed" :width="200" :collapsed-width="60"
+      v-model:collapsed="SecretKey.isCollapsed"
+      :width="200"
+      :collapsed-width="60"
       class="rounded-none main-sidebar"
     >
       <div class="sidebar-title">
@@ -138,22 +141,7 @@ const appTitle = import.meta.env.VITE_APP_TITLE
           @click="handleClickMenuItem"
           @openChange="handleOpenChange"
         >
-          <template v-for="item in currentRouterList" :key="item.path">
-            <a-sub-menu v-if="item.children && !item.meta?.isHide" :key="item.path">
-              <template #icon>
-                <component :is="item.meta?.icon" />
-              </template>
-              <template #title>
-                {{ item.name }}
-              </template>
-              <a-menu-item v-for="menuChild in item.children" :key="menuChild.path">
-                <span>{{ menuChild.name }}</span>
-              </a-menu-item>
-            </a-sub-menu>
-            <a-menu-item v-else-if="!item.meta?.isHide && item.component" :key="item.name">
-              <span>{{ item.name }}</span>
-            </a-menu-item>
-          </template>
+          <MenuItems :menu-list="currentRouterList" />
         </a-menu>
         <div class="collapse-button" @click="handleCollapsed">
           <MenuFoldOutlined v-if="!SecretKey.isCollapsed" :style="{ color: '#000000' }" />
