@@ -84,8 +84,27 @@ const breadcrumb = computed(() =>
 )
 
 // 管理菜单展开项
-const openKeysArr = ref([routerList[0].path])
+const openKeysArr = ref<string[]>([])
 const rootSubmenuKeys = ref(routerList.map(item => item.path))
+
+// 根据当前路由计算需要展开的菜单
+const initOpenKeys = () => {
+  const paths = currentRoute.path.split('/')
+  const parentPath = `/${paths[1]}`
+  openKeysArr.value = [parentPath]
+}
+// 在组件挂载时初始化展开的菜单
+onMounted(() => {
+  initOpenKeys()
+})
+
+// 监听路由变化，动态更新展开的菜单
+watch(
+  () => currentRoute.path,
+  () => {
+    initOpenKeys()
+  },
+)
 
 // 处理菜单点击事件
 const handleClickMenuItem: MenuClickEventHandler = (obj) => {
