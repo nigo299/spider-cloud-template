@@ -1,68 +1,41 @@
 import { defineConfig } from 'taze'
 
 export default defineConfig({
-  // 按包名配置不同更新策略
   packageMode: {
-    // IE 项目相关依赖保守更新
-    '@web/ie': {
-      // 锁定核心依赖版本
-      'vue': 'none',
-      'vite': 'none',
-      '@vitejs/plugin-legacy': 'none',
-      '@vitejs/plugin-vue2': 'none',
-      'element-ui': 'none',
-      'echarts': 'none',
+    // 常用工具库补丁更新
+    'axios': 'patch',
+    'lodash-es': 'patch',
+    'dayjs': 'patch',
 
-      // 运行时依赖仅允许补丁更新
-      'axios': 'patch',
-      'lodash-es': 'patch',
-      'dayjs': 'patch',
-      'pinia': 'patch',
+    // 类型定义更新
+    '@types/*': 'minor',
 
-      // 开发依赖允许小版本更新
-      '@types/*': 'minor',
-      'less': 'minor',
-      'typescript': 'minor',
-    },
+    // UI 框架允许小版本更新
+    'ant-design-vue': 'minor',
+    'vant': 'minor',
 
-    // PC 项目允许更激进的更新
-    '@web/pc': {
-      'ant-design-vue': 'minor',
-      'vue': 'minor',
-      'vite': 'minor',
-      '*': 'latest',
-    },
-
-    // H5 项目
-    '@web/h5': {
-      'vant': 'minor',
-      '*': 'latest',
-    },
-
-    // 移动端项目
-    '@web/mobile': {
-      'uni-*': 'minor',
-      '*': 'latest',
-    },
+    // 其他依赖
+    '*': 'patch',
   },
 
-  // 全局排除的依赖
+  // 需要锁定版本的依赖添加到 exclude
   exclude: [
+    // 核心框架相关
+    'vue',
+    'vite',
+    '@vitejs/plugin-vue2',
+    'element-ui',
+
     // 工具链相关
     'eslint',
     'prettier',
     'husky',
     'lint-staged',
     'commitizen',
-    'cz-customizable',
-    '@commitlint/cli',
-    '@commitlint/config-conventional',
   ],
 
-  // 不自动安装更新
   install: false,
 
-  // 忽略的路径
   ignorePaths: [
     '**/node_modules/**',
     '**/dist/**',
