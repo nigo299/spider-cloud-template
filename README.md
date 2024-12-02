@@ -119,3 +119,20 @@ pnpm commit
 - pnpm >= 7.x
 - Vue >= 3.4
 - TypeScript >= 5.0
+
+## Taze集成指南
+
+```bash
+taze.config.ts
+```
+
+```bash
+# 递归检查所有workspace
+pnpm taze -r
+
+# 递归更新补丁版本
+pnpm taze patch -r -w
+
+# 更新指定工作区
+pnpm taze -f packages/pc
+```
