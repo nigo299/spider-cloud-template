@@ -18,8 +18,10 @@ install_dependencies:
   image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
   <<: *default_rules
   script:
+    - sudo rm -rf node_modules
+    - pnpm store prune
     - sudo pnpm config set store-dir /share_pnpm_store
-    - sudo pnpm install
+    - sudo pnpm install --force
   artifacts:
     paths:
       - node_modules/
