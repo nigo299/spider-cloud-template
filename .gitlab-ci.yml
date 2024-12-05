@@ -18,9 +18,9 @@ install_dependencies:
   image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
-    - sudo rm -rf node_modules
-    - sudo pnpm config set store-dir /share_pnpm_store
-    - sudo pnpm install --force
+    - rm -rf node_modules
+    - pnpm config set store-dir /share_pnpm_store
+    - pnpm install --force
   tags:
     - share-fe-package-runner
 
