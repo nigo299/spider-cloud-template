@@ -4,7 +4,7 @@ stages:
   - deploy
 
 variables:
-  PROJECT_NAME: spider-cloud-frontend-vue
+  PROJECT_NAME: spider-cloud-vue
   GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npmrc
 
 .default_rules: &default_rules
