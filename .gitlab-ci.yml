@@ -21,10 +21,6 @@ install_dependencies:
     - sudo rm -rf node_modules
     - sudo pnpm config set store-dir /share_pnpm_store
     - sudo pnpm install --force
-  artifacts:
-    paths:
-      - node_modules/
-    expire_in: 1 day
   tags:
     - share-fe-package-runner
 
@@ -34,10 +30,6 @@ build_pc:
   <<: *default_rules
   script:
     - pnpm run build-test:pc
-  artifacts:
-    paths:
-      - packages/pc/dist/
-    expire_in: 1 day
   tags:
     - share-fe-package-runner
   needs:
