@@ -15,7 +15,7 @@ variables:
 
 install_dependencies:
   stage: install
-  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
     - sudo rm -rf node_modules
@@ -26,7 +26,7 @@ install_dependencies:
 
 build_pc:
   stage: build
-  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
     - pnpm run build-test:pc
@@ -37,7 +37,7 @@ build_pc:
 
 deploy_pc:
   stage: deploy
-  image: lsage/pnpm-circleci-node:16.13.1-pnpm7.5.1
+  image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
     - sudo /bin/rm -rf /deploy_folder/${PROJECT_NAME}-pc
