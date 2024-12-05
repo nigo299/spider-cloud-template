@@ -19,7 +19,6 @@ install_dependencies:
   <<: *default_rules
   script:
     - rm -rf node_modules
-    - pnpm config set store-dir /share_pnpm_store
     - pnpm install --force
   tags:
     - share-fe-package-runner
