@@ -1,5 +1,6 @@
 import type { UserConfigFn } from 'vite'
 import path from 'node:path'
+import process from 'node:process'
 import { fileURLToPath, URL } from 'node:url'
 import legacy from '@vitejs/plugin-legacy'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -57,7 +58,6 @@ const defineCustomConfig: UserConfigFn = (env) => {
       }),
       createSvgIconsPlugin({
         // 指定目录
-        // eslint-disable-next-line node/prefer-global/process
         iconDirs: [path.resolve(process.cwd(), 'src/icons')],
         // 使用svg图标的格式
         symbolId: 'icon-[dir]-[name]',
