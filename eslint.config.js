@@ -36,6 +36,17 @@ export default antfu(
           'alphabetize': { order: 'asc' },
         },
       ],
+      'eslintperfectionist/sort-imports': ['error', {
+        'type': 'natural',
+        'order': 'asc',
+        'groups': [
+          ['builtin', 'external'],
+          'internal',
+          ['parent', 'sibling', 'index'],
+        ],
+        'newlines-between': 'always',
+      }],
+
     },
   },
   {
