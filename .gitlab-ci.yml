@@ -19,6 +19,7 @@ install_dependencies:
   <<: *default_rules
   script:
     - rm -rf node_modules
+    - pnpm config set store-dir /share_pnpm_store
     - pnpm install --force
   tags:
     - share-fe-package-runner
@@ -39,10 +40,10 @@ deploy_pc:
   image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
-    - sudo /bin/rm -rf /deploy_folder/${PROJECT_NAME}-pc
-    - sudo mkdir -p /deploy_folder/${PROJECT_NAME}-pc
-    - sudo chmod 777 /deploy_folder/${PROJECT_NAME}-pc
-    - /bin/mv  packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
+    - /bin/rm -rf /deploy_folder/${PROJECT_NAME}-pc
+    - mkdir -p /deploy_folder/${PROJECT_NAME}-pc
+    - chmod 777 /deploy_folder/${PROJECT_NAME}-pc
+    - /bin/mv packages/pc/dist/** /deploy_folder/${PROJECT_NAME}-pc
   tags:
     - share-fe-package-runner
   needs:
