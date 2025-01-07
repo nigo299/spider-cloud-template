@@ -18,9 +18,12 @@ install_dependencies:
   image: guergeiro/pnpm:18-9
   <<: *default_rules
   script:
-    - rm -rf node_modules
     - pnpm config set store-dir /share_pnpm_store
-    - pnpm install --force
+    - pnpm install
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 3 days
   tags:
     - share-fe-package-runner
 
@@ -30,6 +33,10 @@ build_pc:
   <<: *default_rules
   script:
     - pnpm run build-test:pc
+  artifacts:
+    paths:
+      - packages/pc/dist/
+    expire_in: 2 hours
   tags:
     - share-fe-package-runner
   needs:
@@ -48,4 +55,3 @@ deploy_pc:
     - share-fe-package-runner
   needs:
     - build_pc
-
