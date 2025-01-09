@@ -38,7 +38,7 @@ const selectList = ref(props.selectList)
 const data = computed(() => props.data)
 const config = computed(() => Object.assign({}, tableDefaultConfig, props.config))
 const loading = computed(() => props.loading)
-const expandedRowKeys = shallowRef<string[]>([])
+const expandedRowKeys = ref<string[]>([])
 
 function onSelectChange(selectedRowKeys: Key[], selectedRows: any) {
   if (config.value.rowSelection!.type === 'radio')
