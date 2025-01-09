@@ -7,7 +7,7 @@ import { Modal, message } from 'ant-design-vue'
 import type { PaginationConfig } from 'ant-design-vue/es/pagination'
 import dayjs from 'dayjs'
 import useSWRV from 'swrv'
-import { createVNode, onMounted, ref, watch } from 'vue'
+import { createVNode, onMounted, ref, watch, onActivated, onDeactivated } from 'vue'
 
 import {
   abnormalEvents,
@@ -47,6 +47,7 @@ const customMessage = ref('您确定需要删除该条数据么？')
 const customHint = ref('删除该条数据后将无法恢复，请谨慎操作。')
 const deleteId = ref<string[]>([])
 const deleteLoading = ref(false)
+const refreshInterval = ref<any>(null)
 const [warningSetting, warningSettingToggle] = useToggle()
 const alarmsNum = ref(1)
 const [statistics, statisticsToggle] = useToggle()
@@ -308,11 +309,14 @@ const getAbnormalEvents = async () => {
   }
 }
 // 异常事件轮询
-useSWRV(
-  () => '[abnormalEvent]',
-  () => getAbnormalEvents(),
-  { ...NotRevalidateOption, refreshInterval: 30000 },
-)
+onActivated(() => {
+  refreshInterval.value = setInterval(() => {
+    getAbnormalEvents()
+  }, 30000)
+});
+onDeactivated(() => {
+  clearInterval(refreshInterval.value)
+});
 </script>
 
 <template>
