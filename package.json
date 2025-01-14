@@ -91,7 +91,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint --fix",
+    "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": ["oxlint --fix", "vue-tsc --noEmit"],
     "*.json": ["prettier --parser=json --write"],
     "*.css": ["prettier --parser=css --write"],
     "*.less": ["prettier --parser=less --write"]
