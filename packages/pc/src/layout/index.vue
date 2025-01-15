@@ -228,7 +228,8 @@ const appTitle = import.meta.env.VITE_APP_TITLE
 }
 
 .layout-base-container {
-  overflow-y: auto;
+  max-height: calc(100vh - 110px);
+  overflow: auto;
   padding: 0 24px;
 }
 

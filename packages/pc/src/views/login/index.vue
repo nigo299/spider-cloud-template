@@ -9,12 +9,13 @@ import { useRouter } from 'vue-router'
 import { login } from '@/api/login'
 import CopyRight from '@/components/CopyRight/index.vue'
 import type { LoginParam } from '@/interface/login'
+import { encrypt } from '@/utils'
 
 const appTitle = import.meta.env.VITE_APP_TITLE
 const formState = reactive<LoginParam>({
   account: '',
   password: '',
-  loginType: 4,
+  loginType: 1,
 })
 const [submit, submitToggle] = useToggle(false)
 
@@ -28,7 +29,8 @@ const router = useRouter()
 
 async function loginIn() {
   submitToggle(true)
-  const [data, err] = await to(login(formState))
+  const password = encrypt(formState.password as string);
+  const [data, err] = await to(login({ ...formState, password }))
 
   if (!err) {
     sessionStorage.setItem(import.meta.env.VITE_TOKEN, data.token)

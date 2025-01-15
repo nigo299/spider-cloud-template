@@ -64,6 +64,7 @@ const columns: ColumnType[] = [
     dataIndex: 'index',
     key: 'index',
     width: 50,
+    align: 'center',
     customRender: ({ index }: { index: number }) => {
       return `${index + 1 + (pageNum.value - 1) * pageSize.value}`
     },
@@ -71,6 +72,7 @@ const columns: ColumnType[] = [
   },
   {
     title: '姓名',
+    align: 'center',
     dataIndex: 'name',
     key: 'name',
     width: 80,
@@ -83,12 +85,14 @@ const columns: ColumnType[] = [
   //   width: 120,
   // },
   {
+    align: 'center',
     title: 'i国网账号',
     dataIndex: 'account',
     key: 'account',
     width: 100,
   },
   {
+    align: 'center',
     title: '账号类型',
     dataIndex: 'validityPeriodType',
     key: 'validityPeriodType',
@@ -96,12 +100,14 @@ const columns: ColumnType[] = [
   },
   {
     title: '有限期',
+    align: 'center',
     key: 'expirationDate',
     dataIndex: 'expirationDate',
     width: 100,
   },
   {
     title: '所属组织',
+    align: 'center',
     dataIndex: 'orgTreeNamePathMapping',
     key: 'orgTreeNamePathMapping',
     ellipsis: true,
@@ -109,12 +115,14 @@ const columns: ColumnType[] = [
   },
   {
     title: '角色名称',
+    align: 'center',
     dataIndex: 'roleName',
     key: 'roleName',
     width: 100,
   },
   {
     title: '状态',
+    align: 'center',
     key: 'status',
     dataIndex: 'status',
     width: 100,
@@ -126,6 +134,7 @@ const columns: ColumnType[] = [
   //   width: 100,
   // },
   {
+    align: 'center',
     title: '最后登录时间',
     key: 'lastLoginTime',
     dataIndex: 'lastLoginTime',

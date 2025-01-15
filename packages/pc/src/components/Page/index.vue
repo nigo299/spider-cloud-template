@@ -18,7 +18,6 @@ const className = props.className ?? ''
     id="fa-page-container"
     class="bg-[#F2F3F5] p-4"
     :class="[className]"
-    :style="{ minHeight: 'calc(100vh - 200px)' }"
   >
     <div class="mt-2" :class="[bodyClassName]">
       <slot />
