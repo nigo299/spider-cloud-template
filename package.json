@@ -93,7 +93,7 @@
   "lint-staged": {
     "**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": [
       "oxlint --fix",
-      "vue-tsc --noEmit --skipLibCheck"
+      "vue-tsc --noEmit --skipLibCheck --esModuleInterop"
     ],
     "*.json": ["prettier --parser=json --write"],
     "*.css": ["prettier --parser=css --write"],
