@@ -47,12 +47,8 @@ export const defaultViteConfig: UserConfigFn = () => ({
     vueJsx(),
     tsConfigPath(),
     Unocss({
-      mode: 'vue-scoped',
       transformers: [transformerVariantGroup(), transformerDirective()],
       hmrTopLevelAwait: false,
-      inspector: false,
-      safelist: [],
-      preflights: [],
     }),
   ],
   base: './',
@@ -60,9 +56,6 @@ export const defaultViteConfig: UserConfigFn = () => ({
     port: 8080,
     proxy: {
       '/api': 'http://localhost:8088',
-    },
-    hmr: {
-      overlay: false,
     },
   },
   build: {

@@ -2,7 +2,7 @@ import * as Icons from '@ant-design/icons-vue'
 import Antd, { message } from 'ant-design-vue'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-
+import 'uno.css'
 import 'virtual:svg-icons-register'
 import { getToken } from '@/api/login'
 import permissionDirective from '@/directives/permission'
@@ -41,8 +41,7 @@ if (import.meta.env.MODE === 'build') {
     .catch(() => {
       init()
     })
-}
-else {
+} else {
   init()
 }
 

@@ -1,16 +1,16 @@
+import { unoPrefixVariant } from 'uno-prefix-variant'
+
 // uno.config.ts
 import {
-  type Preset,
   defineConfig,
+  type Preset,
   presetAttributify,
   presetIcons,
   presetUno,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
-
 import { presetApplet, presetRemRpx, transformerAttributify } from 'unocss-applet'
-
 // @see https://unocss.dev/presets/legacy-compat
 // import { presetLegacyCompat } from '@unocss/preset-legacy-compat'
 
@@ -21,8 +21,7 @@ const presets: Preset[] = []
 if (isMp) {
   // 使用小程序预设
   presets.push(presetApplet(), presetRemRpx())
-}
-else {
+} else {
   presets.push(
     // 非小程序用官方预设
     presetUno(),
@@ -38,7 +37,7 @@ export default defineConfig({
       scale: 1.2,
       warn: true,
       extraProperties: {
-        'display': 'inline-block',
+        display: 'inline-block',
         'vertical-align': 'middle',
       },
     }),
@@ -78,6 +77,11 @@ export default defineConfig({
     ],
     ['pt-safe', { 'padding-top': 'env(safe-area-inset-top)' }],
     ['pb-safe', { 'padding-bottom': 'env(safe-area-inset-bottom)' }],
+  ],
+  variants: [
+    unoPrefixVariant({
+      prefixCls: '#app',
+    }) as unknown as any,
   ],
 })
 
