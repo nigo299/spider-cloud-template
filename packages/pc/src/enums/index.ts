@@ -29,4 +29,5 @@ export enum TableColumnTypeEnum {
   TOOLTIP = 'tooltip', // 有提示
   SEX = 'sex', // 性别
   NUMBER = 'number',
+  RENDER = 'render',
 }
