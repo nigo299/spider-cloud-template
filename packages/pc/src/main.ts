@@ -11,7 +11,7 @@ import App from './App.vue'
 import { SvgIconPlugin } from './components/SvgIcon'
 import router from './router'
 
-import 'uno.css'
+// import 'uno.css'
 import './assets/styles/main.css'
 import 'vue-cropper/dist/index.css'
 import './utils/permission'

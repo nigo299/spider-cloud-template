@@ -47,6 +47,7 @@ export function splitChunk(options: {
 
 export const defaultViteConfig: UserConfigFn = () => ({
   plugins: [vue(), vueJsx(), tsConfigPath(), Unocss({
+    mode: 'vue-scoped',
     transformers: [transformerVariantGroup(), transformerDirective()],
     hmrTopLevelAwait: false,
   })],

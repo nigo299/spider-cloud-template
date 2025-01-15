@@ -46,7 +46,7 @@ const loadingState = computed(() => props.loading)
 }
 
 :deep(.ant-card-body) {
-  padding: 0px;
+  padding: 0px !important;
 }
 
 .card-body-box {
