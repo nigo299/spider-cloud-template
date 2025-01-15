@@ -1,12 +1,12 @@
-import path from 'node:path'
-
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
 import type { Plugin, UserConfigFn } from 'vite'
-import tsConfigPath from 'vite-tsconfig-paths'
-import Unocss from 'unocss/vite'
+
+import path from 'node:path'
 import transformerDirective from '@unocss/transformer-directives'
 import transformerVariantGroup from '@unocss/transformer-variant-group'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import Unocss from 'unocss/vite'
+import tsConfigPath from 'vite-tsconfig-paths'
 
 export function splitChunk(options: {
   rules: Array<string | { regex: RegExp, to: string }>
