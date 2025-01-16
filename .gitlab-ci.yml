@@ -1,4 +1,5 @@
 stages:
+  - ai-review
   - install
   - build
   - deploy
@@ -6,12 +7,33 @@ stages:
 variables:
   PROJECT_NAME: spider-cloud-vue
   GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npmrc
+  # GitLab API Token 需要在 CI/CD Settings 中设置
+  # 需要具有以下权限：api, read_repository, write_repository
+  GITLAB_TOKEN: glpat-5aEaewax3-EPb_ymc2-w
 
 .default_rules: &default_rules
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^main\/.+$/
       when: always
     - when: manual
+
+.mr_rules: &mr_rules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: always
+    - when: never
+
+ai_code_review:
+  stage: ai-review
+  image: guergeiro/pnpm:18-9
+  <<: *mr_rules
+  variables:
+    DEEPSEEK_API_URL: ${DEEPSEEK_API_URL}
+    DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+  script:
+    - node scripts/ai-code-review.js
+  tags:
+    - share-fe-package-runner
 
 install_dependencies:
   stage: install
