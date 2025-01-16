@@ -20,9 +20,11 @@ const defineCustomConfig: UserConfigFn = (env) => {
     base: '',
     server: {
       proxy: {
-        '/spider': {
-          target: 'http://192.168.0.10',
+        '/digital-workplace': {
+          target: 'http://192.168.0.13',
+          // target: 'http://192.168.0.90:19206',
           changeOrigin: true,
+          // rewrite: path => path.replace(/^\/digital-workplace/, ''),
         },
       },
     },
@@ -81,9 +83,9 @@ const defineCustomConfig: UserConfigFn = (env) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            'vue': ['vue', 'vue-router'],
-            'lodash': ['lodash'],
-            'dayjs': ['dayjs'],
+            vue: ['vue', 'vue-router'],
+            lodash: ['lodash'],
+            dayjs: ['dayjs'],
             'ant-design-vue': ['ant-design-vue'],
           },
         },
@@ -92,12 +94,14 @@ const defineCustomConfig: UserConfigFn = (env) => {
     },
   }
   if (env.mode === 'build') {
-    config.plugins.push(legacy({
-      targets: ['Chrome 68'],
-      modernPolyfills: true,
-    }))
+    config.plugins.push(
+      legacy({
+        targets: ['Chrome 68'],
+        modernPolyfills: true,
+      }),
+    )
   }
   return config
 }
 
-export default defineConfig(env => mergeConfig(defaultViteConfig(env), defineCustomConfig(env)))
+export default defineConfig((env) => mergeConfig(defaultViteConfig(env), defineCustomConfig(env)))

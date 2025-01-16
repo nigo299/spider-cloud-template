@@ -74,7 +74,9 @@ declare module 'vue' {
     Select: typeof import('./../components/Select/index.vue')['default']
     SvgIcon: typeof import('./../components/SvgIcon/SvgIcon.vue')['default']
     Table: typeof import('./../components/Table/index.vue')['default']
+    TableCell: typeof import('./../components/Table/components/TableCell.vue')['default']
     TableDefaultConfig: typeof import('./../components/Table/tableDefaultConfig.ts')['default']
+    Types: typeof import('./../components/Table/types.ts')['default']
     Upload: typeof import('./../components/Upload/index.vue')['default']
   }
 }

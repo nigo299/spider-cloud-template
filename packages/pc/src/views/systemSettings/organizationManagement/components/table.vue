@@ -256,8 +256,7 @@ async function handleDeleteClick() {
     userIds.value = []
     pageNum.value = 1
     refresh()
-  }
-  else {
+  } else {
     message.error(err.message)
   }
   handleDeleteCancel()
@@ -275,8 +274,7 @@ async function handleDeleteAllMember() {
     userIds.value = []
     pageNum.value = 1
     refresh()
-  }
-  else {
+  } else {
     message.error(err.message ?? '删除失败')
   }
   handleDeleteCancel()
@@ -293,8 +291,7 @@ async function handleDeregistration() {
     message.success('注销成功')
     pageNum.value = 1
     refresh()
-  }
-  else {
+  } else {
     message.error(err.message ?? '注销失败')
   }
   handleDeleteCancel()
@@ -345,8 +342,7 @@ async function handleChangeAllStatus(type: number) {
     userIds: userIds.value,
   }
   // 批量开启
-  if (type === 0)
-    params.status = 0
+  if (type === 0) params.status = 0
   roleStatusTitle.value = type ? btnText[0] : btnText[1]
   changeRoleStatusVisible(true)
 }
@@ -367,8 +363,7 @@ const statusConfirmEmit = async (val: { [key: string]: number }) => {
     message.success('状态更改成功')
     roleStatusRef.value?.resetForm()
     refresh()
-  }
-  else {
+  } else {
     message.error(err.message)
   }
   changeRoleStatusVisible(false)
@@ -424,23 +419,20 @@ function selectOrgGetTableList(orgParams: ITreeSelect) {
 // )
 const handleBatchExport = async () => {
   const [data, err] = await to(postBatchExportLock())
-  if (!err)
-    download('不活跃账号.xlsx', 'blob', data as Blob)
+  if (!err) download('不活跃账号.xlsx', 'blob', data as Blob)
 }
 
 const handleChangeSecret = (index: number, secret: string, type: string) => {
   if (orgTableList.value && orgTableList.value[index][type]) {
     orgTableList.value[index][type] = false
-  }
-  else {
+  } else {
     secretKeyType.value = type
     secretKeyIndex.value = index
 
     if (type === 'phoneVisible') {
       secretKeyPhone.value = secret
       secretKeyIdCard.value = ''
-    }
-    else {
+    } else {
       secretKeyPhone.value = ''
       secretKeyIdCard.value = secret
     }
@@ -449,8 +441,7 @@ const handleChangeSecret = (index: number, secret: string, type: string) => {
 }
 
 const secretKeyConfirm = ({ phone }: { phone: string }) => {
-  if (!orgTableList.value)
-    return
+  if (!orgTableList.value) return
   const decryptPhone = atob(phone)
   orgTableList.value[secretKeyIndex.value as number].phone = sm4Encrypt(decryptPhone)
   orgTableList.value[secretKeyIndex.value as number][secretKeyType.value] = true
@@ -469,9 +460,7 @@ defineExpose({
 
 <template>
   <div class="h-full w-full">
-    <h3 class="font-600 mb-3">
-      账号列表
-    </h3>
+    <h3 class="font-600 mb-3">账号列表</h3>
     <div v-if="orgId" class="btn flex justify-between">
       <a-space>
         <a-input
@@ -534,9 +523,7 @@ defineExpose({
               </p>
             </a-space>
           </template>
-          <a-button type="primary" size="small" ghost>
-            批量操作
-          </a-button>
+          <a-button type="primary" size="small" ghost> 批量操作 </a-button>
         </a-popover>
         <a-button
           v-permission="['button_contact_department_add']"
@@ -567,7 +554,7 @@ defineExpose({
         :data-source="orgTableList"
         :loading="{ spinning: loading, delay: customDelay }"
         :pagination="pagination"
-        :scroll="{ x: '100', y: scrollHeight }"
+        :scroll="{ x: '100', y: '500' }"
         :row-selection="{ selectedRowKeys: userIds, onChange: rowSelection }"
         row-key="userId"
         @change="handleTableChange"
@@ -600,12 +587,8 @@ defineExpose({
             </div>
           </template>
           <template v-if="column.key === 'validityPeriodType'">
-            <div v-if="record.validityPeriodType === 0">
-              永久
-            </div>
-            <div v-if="record.validityPeriodType === 1">
-              临时
-            </div>
+            <div v-if="record.validityPeriodType === 0">永久</div>
+            <div v-if="record.validityPeriodType === 1">临时</div>
           </template>
           <template v-if="column.dataIndex === 'status'">
             <a-tag v-if="record.statusCode === 0" color="success">
@@ -652,7 +635,8 @@ defineExpose({
                 danger
                 @click="openDeregistrationModal(record.userId)"
               >
-                注销</a-button>
+                注销</a-button
+              >
               <a-button
                 v-permission="['button_contact_department_delete']"
                 class="px-0"
@@ -715,7 +699,7 @@ defineExpose({
 
 <style lang="less" scoped>
 .tableContent {
-  height: calc(100% - 36px);
+  min-height: calc(200px - 36px);
   overflow-y: hidden;
   margin-top: 10px;
 
