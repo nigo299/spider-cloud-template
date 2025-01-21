@@ -28,12 +28,11 @@ const initData = async () => {
       const { sortNumber, permissionType, code, path } = item.self
       Object.assign(item, { sortNumber, permissionType, code, path })
 
-      if (item.hasChildren)
-        formatMenu(item.items)
+      if (item.hasChildren) formatMenu(item.items)
     })
   }
   formatMenu(data)
-  const parentIndex = formColumns.value.findIndex(item => item.field === 'parentId')
+  const parentIndex = formColumns.value.findIndex((item) => item.field === 'parentId')
   formColumns.value[parentIndex].treeData = [...data, { name: '主目录', id: null, parentId: null }]
   return data
 }
@@ -58,8 +57,7 @@ async function toDelete(id: string) {
   if (!err) {
     message.success('删除成功！')
     getList()
-  }
-  else {
+  } else {
     message.error(err.message)
   }
 }
@@ -77,21 +75,13 @@ async function toDelete(id: string) {
         >
           <template #header>
             <div class="flex justify-between py-2">
-              <a-button type="primary" @click="toAdd()">
-                新增主目录
-              </a-button>
+              <a-button type="primary" @click="toAdd()"> 新增主目录 </a-button>
             </div>
           </template>
           <template #default="{ row }">
-            <a-button class="px-0" type="link" @click="toAdd(row)">
-              新增
-            </a-button>
-            <a-button class="px-0" type="link" @click="toEdit(row)">
-              编辑
-            </a-button>
-            <a-button class="px-0" type="link" danger @click="toDelete(row.id)">
-              删除
-            </a-button>
+            <a-button class="px-0" type="link" @click="toAdd(row)"> 新增 </a-button>
+            <a-button class="px-0" type="link" @click="toEdit(row)"> 编辑 </a-button>
+            <a-button class="px-0" type="link" danger @click="toDelete(row.id)"> 删除 </a-button>
           </template>
         </Table>
       </Card>

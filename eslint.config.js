@@ -1,4 +1,5 @@
 import antfu from '@antfu/eslint-config'
+import eslintConfigPrettier from 'eslint-config-prettier'
 
 export default antfu(
   {
@@ -26,27 +27,25 @@ export default antfu(
       'import/order': [
         'error',
         {
-          'groups': [
+          groups: [
             'builtin',
             'external',
             ['internal', 'unknown'],
             ['parent', 'sibling', 'index', 'object'],
           ],
           'newlines-between': 'always',
-          'alphabetize': { order: 'asc' },
+          alphabetize: { order: 'asc' },
         },
       ],
-      'eslintperfectionist/sort-imports': ['error', {
-        'type': 'natural',
-        'order': 'asc',
-        'groups': [
-          ['builtin', 'external'],
-          'internal',
-          ['parent', 'sibling', 'index'],
-        ],
-        'newlines-between': 'always',
-      }],
-
+      'eslintperfectionist/sort-imports': [
+        'error',
+        {
+          type: 'natural',
+          order: 'asc',
+          groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+          'newlines-between': 'always',
+        },
+      ],
     },
   },
   {
@@ -55,4 +54,5 @@ export default antfu(
       'style/semi': ['error', 'never'],
     },
   },
+  eslintConfigPrettier,
 )
