@@ -14,7 +14,9 @@ export function splitChunk(options: {
   function matchRule(id: string): { matched: boolean; id?: string } {
     for (const rule of options.rules) {
       if (typeof rule === 'string') {
-        if (id.includes(rule)) return { matched: true, id: rule }
+        if (id.includes(rule)) {
+          return { matched: true, id: rule }
+        }
       } else if (rule.regex.test(id)) {
         return { matched: true, id: rule.to }
       }
@@ -27,11 +29,15 @@ export function splitChunk(options: {
     name: 'rollup-plugin-multiple-vendors',
     outputOptions(o) {
       o.manualChunks = (id: string) => {
-        if (id.includes('?worker')) return path.basename(id.replace(/\?[\w-]+/, ''))
+        if (id.includes('?worker')) {
+          return path.basename(id.replace(/\?[\w-]+/, ''))
+        }
 
         if (id.includes('node_modules')) {
           const ret = matchRule(id)
-          if (ret.matched) return ret.id ?? 'vendor'
+          if (ret.matched) {
+            return ret.id ?? 'vendor'
+          }
 
           return 'vendor'
         }

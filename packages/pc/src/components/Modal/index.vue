@@ -29,37 +29,24 @@ const modalProps = computed(() => ({
 watch(
   () => props.visible,
   (newVal) => {
-    if (!props.destroySelfOnClose)
-      return
+    if (!props.destroySelfOnClose) return
 
     if (newVal) {
-      if (timer)
-        clearTimeout(timer)
+      if (timer) clearTimeout(timer)
       render.value = newVal
-    }
-    else {
+    } else {
       timer = setTimeout(() => {
         render.value = newVal
       }, 1000)
     }
-  },
+  }
 )
 </script>
 
 <template>
-  <AModal
-    v-if="render"
-    v-bind="modalProps"
-    v-on="$attrs"
-  >
-    <template
-      v-for="(_, name) in $slots"
-      #[name]="slotProps"
-    >
-      <slot
-        :name="name"
-        v-bind="slotProps"
-      />
+  <AModal v-if="render" v-bind="modalProps" v-on="$attrs">
+    <template v-for="(_, name) in $slots" #[name]="slotProps">
+      <slot :name="name" v-bind="slotProps" />
     </template>
   </AModal>
 </template>

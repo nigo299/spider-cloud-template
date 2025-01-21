@@ -1,6 +1,6 @@
 import type { SlotsType } from 'vue'
-import { defineComponent, onMounted, ref } from 'vue'
 import ATooltip from 'ant-design-vue/es/tooltip'
+import { defineComponent, onMounted, ref } from 'vue'
 import * as VueTypes from 'vue-types'
 
 type SEllipsisDefineSlots = SlotsType<{
@@ -77,9 +77,9 @@ export const SEllipsis = defineComponent({
       if (props.tooltip === true) {
         const binds = {
           ...props,
-          'open': props.open !== undefined ? props.open : open.value,
+          open: props.open !== undefined ? props.open : open.value,
           'onUpdate:open': undefined,
-          'onVisibleChange': undefined,
+          onVisibleChange: undefined,
         }
 
         return (
@@ -99,7 +99,7 @@ export const SEllipsis = defineComponent({
                 overflow: outside.value && props.ellipsis === true ? 'hidden' : 'visible',
               }}
             >
-              { slots.default?.() }
+              {slots.default?.()}
             </div>
           </ATooltip>
         )
