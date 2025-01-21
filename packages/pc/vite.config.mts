@@ -66,7 +66,7 @@ const defineCustomConfig: UserConfigFn = (env) => {
         'ant-design-vue/es/tooltip/style/index',
         'ant-design-vue/es/popover/style/index',
         'ant-design-vue/es/card/style/index',
-        'ant-design-vue/es/pagination/style/index',
+        'ant-design-vue/es/pagination/style/index'
       ],
       exclude: [],
     },
@@ -84,18 +84,13 @@ const defineCustomConfig: UserConfigFn = (env) => {
         deep: true,
         extensions: ['vue', 'js', 'jsx', 'ts', 'tsx'],
         include: [/\.vue$/, /\.vue\?vue/, /\.js$/, /\.jsx$/, /\.ts$/, /\.tsx$/],
-        exclude: [
-          /[\\/]node_modules[\\/]/,
-          /[\\/]\.git[\\/]/,
-          /[\\/]\.nuxt[\\/]/,
-          /SvgIcon(\/index)?\.vue$/,
-        ],
+        exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/, /SvgIcon(\/index)?\.vue$/],
         resolvers: [
           AntDesignVueResolver({
             importStyle: 'less',
             resolveIcons: true,
             cjs: false,
-            exclude: ['style-provider', 'config-provider'],
+            exclude: ['style-provider', 'config-provider']
           }),
         ],
         dts: './src/auto-import/components.d.ts',
