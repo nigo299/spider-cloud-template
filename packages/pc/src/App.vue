@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ConfigProvider, StyleProvider } from 'ant-design-vue'
 import { legacyLogicalPropertiesTransformer } from 'ant-design-vue'
 import 'dayjs/locale/zh-cn'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
@@ -9,8 +10,8 @@ import { themeConfig } from './config/theme'
 </script>
 
 <template>
-  <a-style-provider hash-priority="high" :transformers="[legacyLogicalPropertiesTransformer]">
-    <a-config-provider
+  <StyleProvider hash-priority="high" :transformers="[legacyLogicalPropertiesTransformer]">
+    <ConfigProvider
       :locale="zhCN"
       :theme="{
         token: themeConfig.light,
@@ -22,6 +23,6 @@ import { themeConfig } from './config/theme'
         </keep-alive>
         <component :is="Component" v-else />
       </RouterView>
-    </a-config-provider>
-  </a-style-provider>
+    </ConfigProvider>
+  </StyleProvider>
 </template>

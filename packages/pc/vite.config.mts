@@ -33,41 +33,54 @@ const defineCustomConfig: UserConfigFn = (env) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    css: {
+      preprocessorOptions: {
+        less: {
+          javascriptEnabled: true,
+          modifyVars: {},
+        },
+      },
+    },
+    optimizeDeps: {
+      include: [
+        'ant-design-vue',
+        '@ant-design/icons-vue',
+        'ant-design-vue/es/locale/zh_CN',
+        // 预构建常用组件的样式
+        'ant-design-vue/es/button/style/index',
+        'ant-design-vue/es/spin/style/index',
+        'ant-design-vue/es/checkbox/style/index',
+        'ant-design-vue/es/radio/style/index',
+        'ant-design-vue/es/tree/style/index',
+        'ant-design-vue/es/table/style/index',
+        'ant-design-vue/es/select/style/index',
+        'ant-design-vue/es/input/style/index',
+        'ant-design-vue/es/form/style/index',
+        'ant-design-vue/es/modal/style/index',
+        'ant-design-vue/es/message/style/index',
+        'ant-design-vue/es/notification/style/index',
+        'ant-design-vue/es/menu/style/index',
+        'ant-design-vue/es/tabs/style/index',
+        'ant-design-vue/es/dropdown/style/index',
+        'ant-design-vue/es/drawer/style/index',
+        'ant-design-vue/es/tooltip/style/index',
+        'ant-design-vue/es/popover/style/index',
+        'ant-design-vue/es/card/style/index',
+        'ant-design-vue/es/pagination/style/index',
+      ],
+      exclude: [],
+    },
     plugins: [
       viteInjectAppLoadingPlugin(env),
       VueDevtools(),
       AutoImport({
-        include: [
-          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-          /\.vue$/,
-          /\.vue\?vue/, // .vue
-          /\.md$/, // .md
-        ],
-        eslintrc: {
-          enabled: false,
-          filepath: './auto-import/.eslintrc-auto-import.json',
-          globalsPropValue: true,
-        },
-        imports: [
-          'vue',
-          'vue-router',
-          // {
-          //   vuex: ['useStore'],
-          // },
-        ],
+        include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
+        imports: ['vue', 'vue-router'],
         resolvers: [AntDesignVueResolver()],
         dts: './src/auto-import/auto-import.d.ts',
       }),
-      createSvgIconsPlugin({
-        // 指定目录
-        iconDirs: [path.resolve(process.cwd(), 'src/icons')],
-        // 使用svg图标的格式
-        symbolId: 'icon-[dir]-[name]',
-        customDomId: '__svg__icons__dom__',
-      }),
       Components({
         dirs: ['src/components'],
-        // 搜索子目录
         deep: true,
         extensions: ['vue', 'js', 'jsx', 'ts', 'tsx'],
         include: [/\.vue$/, /\.vue\?vue/, /\.js$/, /\.jsx$/, /\.ts$/, /\.tsx$/],
@@ -79,10 +92,18 @@ const defineCustomConfig: UserConfigFn = (env) => {
         ],
         resolvers: [
           AntDesignVueResolver({
-            importStyle: false,
+            importStyle: 'less',
+            resolveIcons: true,
+            cjs: false,
+            exclude: ['style-provider', 'config-provider'],
           }),
         ],
         dts: './src/auto-import/components.d.ts',
+      }),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'src/icons')],
+        symbolId: 'icon-[dir]-[name]',
+        customDomId: '__svg__icons__dom__',
       }),
     ],
     build: {
@@ -97,8 +118,11 @@ const defineCustomConfig: UserConfigFn = (env) => {
         },
       },
       minify: 'terser',
+      cssCodeSplit: true,
+      chunkSizeWarningLimit: 2000,
     },
   }
+
   if (env.mode === 'build') {
     config.plugins.push(
       legacy({
