@@ -71,6 +71,12 @@ const defineCustomConfig: UserConfigFn = (env) => {
         deep: true,
         extensions: ['vue', 'js', 'jsx', 'ts', 'tsx'],
         include: [/\.vue$/, /\.vue\?vue/, /\.js$/, /\.jsx$/, /\.ts$/, /\.tsx$/],
+        exclude: [
+          /[\\/]node_modules[\\/]/,
+          /[\\/]\.git[\\/]/,
+          /[\\/]\.nuxt[\\/]/,
+          /SvgIcon(\/index)?\.vue$/,
+        ],
         resolvers: [
           AntDesignVueResolver({
             importStyle: false,
@@ -98,7 +104,7 @@ const defineCustomConfig: UserConfigFn = (env) => {
       legacy({
         targets: ['Chrome 68'],
         modernPolyfills: true,
-      }),
+      })
     )
   }
   return config

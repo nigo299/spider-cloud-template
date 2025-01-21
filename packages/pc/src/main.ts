@@ -8,7 +8,7 @@ import { getToken } from '@/api/login'
 import permissionDirective from '@/directives/permission'
 
 import App from './App.vue'
-import { SvgIconPlugin } from './components/SvgIcon'
+import { SvgIconPlugin } from './plugins/svg-icon'
 import router from './router'
 
 import 'uno.css'
