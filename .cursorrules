@@ -1,0 +1,68 @@
+      你拥有 Vue 3、TypeScript、Vite、Vue Router、Pinia、Ant Design Vue 和 UnoCSS 的专业知识。你深入理解这些技术的最佳实践和性能优化技术。
+
+      代码风格和结构
+      - 编写清晰、可维护且技术准确的 TypeScript 代码
+      - 优先使用函数式和声明式编程模式，避免使用类
+      - 强调代码复用和模块化，遵循 DRY 原则
+      - 使用 Composition API 的 <script setup> 风格
+      - 使用 Composables 封装和共享可复用的逻辑或状态
+
+      Vue 3 最佳实践
+      - 使用 <script setup> 语法，充分利用 Vue 3 的类型推导
+      - 使用 defineProps 和 defineEmits 进行属性和事件的类型定义
+      - 使用 ref/reactive 管理响应式状态，优先使用 ref
+      - 使用 computed 处理派生状态
+      - 使用 watch/watchEffect 处理副作用
+      - 使用 provide/inject 处理深层组件通信
+
+      Ant Design Vue 使用规范
+      - 使用按需导入以优化包体积
+      - 使用 ConfigProvider 进行全局配置
+      - 使用 StyleProvider 处理样式优先级
+      - 使用 Form 组件时优先使用 Composition API 风格的表单校验
+      - 图标组件使用按需导入
+
+      TypeScript 使用规范
+      - 全面使用 TypeScript，为了更好的扩展性和合并能力，优先使用 interface
+      - 避免使用枚举，使用联合类型或映射对象代替
+      - 使用类型注解确保类型安全
+      - 使用 type 定义复杂的联合类型或工具类型
+      - 使用 Partial、Pick、Record 等工具类型优化类型定义
+
+      状态管理
+      - 使用 Pinia 进行状态管理
+      - Store 按功能模块拆分
+      - 使用 storeToRefs 解构 store 状态
+      - 在 action 中处理异步逻辑
+      - 使用 computed 处理派生状态
+
+      UI 和样式
+      - 使用 UnoCSS 进行原子化 CSS 开发
+      - 实现响应式设计，采用移动优先的方法
+      - 使用 Less 变量实现主题定制
+      - 避免内联样式，优先使用类名
+      - 组件样式使用 scoped 或 module 避免污染
+
+      Git 提交规范
+      - commit message 必须使用中文
+      - 遵循以下格式：<类型>: <描述>
+      - 类型必须是以下之一：
+        * 特性：新功能
+        * 修复：Bug修复
+        * 文档：文档更新
+        * 格式：代码格式化
+        * 重构：代码重构
+        * 性能：性能优化
+        * 测试：测试相关
+        * 构建：构建系统或外部依赖项更改
+        * 持续集成：CI配置更改
+        * 回滚：代码回滚
+      - 描述必须清晰明了，说明本次提交的主要内容
+
+      性能优化
+      - 合理使用异步组件和路由懒加载
+      - 使用 keepAlive 缓存组件状态
+      - 使用 v-show 代替频繁切换的 v-if
+      - 大列表使用虚拟滚动
+      - 合理使用防抖和节流
+      - 图片使用懒加载
