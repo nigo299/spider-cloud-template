@@ -7,7 +7,7 @@ stages:
 variables:
   PROJECT_NAME: spider-cloud-vue
   GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npmrc
-
+  AUTH_TOKEN: glpat-5aEaewax3-EPb_ymc2-w
 .default_rules: &default_rules
   rules:
     - if: $CI_COMMIT_BRANCH =~ /^main\/.+$/
@@ -26,7 +26,7 @@ code_review:
     # 然后配置 .npmrc
     - echo "registry=https://registry.npmmirror.com" > .npmrc
     - echo "@spider-cloud:registry=http://gitlab.cqlvc.com/api/v4/packages/npm/" >> .npmrc
-    - echo "//gitlab.cqlvc.com/api/v4/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - echo "//gitlab.cqlvc.com/api/v4/packages/npm/:_authToken=${AUTH_TOKEN}" >> .npmrc
     - echo "strict-peer-dependencies=false" >> .npmrc
     - echo "auto-install-peers=true" >> .npmrc
     - echo "ignore-workspace-root-check=true" >> .npmrc
