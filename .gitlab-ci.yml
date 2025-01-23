@@ -1,4 +1,5 @@
 stages:
+  - review
   - install
   - build
   - deploy
@@ -12,6 +13,37 @@ variables:
     - if: $CI_COMMIT_BRANCH =~ /^main\/.+$/
       when: always
     - when: manual
+
+code_review:
+  stage: review
+  image: guergeiro/pnpm:18-9
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  before_script:
+    # 首先设置 store 路径
+    - pnpm config set store-dir /share_pnpm_store
+
+    # 然后配置 .npmrc
+    - echo "registry=https://registry.npmmirror.com" > .npmrc
+    - echo "@spider-cloud:registry=http://gitlab.cqlvc.com/api/v4/packages/npm/" >> .npmrc
+    - echo "//gitlab.cqlvc.com/api/v4/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - echo "strict-peer-dependencies=false" >> .npmrc
+    - echo "auto-install-peers=true" >> .npmrc
+    - echo "ignore-workspace-root-check=true" >> .npmrc
+
+    # 验证配置
+    - pnpm config list
+    - cat .npmrc
+  script:
+    # 安装依赖
+    - pnpm add -D @spider-cloud/ai-code-review@1.0.1
+    - pnpm ai-code-review
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - /share_pnpm_store
+  tags:
+    - share-fe-package-runner
 
 install_dependencies:
   stage: install
