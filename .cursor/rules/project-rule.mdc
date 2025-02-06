@@ -1,0 +1,109 @@
+---
+description: Spider Cloud Template 项目规范
+globs: ["**/*.{vue,ts,tsx,js,jsx}"]
+---
+
+# 技术栈规范
+
+你需要熟悉以下技术栈并遵循其最佳实践：
+- Vue 3 + TypeScript + Vite
+- Vue Router + Pinia
+- Ant Design Vue
+- UnoCSS
+- Less
+
+## 项目结构
+- packages/pc: PC端项目
+- packages/h5: H5端项目
+- packages/mobile: 移动端项目
+- packages/ie: IE兼容版本
+
+## 代码规范
+
+### Vue 组件规范
+- 使用 `<script setup lang="ts">`
+- Props 必须使用 TypeScript 类型定义
+- 组件名使用 PascalCase
+- 文件名与组件名保持一致
+- 组件目录结构：
+  ```
+  components/
+    └── ComponentName/
+        ├── index.vue
+        ├── components/
+        └── types.ts
+  ```
+
+### TypeScript 规范
+- 优先使用 `interface` 而不是 `type`
+- 避免使用 `any`，必要时使用 `unknown`
+- 使用类型工具：`Partial`、`Pick`、`Record` 等
+- 组件 Props 类型命名：`${ComponentName}Props`
+- API 响应类型命名：`${ApiName}Response`
+
+### 状态管理规范
+- 使用 Pinia 进行状态管理
+- Store 文件位于 `src/stores` 目录
+- Store 按功能模块拆分
+- 异步操作放在 actions 中
+- 使用 `storeToRefs` 解构状态
+
+### Ant Design Vue 使用规范
+- 按需导入组件和样式
+- 使用 `ConfigProvider` 配置主题和国际化
+- Form 组件使用 Composition API 风格
+- 图标组件单独按需导入
+- 自定义组件样式时使用 Less 变量覆盖
+
+### 样式规范
+- 使用 UnoCSS 的原子化 CSS
+- 自定义样式使用 Less
+- 组件样式使用 `scoped`
+- 主题相关样式通过 CSS 变量管理
+- 响应式设计使用 UnoCSS 的断点工具类
+
+### Git 提交规范
+- commit message 必须使用中文
+- 格式：`<类型>: <描述>`
+- 类型：
+  * 特性：新功能
+  * 修复：Bug修复
+  * 文档：文档更新
+  * 格式：代码格式化
+  * 重构：代码重构
+  * 性能：性能优化
+  * 测试：测试相关
+  * 构建：构建系统或外部依赖项更改
+  * 持续集成：CI配置更改
+  * 回滚：代码回滚
+
+### 性能优化规范
+- 路由使用懒加载
+- 大型组件使用异步组件
+- 列表使用虚拟滚动
+- 使用 `v-show` 替代频繁切换的 `v-if`
+- 合理使用 `keepAlive`
+- 图片使用懒加载
+- 按需导入第三方库
+
+### 开发工具配置
+- 使用 VS Code
+- 启用 ESLint
+- 启用 Prettier
+- 使用 TypeScript 语言服务
+- 保存时自动格式化
+- 使用推荐的 VS Code 插件
+
+### API 请求规范
+- 使用统一的请求封装
+- API 定义放在 `src/api` 目录
+- 请求参数和响应使用 TypeScript 类型
+- 统一的错误处理
+- 支持请求取消
+- 支持请求重试
+
+### 环境配置规范
+- 使用 `.env` 文件管理环境变量
+- 环境变量以 `VITE_` 开头
+- 区分开发、测试、生产环境
+- 敏感信息不要提交到代码库
