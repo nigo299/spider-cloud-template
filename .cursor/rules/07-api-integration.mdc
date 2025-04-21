@@ -1,0 +1,181 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# API 接口对接规范
+
+本文档介绍项目中 API 接口对接的最佳实践和规范，包括接口组织、数据获取、错误处理等方面。
+
+## 接口文件组织
+
+1. **目录结构**
+
+   - 所有 API 请求方法应放置在 `packages/pc/src/api/` 目录下
+   - 按照业务模块进行分类，例如 `system/menuManage.ts`
+   - 每个模块的接口应当在同一个文件中定义
+
+2. **接口命名规范**
+
+   - 获取列表：`get{Module}List`
+   - 获取详情：`get{Module}Detail`
+   - 新增：`add{Module}`
+   - 更新：`update{Module}`
+   - 删除：`delete{Module}`
+
+3. **接口类型定义**
+   - 接口参数和返回值类型定义应放在 `packages/pc/src/interface/` 目录下
+   - 按照业务模块进行分类，文件命名与 API 文件对应
+   - 接口类型命名以 `I` 开头，如 `IMenuTreeRecord`
+
+## 使用 useSWRV 进行数据获取
+
+项目中统一使用 useSWRV 进行数据获取和缓存管理，以提高用户体验和性能。
+
+### 基本用法
+
+```typescript
+import { NotRevalidateOption } from '@web/common/swrv'
+import { to } from '@web/common/util'
+import { message } from 'ant-design-vue'
+import useSWRV from 'swrv'
+
+// 定义数据获取方法
+async function initData() {
+  const [data, error] = await to(getMenuList())
+
+  if (error) {
+    message.error(error.message)
+    return
+  }
+
+  // 数据处理逻辑
+  function formatMenu(list) {
+    list.forEach((item) => {
+      item.children = item.items
+      const { sortNumber, permissionType, code, path } = item.self
+      Object.assign(item, { sortNumber, permissionType, code, path })
+
+      if (item.hasChildren) formatMenu(item.items)
+    })
+  }
+  formatMenu(data)
+
+  return data
+}
+
+// 使用 useSWRV 获取数据
+const {
+  data: dataSource, // 数据源
+  isValidating: loading, // 加载状态
+  mutate: getList, // 手动触发重新获取数据的方法
+} = useSWRV(() => '[menu-list]', initData, NotRevalidateOption)
+```
+
+### 最佳实践
+
+1. **唯一键**
+
+   - 为每个请求提供唯一的键，推荐格式：`[{模块名}-{操作}]`
+   - 例如：`[menu-list]`, `[user-detail-123]`
+
+2. **错误处理**
+
+   - 使用 `@web/common/util` 中的 `to` 函数进行异步错误处理
+   - 在数据获取方法中处理错误，避免直接在组件中处理
+
+3. **缓存控制**
+
+   - 使用 `NotRevalidateOption` 可以避免组件重新挂载时自动重新获取数据
+   - 需要更新数据时，通过 `mutate` 方法手动触发
+
+4. **数据预处理**
+
+   - 在数据获取方法内对 API 返回的数据进行处理和转换
+   - 确保组件获取到的数据格式符合预期，例如转换树形结构
+
+5. **加载状态**
+   - 使用 `isValidating` 管理加载状态，控制表格或其他组件的加载动画
+
+## 数据修改操作规范
+
+对于修改操作（如新增、编辑、删除），应当遵循以下规范：
+
+```typescript
+// 删除操作示例
+async function toDelete(id: string) {
+  const [, err] = await to(deleteMenu(id))
+
+  if (!err) {
+    message.success('删除成功！')
+    getList() // 刷新列表数据
+  } else {
+    message.error(err.message)
+  }
+}
+
+// 新增/编辑操作示例
+async function handleSubmit(formData) {
+  const [, err] = await to(isEdit.value ? updateMenu(formData) : addMenu(formData))
+
+  if (!err) {
+    message.success(`${isEdit.value ? '编辑' : '新增'}成功！`)
+    emit('refresh') // 通知父组件刷新数据
+    visible.value = false
+  } else {
+    message.error(err.message)
+  }
+}
+```
+
+## 接口错误处理
+
+1. **统一的错误处理方式**
+
+   - 使用 `to` 函数解构API调用结果，获取数据和错误
+   - 错误信息统一通过 `message.error` 展示给用户
+
+2. **请求状态管理**
+   - 使用 `ref` 管理加载状态
+   - 操作开始前设置为 `true`，完成后设置为 `false`
+
+## 模块间通信
+
+当需要在不同组件间传递数据更新时，应采用以下方法：
+
+1. **父子组件通信**
+
+   - 子组件通过自定义事件通知父组件
+
+   ```typescript
+   const emit = defineEmits(['refresh'])
+   emit('refresh') // 通知父组件
+   ```
+
+2. **全局状态管理**
+   - 复杂应用应使用Pinia进行全局状态管理
+   - 定义store并在组件中使用 `useStore` 获取和更新状态
+
+## 接口调试和Mock数据
+
+在开发阶段，可以使用Mock数据进行接口调试：
+
+1. **本地Mock**
+
+   - 在接口方法中添加Mock数据返回
+
+   ```typescript
+   export async function getMenuList() {
+     // 开发环境返回Mock数据
+     if (import.meta.env.DEV) {
+       return Promise.resolve(mockData)
+     }
+
+     // 生产环境调用真实接口
+     return request.get('/api/menu/list')
+   }
+   ```
+
+2. **统一Mock服务**
+   - 使用项目提供的Mock服务进行接口模拟
+   - 在 `mock/` 目录下添加对应模块的Mock配置

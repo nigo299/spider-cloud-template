@@ -1,0 +1,132 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Table 表格组件
+
+封装自 Ant Design Vue 的 Table 组件，用于统一表格风格，快速生成表格。
+
+## 基本用法
+
+```vue
+<script setup lang="ts">
+import type { TableColumnAllType, TableConfigType } from '@/interface/table'
+import { TableColumnTypeEnum } from '@/enums'
+import { ref } from 'vue'
+
+// 表格数据
+const tableData = ref([
+  {
+    id: '01',
+    name: '示例数据',
+    // 其他字段
+  },
+])
+
+// 表格配置
+const tableConfig = ref<TableConfigType>({
+  rowKey: 'id',
+  pagination: {
+    current: 1,
+    pageSize: 10,
+    total: 60,
+    defaultPageSize: 10,
+    pageSizeOptions: ['10', '20', '50', '100'],
+    showSizeChanger: true,
+    showTotal: (total: number) => `共 ${total} 条`,
+  },
+})
+
+// 表格列配置
+const tableColumns: TableColumnAllType[] = [
+  {
+    title: '序号',
+    key: 'id',
+    dataIndex: 'id',
+    width: 64,
+    align: 'left',
+    type: TableColumnTypeEnum.TEXT,
+  },
+  {
+    title: '名称',
+    dataIndex: 'name',
+    key: 'name',
+    width: 180,
+    type: TableColumnTypeEnum.TEXT,
+  },
+  {
+    title: '操作',
+    key: 'operation',
+    width: 128,
+    align: 'center',
+    type: TableColumnTypeEnum.OPERATION,
+  },
+]
+
+// 选中行
+const selectList = ref<string[]>([])
+
+// 分页变化处理
+function changePaginationEvent(pagination: any, filters: any, sorter: any) {
+  if (pagination && tableConfig.value && tableConfig.value.pagination) {
+    tableConfig.value.pagination.current = pagination.current
+    tableConfig.value.pagination.pageSize = pagination.pageSize
+    // 重新加载数据
+  }
+}
+</script>
+
+<template>
+  <Table
+    v-model:select-list="selectList"
+    :config="tableConfig"
+    :data="tableData"
+    :loading="false"
+    :columns="tableColumns"
+    @change="changePaginationEvent"
+  >
+    <!-- 自定义操作列 -->
+    <template #default="{ row }">
+      <a-space size="small">
+        <a class="text-primary">编辑</a>
+        <a class="text-danger">删除</a>
+      </a-space>
+    </template>
+
+    <!-- 自定义表格上方区域 -->
+    <template #header>
+      <a-button type="primary">新增</a-button>
+    </template>
+  </Table>
+</template>
+```
+
+## 配置参数
+
+- `data`: 数据源
+- `columns`: 表格列配置，使用TableColumnAllType类型，必须包含type字段
+- `config`: 表格配置项，使用TableConfigType类型
+- `loading`: 表格加载状态
+- `selectList`: 表格选择的行数据key数组
+
+## 列类型定义
+
+表格列支持以下类型（通过TableColumnTypeEnum枚举定义）：
+
+- `TEXT`: 文本类型
+- `NUMBER`: 数字类型
+- `DATE`: 日期类型
+- `TOOLTIP`: 带提示的文本
+- `TAG`: 标签类型
+- `INDEX`: 索引列
+- `OPERATION`: 操作列
+
+
+## 表格样式规范
+
+- 表头默认居中对齐，设置 `align: 'center'`
+- 表格内容根据数据类型选择对齐方式，一般文本居左，数字居右
+- 操作列必须居中对齐
+- 时间字段使用时间戳作为值
+- 使用 useSWRV 进行数据获取

@@ -1,0 +1,38 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# 项目架构规则
+
+## 项目架构
+
+项目基于Vue 3 + TypeScript + Vite构建，使用了以下主要技术栈：
+
+- Vue 3 Composition API
+- TypeScript
+- Ant Design Vue 作为UI组件库基础
+- UnoCSS 进行原子化CSS开发
+- Vue Router 进行路由管理
+- Pinia 进行状态管理
+
+### 文件结构
+
+```
+packages/pc/src/
+├── api/              # API接口
+├── assets/           # 静态资源
+├── auto-import/      # 自动导入配置
+├── components/       # 公共组件
+├── config/           # 配置文件
+├── directives/       # 自定义指令
+├── enums/            # 枚举常量
+├── hooks/            # 自定义Hooks
+├── interface/        # TypeScript接口定义
+├── layout/           # 布局组件
+├── plugins/          # 插件
+├── router/           # 路由配置
+├── stores/           # Pinia状态管理
+├── utils/            # 工具函数
+├── views/            # 页面组件
+```
