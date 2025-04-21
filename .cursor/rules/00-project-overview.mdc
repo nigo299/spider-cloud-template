@@ -1,7 +1,7 @@
 ---
 description:
-globs: *.vue,*.ts,*.css
-alwaysApply: false
+globs:
+alwaysApply: true
 ---
 # Spider Cloud Template 项目规范
 
