@@ -1,5 +1,5 @@
 {
-  "name": "vue-naive-admin",
+  "name": "@web/pc-pro",
   "type": "module",
   "version": "2.0.0",
   "private": true,
@@ -8,7 +8,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint:fix": "eslint --fix",
-    "postinstall": "npx simple-git-hooks",
     "up": "taze major -I"
   },
   "dependencies": {
@@ -42,7 +41,6 @@
     "glob": "^11.0.2",
     "lint-staged": "^15.5.1",
     "rollup-plugin-visualizer": "^5.14.0",
-    "simple-git-hooks": "^2.13.0",
     "taze": "^19.0.4",
     "typescript": "^5.8.3",
     "typescript-plugin-css-modules": "^5.1.0",
@@ -52,11 +50,5 @@
     "vite": "^6.3.3",
     "vite-plugin-router-warn": "^1.0.0",
     "vite-plugin-vue-devtools": "^7.7.5"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
-  },
-  "lint-staged": {
-    "*": "eslint --fix"
   }
 }
