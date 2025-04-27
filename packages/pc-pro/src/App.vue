@@ -30,8 +30,7 @@ import { layoutSettingVisible } from './settings'
 const layouts = new Map<string, Component>()
 function getLayout(name: string): Component {
   // 利用map将加载过的layout缓存起来，防止重新加载layout导致页面闪烁
-  if (layouts.get(name))
-    return layouts.get(name)!
+  if (layouts.get(name)) return layouts.get(name) as Component
   const layout = markRaw(defineAsyncComponent(() => import(`@/layouts/${name}/index.vue`)))
   layouts.set(name, layout)
   return layout
@@ -39,17 +38,17 @@ function getLayout(name: string): Component {
 
 const route = useRoute()
 const appStore = useAppStore()
-if (appStore.layout === 'default')
-  appStore.setLayout('')
+if (appStore.layout === 'default') appStore.setLayout('')
 const Layout = computed(() => {
-  if (!route.matched?.length)
-    return null
-  return getLayout(route.meta?.layout as string || appStore.layout)
+  if (!route.matched?.length) return null
+  return getLayout((route.meta?.layout as string) || appStore.layout)
 })
 
 const tabStore = useTabStore()
 const keepAliveNames = computed<string[]>(() => {
-  return tabStore.tabs.filter(item => item.keepAlive).map(item => item.name)
+  return tabStore.tabs
+    .filter((item: { keepAlive: boolean }) => item.keepAlive)
+    .map((item: { name: string }) => item.name)
 })
 
 watchEffect(() => {

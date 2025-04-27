@@ -24,14 +24,16 @@ class Storage {
   }
 
   get<T = any>(key: string): T | null {
-    const { value } = this.getItem<T>(key, null)
-    return value
+    const item = this.getItem<T>(key, null)
+    return item ? item.value : null
   }
 
-  getItem<T = any>(key: string, def: { value: T | null, time?: number } | null = null): { value: T | null, time?: number } {
+  getItem<T = any>(
+    key: string,
+    def: { value: T | null; time?: number } | null = null
+  ): { value: T | null; time?: number } | null {
     const val = this.storage.getItem(this.getKey(key))
-    if (!val)
-      return def as { value: T | null, time?: number }
+    if (!val) return def
     try {
       const data = JSON.parse(val) as StorageData<T>
       const { value, time, expire } = data
@@ -39,12 +41,11 @@ class Storage {
         return { value, time }
       }
       this.remove(key)
-      return def as { value: T | null, time?: number }
-    }
-    catch (error) {
+      return def
+    } catch (error) {
       console.error(error)
       this.remove(key)
-      return def as { value: T | null, time?: number }
+      return def
     }
   }
 
@@ -57,6 +58,9 @@ class Storage {
   }
 }
 
-export function createStorage({ prefixKey = '', storage = sessionStorage }: StorageOption): Storage {
+export function createStorage({
+  prefixKey = '',
+  storage = sessionStorage,
+}: StorageOption): Storage {
   return new Storage({ prefixKey, storage })
 }
