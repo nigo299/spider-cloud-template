@@ -1,5 +1,6 @@
 import type { UserConfig } from 'vite'
 import path from 'node:path'
+import process from 'node:process'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import Unocss from 'unocss/vite'
@@ -22,6 +23,7 @@ interface ViteEnv {
   [key: string]: string
 }
 
+// 注意：如果遇到类型错误，请确保在 tsconfig.json 中设置了 "skipLibCheck": true
 export default defineConfig(({ mode }): UserConfig => {
   const viteEnv = loadEnv(mode, process.cwd()) as unknown as ViteEnv
   const { VITE_PUBLIC_PATH, VITE_PROXY_TARGET } = viteEnv
@@ -40,48 +42,27 @@ export default defineConfig(({ mode }): UserConfig => {
           'pinia',
           '@vueuse/core',
           {
-            'naive-ui': [
-              'useDialog',
-              'useMessage',
-              'useNotification',
-              'useLoadingBar',
-            ],
-            'axios': [
-              ['default', 'axios'],
-            ],
-            'dayjs': [
-              ['default', 'dayjs'],
-            ],
+            'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+            axios: [['default', 'axios']],
+            dayjs: [['default', 'dayjs']],
           },
         ],
         dts: 'src/types/auto-imports.d.ts',
-        dirs: [
-          'src/composables',
-          'src/utils',
-          'src/store/modules',
-        ],
+        dirs: ['src/composables', 'src/utils', 'src/store/modules'],
         vueTemplate: true,
         eslintrc: {
           enabled: true,
         },
-      }),
+      }) as any,
       Components({
-        resolvers: [
-          NaiveUiResolver(),
-          VueUseComponentsResolver(),
-          VueUseDirectiveResolver(),
-        ],
+        resolvers: [NaiveUiResolver(), VueUseComponentsResolver(), VueUseDirectiveResolver()],
         dts: 'src/types/components.d.ts',
-        dirs: [
-          'src/components',
-          'src/layouts',
-          'src/views',
-        ],
+        dirs: ['src/components', 'src/layouts', 'src/views'],
         extensions: ['vue', 'tsx'],
         deep: true,
         directoryAsNamespace: false,
         include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
-      }),
+      }) as any,
       // 自定义插件，用于生成页面文件的path，并添加到虚拟模块
       pluginPagePathes(),
       // 自定义插件，用于生成自定义icon，并添加到虚拟模块
@@ -108,7 +89,8 @@ export default defineConfig(({ mode }): UserConfig => {
           configure: (proxy, options) => {
             // 配置此项可在响应头中看到请求的真实地址
             proxy.on('proxyRes', (proxyRes, req) => {
-              proxyRes.headers['x-real-url'] = new URL(req.url || '', options.target as string)?.href || ''
+              proxyRes.headers['x-real-url'] =
+                new URL(req.url || '', options.target as string)?.href || ''
             })
           },
         },

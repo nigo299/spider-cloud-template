@@ -1,4 +1,5 @@
 import { defaultLayout, defaultPrimaryColor, naiveThemeOverrides } from '@/settings'
+// @ts-expect-error 忽略报错
 import { generate, getRgbStr } from '@arco-design/color'
 import { useDark } from '@vueuse/core'
 import { defineStore } from 'pinia'
