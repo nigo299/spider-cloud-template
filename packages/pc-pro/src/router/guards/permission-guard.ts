@@ -1,54 +1,63 @@
-import type { RouteLocationNormalized, Router, RouteRecordRaw } from 'vue-router'
-import api from '@/api'
+import type { Router } from 'vue-router'
 import { useAuthStore, usePermissionStore, useUserStore } from '@/store'
-import { getPermissions, getUserInfo } from '@/store/helper'
+import { getUserInfo } from '@/store/helper'
 
-const WHITE_LIST = ['/login', '/404']
+const WHITE_LIST = ['/login', '/404', '/403']
 
 export function createPermissionGuard(router: Router): void {
-  router.beforeEach(async (to: RouteLocationNormalized) => {
+  router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore()
     const token = authStore.accessToken
 
-    /** 没有token */
+    // 无token且访问非白名单页面，重定向至登录
     if (!token) {
-      if (WHITE_LIST.includes(to.path))
-        return true
-      return { path: 'login', query: { ...to.query, redirect: to.path } }
+      if (WHITE_LIST.includes(to.path)) {
+        return next()
+      }
+      return next({ path: '/login', query: { redirect: to.fullPath } })
     }
 
-    // 有token的情况
-    if (to.path === '/login')
-      return { path: '/' }
-    if (WHITE_LIST.includes(to.path))
-      return true
+    // 有token访问登录页，重定向至首页
+    if (to.path === '/login') {
+      return next({ path: '/' })
+    }
 
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
+
+    // 获取用户信息和权限
     if (!userStore.userInfo) {
-      const [user, permissions] = await Promise.all([getUserInfo(), getPermissions()])
-      userStore.setUser(user)
-      permissionStore.setPermissions(permissions)
-      const routeComponents = import.meta.glob('@/views/**/*.vue')
-      permissionStore.accessRoutes.forEach((route) => {
-        if (route.component && typeof route.component === 'string') {
-          route.component = routeComponents[route.component] as any
-        }
-        if (route.name) {
-          !router.hasRoute(route.name) && router.addRoute(route as unknown as RouteRecordRaw)
-        }
-      })
-      return { ...to, replace: true }
+      try {
+        // 获取用户信息
+        const userInfo = await getUserInfo()
+        userStore.setUser(userInfo)
+
+        // 直接生成所有本地权限路由
+        const accessRoutes = permissionStore.generateRoutes()
+
+        // 动态添加路由
+        accessRoutes.forEach((route) => {
+          if (route.name && !router.hasRoute(route.name)) {
+            router.addRoute(route as any)
+          }
+        })
+
+        // 重定向到相同的路由以确保路由配置生效
+        return next({ ...to, replace: true })
+      } catch (error) {
+        console.error('获取用户信息失败', error)
+        // 清除token，跳转到登录页
+        authStore.resetToken()
+        return next({ path: '/login', query: { redirect: to.fullPath } })
+      }
     }
 
-    const routes = router.getRoutes()
-    if (routes.find(route => route.name === to.name))
-      return true
+    // 如果路由存在则允许访问
+    if (to.name && router.hasRoute(to.name)) {
+      return next()
+    }
 
-    // 判断是无权限还是404
-    const { data: hasMenu } = await api.validateMenuPath(to.path)
-    return hasMenu
-      ? { name: '403', query: { path: to.fullPath }, state: { from: 'permission-guard' } }
-      : { name: '404', query: { path: to.fullPath } }
+    // 路由不存在，跳转到404页面
+    next({ path: '/404' })
   })
 }

@@ -9,7 +9,8 @@ declare module 'vue-router' {
     requiresAuth?: boolean
     permissions?: string[]
     parentKey?: string | null
-    btns?: Array<{ code: string, name: string }>
+    btns?: Array<{ code: string; name: string }>
+    hidden?: boolean
   }
 }
 
@@ -27,7 +28,8 @@ export interface AppRouteRecordRaw {
     requiresAuth?: boolean
     permissions?: string[]
     parentKey?: string | null
-    btns?: Array<{ code: string, name: string }>
+    btns?: Array<{ code: string; name: string }>
+    hidden?: boolean
   }
 }
 

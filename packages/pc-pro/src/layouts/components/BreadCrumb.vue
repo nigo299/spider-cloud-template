@@ -6,8 +6,8 @@
     <n-breadcrumb-item
       v-for="(item, index) of breadItems"
       v-else
-      :key="item.code"
-      :clickable="!!item.path"
+      :key="item.key"
+      :clickable="!!item.path && index !== 0"
       @click="handleItemClick(item)"
     >
       <n-dropdown
@@ -15,8 +15,8 @@
         @select="handleDropSelect"
       >
         <div class="flex items-center">
-          <i :class="item.icon" class="mr-8" />
-          {{ item.name }}
+          <i :class="item.iconClass" class="mr-8" />
+          {{ item.label }}
         </div>
       </n-dropdown>
     </n-breadcrumb-item>
@@ -28,10 +28,10 @@ import type { DropdownOption } from 'naive-ui'
 import { usePermissionStore } from '@/store'
 
 interface BreadcrumbItem {
-  code: string
-  name: string
+  key: string
+  label: string
   path?: string
-  icon?: string
+  iconClass?: string
   children?: BreadcrumbItem[]
   show?: boolean
 }
@@ -44,18 +44,22 @@ const breadItems = ref<BreadcrumbItem[]>([])
 watch(
   () => route.name,
   (v) => {
-    breadItems.value = findMatchs(permissionStore.permissions, v as string) || []
+    breadItems.value = findMatchs(permissionStore.menus, v as string) || []
   },
-  { immediate: true },
+  { immediate: true }
 )
 
-function findMatchs(tree: BreadcrumbItem[], code: string, parents: BreadcrumbItem[] = []): BreadcrumbItem[] | null {
+function findMatchs(
+  tree: BreadcrumbItem[],
+  key: string,
+  parents: BreadcrumbItem[] = []
+): BreadcrumbItem[] | null {
   for (const item of tree) {
-    if (item.code === code) {
+    if (item.key === key) {
       return [...parents, item]
     }
     if (item.children?.length) {
-      const found = findMatchs(item.children, code, [...parents, item])
+      const found = findMatchs(item.children, key, [...parents, item])
       if (found) {
         return found
       }
@@ -65,24 +69,22 @@ function findMatchs(tree: BreadcrumbItem[], code: string, parents: BreadcrumbIte
 }
 
 function handleItemClick(item: BreadcrumbItem): void {
-  if (item.path && item.code !== route.name) {
+  if (item.path && item.key !== route.name) {
     router.push(item.path)
   }
 }
 
 function getDropOptions(list: BreadcrumbItem[] = []): DropdownOption[] {
-  return list
-    .filter(item => item.show)
-    .map(child => ({
-      label: child.name,
-      key: child.code,
-      icon: () => h('i', { class: child.icon }),
-    }))
+  return list.map((child) => ({
+    label: child.label,
+    key: child.key,
+    icon: child.iconClass ? () => h('i', { class: child.iconClass }) : undefined,
+  }))
 }
 
-function handleDropSelect(code: string): void {
-  if (code && code !== route.name) {
-    router.push({ name: code })
+function handleDropSelect(key: string): void {
+  if (key && key !== route.name) {
+    router.push({ name: key })
   }
 }
 </script>

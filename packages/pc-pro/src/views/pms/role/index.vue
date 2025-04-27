@@ -66,19 +66,16 @@
             :data="permissionTree"
             :checked-keys="modalForm.permissionIds || []"
             :on-update:checked-keys="(keys) => (modalForm.permissionIds = keys)"
-
-            checkable check-on-click default-expand-all
+            checkable
+            check-on-click
+            default-expand-all
             class="cus-scroll max-h-200 w-full"
           />
         </n-form-item>
         <n-form-item label="状态" path="enable">
           <NSwitch v-model:value="modalForm.enable">
-            <template #checked>
-              启用
-            </template>
-            <template #unchecked>
-              停用
-            </template>
+            <template #checked> 启用 </template>
+            <template #unchecked> 停用 </template>
           </NSwitch>
         </n-form-item>
       </n-form>
@@ -122,8 +119,8 @@ onMounted(() => {
   $table.value?.handleSearch()
 })
 
-const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete, handleEdit }
-  = useCrud<RoleItem>({
+const { modalRef, modalFormRef, modalAction, modalForm, handleAdd, handleDelete, handleEdit } =
+  useCrud<RoleItem>({
     name: '角色',
     doCreate: api.create,
     doDelete: api.delete,
@@ -152,7 +149,7 @@ const columns: DataTableColumns<RoleItem> = [
         {
           checked: () => '启用',
           unchecked: () => '停用',
-        },
+        }
       ),
   },
   {
@@ -175,7 +172,7 @@ const columns: DataTableColumns<RoleItem> = [
           {
             default: () => '分配用户',
             icon: () => h('i', { class: 'i-fe:user-plus text-14' }),
-          },
+          }
         ),
         h(
           NButton,
@@ -189,7 +186,7 @@ const columns: DataTableColumns<RoleItem> = [
           {
             default: () => '编辑',
             icon: () => h('i', { class: 'i-material-symbols:edit-outline text-14' }),
-          },
+          }
         ),
 
         h(
@@ -204,7 +201,7 @@ const columns: DataTableColumns<RoleItem> = [
           {
             default: () => '删除',
             icon: () => h('i', { class: 'i-material-symbols:delete-outline text-14' }),
-          },
+          }
         ),
       ]
     },
@@ -218,8 +215,7 @@ async function handleEnable(row: RoleItem): Promise<void> {
     row.enableLoading = false
     window.$message.success('操作成功')
     $table.value?.handleSearch()
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error)
     row.enableLoading = false
   }

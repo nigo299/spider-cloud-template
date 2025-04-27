@@ -48,20 +48,6 @@ import type { DataTableColumn, PaginationProps } from 'naive-ui'
 import { nextTick, reactive, ref } from 'vue'
 import { utils, writeFile } from 'xlsx'
 
-// 使用全局声明的消息API
-declare global {
-  interface Window {
-    $message: {
-      loading: (content: string, option?: any) => void
-      success: (content: string, option?: any) => void
-      error: (content: string, option?: any) => void
-      info: (content: string, option?: any) => void
-      warning: (content: string, option?: any) => void
-      destroy: (key: string, duration?: number) => void
-    }
-  }
-}
-
 interface QueryItems {
   [key: string]: any
 }
@@ -168,7 +154,7 @@ function toggleExpand(): void {
 async function handleQuery(): Promise<void> {
   try {
     loading.value = true
-    let paginationParams: { pageNo?: number, pageSize?: number } = {}
+    let paginationParams: { pageNo?: number; pageSize?: number } = {}
     // 如果非分页模式或者使用前端分页,则无需传分页参数
     if (props.isPagination && props.remote) {
       paginationParams = { pageNo: pagination.page ?? 1, pageSize: pagination.pageSize ?? 10 }
@@ -183,13 +169,11 @@ async function handleQuery(): Promise<void> {
       // 如果当前页数据为空，且总条数不为0，则返回上一页数据
       onPageChange((pagination.page ?? 1) - 1)
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error)
     tableData.value = []
     pagination.itemCount = 0
-  }
-  finally {
+  } finally {
     emit('onDataChange', tableData.value)
     loading.value = false
   }
@@ -198,8 +182,7 @@ async function handleQuery(): Promise<void> {
 function handleSearch(keepCurrentPage: boolean = false): void {
   if (keepCurrentPage || !props.remote) {
     handleQuery()
-  }
-  else {
+  } else {
     onPageChange(1)
   }
 }
@@ -223,19 +206,22 @@ function onPageChange(currentPage: number): void {
 }
 
 function onChecked(rowKeys: (string | number)[]): void {
-  if (props.columns.some(item => item.type === 'selection')) {
+  if (props.columns.some((item) => item.type === 'selection')) {
     emit('onChecked', rowKeys)
   }
 }
 
-function handleExport(columns: TableColumn[] = props.columns, data: TableRow[] = tableData.value): void {
+function handleExport(
+  columns: TableColumn[] = props.columns,
+  data: TableRow[] = tableData.value
+): void {
   if (!data?.length) {
     return window.$message.warning('没有数据')
   }
-  const columnsData = columns.filter(item => !!item.title && !item.hideInExcel)
-  const thKeys = columnsData.map(item => item.key)
-  const thData = columnsData.map(item => item.title)
-  const trData = data.map(item => thKeys.map(key => item[key]))
+  const columnsData = columns.filter((item) => !!item.title && !item.hideInExcel)
+  const thKeys = columnsData.map((item) => item.key)
+  const thData = columnsData.map((item) => item.title)
+  const trData = data.map((item) => thKeys.map((key) => item[key]))
   const sheet = utils.aoa_to_sheet([thData, ...trData])
   const workBook = utils.book_new()
   utils.book_append_sheet(workBook, sheet, '数据报表')

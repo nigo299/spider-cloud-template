@@ -10,6 +10,7 @@
     :options="permissionStore.menus"
     :value="activeKey"
     @update:value="handleMenuSelect"
+    :render-icon="renderMenuIcon"
   />
 </template>
 
@@ -17,6 +18,7 @@
 import { useAppStore, usePermissionStore } from '@/store'
 import { isExternal } from '@/utils'
 import { NMenu } from 'naive-ui'
+import { h } from 'vue'
 
 // 从store中定义的MenuItem类型
 interface MenuItem {
@@ -24,8 +26,8 @@ interface MenuItem {
   key: string
   path?: string
   originPath?: string
-  icon: () => any
-  order: number
+  iconClass?: string
+  order?: number
   children?: MenuItem[]
 }
 
@@ -34,7 +36,13 @@ const route = useRoute()
 const appStore = useAppStore()
 const permissionStore = usePermissionStore()
 
-const activeKey = computed<string | null>(() => route.meta?.parentKey as string || route.name as string)
+const activeKey = computed<string | null>(() => {
+  // 外链 iframe 页面：高亮 query.key
+  if (route.path === '/iframe' && route.query.key) {
+    return route.query.key as string
+  }
+  return (route.meta?.parentKey as string) || (route.name as string)
+})
 
 const menu = ref<InstanceType<typeof NMenu> | null>(null)
 watch(route, async () => {
@@ -44,24 +52,31 @@ watch(route, async () => {
 
 function handleMenuSelect(key: string): void {
   // 从menus中查找对应的菜单项
-  const findMenuItem = (items: MenuItem[], targetKey: string): MenuItem | undefined => {
+  const findMenuItem = (
+    items: MenuItem[],
+    targetKey: string,
+    parentPath = ''
+  ): { item?: MenuItem; fullPath?: string } => {
     for (const item of items) {
+      const currentPath = item.path
+        ? parentPath
+          ? parentPath.replace(/\/$/, '') + '/' + item.path.replace(/^\//, '')
+          : item.path
+        : parentPath
       if (item.key === targetKey)
-        return item
+        return { item, fullPath: currentPath.startsWith('/') ? currentPath : '/' + currentPath }
       if (item.children?.length) {
-        const found = findMenuItem(item.children, targetKey)
-        if (found)
-          return found
+        const found = findMenuItem(item.children, targetKey, currentPath)
+        if (found.item) return found
       }
     }
-    return undefined
+    return {}
   }
 
-  const item = findMenuItem(permissionStore.menus, key)
-  if (!item)
-    return
+  const { item, fullPath } = findMenuItem(permissionStore.menus, key)
+  if (!item || !fullPath) return
 
-  if (item.originPath && isExternal(item.originPath)) {
+  if (item.path && isExternal(item.path)) {
     window.$dialog.confirm({
       type: 'info',
       title: `请选择打开方式`,
@@ -73,16 +88,42 @@ function handleMenuSelect(key: string): void {
         }
       },
       cancel: () => {
-        if (item.path)
-          router.push({ path: item.path })
+        // 在本站内嵌打开，跳转到 iframe 页面并传递 url、标题、icon、key、parentKey 参数
+        // 递归查找父级key
+        function findParentKey(
+          items: MenuItem[],
+          targetKey: string,
+          parentKey: string | null = null
+        ): string | null {
+          for (const menu of items) {
+            if (menu.key === targetKey) return parentKey
+            if (menu.children) {
+              const found: string | null = findParentKey(menu.children, targetKey, menu.key)
+              if (found) return found
+            }
+          }
+          return null
+        }
+        const parentKey = findParentKey(permissionStore.menus, item.key)
+        router.push({
+          path: '/iframe',
+          query: {
+            url: item.path,
+            title: item.label,
+            icon: item.iconClass,
+            key: item.key,
+            parentKey: parentKey,
+          },
+        })
       },
     })
+  } else {
+    router.push({ path: fullPath })
   }
-  else {
-    if (!item.path)
-      return
-    router.push({ path: item.path })
-  }
+}
+
+function renderMenuIcon(option: any) {
+  return option.iconClass ? h('i', { class: `${option.iconClass} text-18` }) : null
 }
 </script>
 

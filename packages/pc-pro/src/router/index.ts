@@ -1,7 +1,7 @@
 import type { App } from 'vue'
 import type { Router } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import { basicRoutes } from './basic-routes'
+import { constantRoutes } from './routes'
 import { setupRouterGuards } from './guards'
 
 export const router: Router = createRouter({
@@ -9,7 +9,7 @@ export const router: Router = createRouter({
     import.meta.env.VITE_USE_HASH === 'true'
       ? createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH || '/')
       : createWebHistory(import.meta.env.VITE_PUBLIC_PATH || '/'),
-  routes: basicRoutes,
+  routes: constantRoutes as any,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
