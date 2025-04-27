@@ -172,7 +172,7 @@ const columns: DataTableColumns<DemoItem> = [
           onUpdateValue: async () => await handleEnable(row),
         },
         {
-          checked: () => '',
+          checked: () => '启用',
           unchecked: () => '停用',
         }
       ),
