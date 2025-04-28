@@ -131,7 +131,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         path: 'crud',
         component: () => import('@/views/demo/crud/index.vue'),
         meta: {
-          title: 'CRUD 示例',
+          title: 'CRUD 表格',
           icon: 'i-fe:database',
           keepAlive: false,
         },
@@ -193,6 +193,70 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           title: '文档 - Naive UI',
           icon: 'i-me:naiveui',
         },
+      },
+    ],
+  },
+  {
+    name: 'MultiLevel',
+    path: '/multi-level',
+    meta: {
+      title: '多级菜单',
+      icon: 'i-fe:list',
+    },
+    children: [
+      {
+        name: 'Level1A',
+        path: 'level-1a',
+        component: () => import('@/views/multi-level/level-1a/index.vue'),
+        meta: {
+          title: '菜单 1-A',
+          icon: 'i-fe:folder',
+          keepAlive: false,
+        },
+        children: [
+          {
+            name: 'Level1A1',
+            path: 'level-1a-1',
+            component: () => import('@/views/multi-level/level-1a/level-1a-1/index.vue'),
+            meta: {
+              title: '菜单 1-A-1',
+              icon: 'i-fe:file',
+              keepAlive: false,
+            },
+          },
+          {
+            name: 'Level1A2',
+            path: 'level-1a-2',
+            component: () => import('@/views/multi-level/level-1a/level-1a-2/index.vue'),
+            meta: {
+              title: '菜单 1-A-2',
+              icon: 'i-fe:file',
+              keepAlive: false,
+            },
+          },
+        ],
+      },
+      {
+        name: 'Level1B',
+        path: 'level-1b',
+        component: () => import('@/views/multi-level/level-1b/index.vue'),
+        meta: {
+          title: '菜单 1-B',
+          icon: 'i-fe:folder',
+          keepAlive: false,
+        },
+        children: [
+          {
+            name: 'Level1B1',
+            path: 'level-1b-1',
+            component: () => import('@/views/multi-level/level-1b/level-1b-1/index.vue'),
+            meta: {
+              title: '菜单 1-B-1（单个子菜单）',
+              icon: 'i-fe:file',
+              keepAlive: false,
+            },
+          },
+        ],
       },
     ],
   },
