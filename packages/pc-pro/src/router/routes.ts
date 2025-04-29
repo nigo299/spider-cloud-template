@@ -260,7 +260,6 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
       },
     ],
   },
-  // 404 必须放在最后
   {
     name: 'Iframe',
     path: '/iframe',
@@ -270,6 +269,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
       hidden: true,
     },
   },
+  {
+    name: 'Profile',
+    path: '/profile',
+    component: () => import('@/views/profile/index.vue'),
+    meta: {
+      title: '个人资料',
+      hidden: true,
+    },
+  },
+  // 404 必须放在最后
   {
     name: 'NotFound',
     path: '/:pathMatch(.*)*',

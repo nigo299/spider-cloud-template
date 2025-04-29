@@ -18,18 +18,6 @@ export interface UserDetail {
     email?: string | null
     userId: string | number
   }
-  roles: Array<{
-    id: string | number
-    name: string
-    code: string
-    enable: boolean
-  }>
-  currentRole: {
-    id: string | number
-    name: string
-    code: string
-    enable: boolean
-  }
 }
 
 /**
@@ -70,13 +58,6 @@ export interface MenuValidation {
 }
 
 /**
- * 角色切换响应
- */
-export interface SwitchRoleResult {
-  success: boolean
-}
-
-/**
  * API接口定义
  */
 export interface Api {
@@ -94,12 +75,6 @@ export interface Api {
    * 用户登出
    */
   logout: () => Promise<HttpResponse<null>>
-
-  /**
-   * 切换当前角色
-   * @param role 角色ID
-   */
-  switchCurrentRole: (role: string) => Promise<HttpResponse<SwitchRoleResult>>
 
   /**
    * 获取角色权限树

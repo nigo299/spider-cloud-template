@@ -66,14 +66,6 @@ export const userApi = {
   },
 
   /**
-   * 切换当前角色
-   * @param role 角色ID
-   */
-  switchCurrentRole(role: string): Promise<HttpResponse<{ success: boolean }>> {
-    return request.post(`/auth/current-role/switch/${role}`)
-  },
-
-  /**
    * 更新用户信息
    * @param data 用户信息
    */
