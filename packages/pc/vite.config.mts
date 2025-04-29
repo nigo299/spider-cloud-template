@@ -119,7 +119,7 @@ const defineCustomConfig: UserConfigFn = (env) => {
           },
         },
       },
-      minify: 'terser',
+      minify: 'terser' as const,
       cssCodeSplit: true,
       chunkSizeWarningLimit: 2000,
     },
