@@ -1,7 +1,7 @@
 <template>
   <n-dropdown :options="options" @select="handleSelect">
     <div id="user-dropdown" class="flex cursor-pointer items-center">
-      <span class="text-14">{{ userName }}</span>
+      <span class="text-14">{{ user?.accountUserInfo.name ?? '匿名用户' }}</span>
     </div>
   </n-dropdown>
 </template>
@@ -10,17 +10,19 @@
 import type { DropdownOption } from 'naive-ui'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/store/modules/auth'
 import { h } from 'vue'
+
+import { logOut } from '@/api/login'
+import useUser from '@/hooks/useUser'
+import { clearCookie } from '@/utils/format'
+import { to } from '@/utils/to'
 
 defineOptions({
   name: 'UserAvatar',
 })
 
-const authStore = useAuthStore()
 const router = useRouter()
-
-const userName = computed(() => authStore.userName || '用户')
+const { user } = useUser()
 
 // 自定义下拉菜单项
 interface CustomDropdownOption {
@@ -58,8 +60,22 @@ function handleSelect(key: string): void {
         type: 'info',
         content: '确认退出？',
         async confirm() {
-          await authStore.logout()
-          window.$message.success('已退出登录')
+          const [, err] = await to(logOut())
+
+          if (!err) {
+            sessionStorage.clear()
+            clearCookie()
+
+            if (import.meta.env.MODE === 'build') {
+              window.location.href =
+                'http://portalnew.cq.sgcc.com.cn/up/pweb/desktop/pweb/login/logout'
+            } else {
+              router.replace({ path: '/login' })
+            }
+            window.$message.success('已退出登录')
+          } else {
+            window.$message.error(err.message)
+          }
         },
       })
       break

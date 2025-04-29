@@ -1,28 +1,9 @@
 <template>
   <AppPage show-footer>
     <div class="flex">
-      <n-card class="min-w-200 w-30%">
-        <div class="flex items-center">
-          <n-avatar round :size="60" :src="userStore.avatar" class="flex-shrink-0" />
-          <div class="ml-20 flex-col">
-            <span class="text-20 opacity-80">
-              Hello, {{ userStore.nickName ?? userStore.username }}
-            </span>
-            <span class="mt-4 opacity-50">当前角色：{{ userStore.currentRole?.name }}</span>
-          </div>
-        </div>
-
-        <p class="mt-28 text-14 opacity-60">
-          一个人几乎可以在任何他怀有无限热忱的事情上成功。
-        </p>
-        <p class="mt-12 text-right text-12 opacity-40">
-          —— 查尔斯·史考伯
-        </p>
-      </n-card>
-      <n-card class="ml-12 w-70%" title="✨ 欢迎使用 Naive Spider Admin">
+      <n-card class="w-full" title="✨ 欢迎使用 Naive Spider Admin">
         <p class="opacity-60">
-          这是一款极简风格的后台管理模板，包含前后端解决方案，前端使用 Vite + Vue3 + Pinia +
-          Unocss
+          这是一款极简风格的后台管理模板，包含前后端解决方案，前端使用 Vite + Vue3 + Pinia + Unocss
         </p>
         <footer class="mt-12 flex items-center justify-end" />
       </n-card>
@@ -200,7 +181,7 @@ const trendOption: ECBasicOption = {
 const skillOption: ECBasicOption = {
   tooltip: {
     trigger: 'item',
-    formatter({ name, value }: { name: string, value: number }) {
+    formatter({ name, value }: { name: string; value: number }) {
       return `${name} ${value}%`
     },
   },
