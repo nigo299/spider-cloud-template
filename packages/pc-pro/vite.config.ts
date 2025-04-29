@@ -72,6 +72,7 @@ export default defineConfig(({ mode }): UserConfig => {
     ],
     resolve: {
       alias: {
+        '@web': path.resolve(process.cwd(), 'libs/common'),
         '@': path.resolve(process.cwd(), 'src'),
         '~': path.resolve(process.cwd()),
       },

@@ -20,8 +20,8 @@ const defineCustomConfig: UserConfigFn = (env) => {
     base: '',
     server: {
       proxy: {
-        '/spider': {
-          target: 'http://192.168.0.10',
+        '/digital-workplace': {
+          target: 'http://192.168.0.13',
           // target: 'http://192.168.0.90:19206',
           changeOrigin: true,
           // rewrite: path => path.replace(/^\/digital-workplace/, ''),
