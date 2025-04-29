@@ -32,6 +32,19 @@ export function createPermissionGuard(router: Router): void {
           router.addRoute(route as any)
         }
       })
+
+      // 添加404路由规则放到最后
+      router.addRoute({
+        path: '/:pathMatch(.*)*',
+        redirect: '/404',
+        name: 'NotFound',
+        meta: {
+          hidden: true,
+        },
+      })
+
+      // 添加完路由后，重新导航到当前页面，确保路由能被正确匹配
+      return next({ ...to, replace: true })
     }
 
     // 已不再需要远程获取用户信息，直接通过本地权限和 token 判断
