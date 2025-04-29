@@ -81,7 +81,7 @@ export default defineConfig(({ mode }): UserConfig => {
       port: 3200,
       open: false,
       proxy: {
-        '/api': {
+        '/digital-workplace': {
           target: VITE_PROXY_TARGET,
           changeOrigin: true,
           rewrite: (path: string) => path.replace(/^\/api/, ''),

@@ -15,8 +15,6 @@ const api: Api = {
   getUser: userApi.getUserInfo,
   refreshToken: userApi.refreshToken,
   logout: userApi.logout,
-  switchCurrentRole: userApi.switchCurrentRole,
-
   // 权限API
   getRolePermissions: permissionApi.getRolePermissions,
   validateMenuPath: permissionApi.validateMenuPath,

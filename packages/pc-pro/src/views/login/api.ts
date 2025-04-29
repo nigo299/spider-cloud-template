@@ -1,7 +1,11 @@
-import { request } from '@/utils'
+import { request } from '@/utils/http'
 
-export default {
-  toggleRole: (data: any) => request.post('/auth/role/toggle', data),
-  login: (data: any) => request.post('/auth/login', data, { needToken: false }),
-  getUser: () => request.get('/user/detail'),
+export interface LoginParam {
+  account: string
+  password: string
+  loginType: number
+}
+
+export function login(params: LoginParam) {
+  return request.post('/auth/papi/common/token/v1/login', params)
 }

@@ -380,6 +380,14 @@
     "watchWithFilter": true,
     "whenever": true,
     "Slot": true,
-    "Slots": true
+    "Slots": true,
+    "Api": true,
+    "FileOSS": true,
+    "MapApi": true,
+    "encrypt": true,
+    "http": true,
+    "message": true,
+    "notification": true,
+    "to": true
   }
 }

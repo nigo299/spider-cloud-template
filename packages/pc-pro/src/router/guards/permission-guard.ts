@@ -1,6 +1,5 @@
 import type { Router } from 'vue-router'
 import { useAuthStore, usePermissionStore, useUserStore } from '@/store'
-import { getUserInfo } from '@/store/helper'
 
 const WHITE_LIST = ['/login', '/404', '/403']
 
@@ -25,32 +24,17 @@ export function createPermissionGuard(router: Router): void {
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
 
-    // 获取用户信息和权限
-    if (!userStore.userInfo) {
-      try {
-        // 获取用户信息
-        const userInfo = await getUserInfo()
-        userStore.setUser(userInfo)
-
-        // 直接生成所有本地权限路由
-        const accessRoutes = permissionStore.generateRoutes()
-
-        // 动态添加路由
-        accessRoutes.forEach((route) => {
-          if (route.name && !router.hasRoute(route.name)) {
-            router.addRoute(route as any)
-          }
-        })
-
-        // 重定向到相同的路由以确保路由配置生效
-        return next({ ...to, replace: true })
-      } catch (error) {
-        console.error('获取用户信息失败', error)
-        // 清除token，跳转到登录页
-        authStore.resetToken()
-        return next({ path: '/login', query: { redirect: to.fullPath } })
-      }
+    // 有 token 且未挂载菜单时，自动生成并挂载本地菜单路由
+    if (token && permissionStore.routes.length === 0) {
+      const accessRoutes = permissionStore.generateRoutes()
+      accessRoutes.forEach((route) => {
+        if (route.name && !router.hasRoute(route.name)) {
+          router.addRoute(route as any)
+        }
+      })
     }
+
+    // 已不再需要远程获取用户信息，直接通过本地权限和 token 判断
 
     // 如果路由存在则允许访问
     if (to.name && router.hasRoute(to.name)) {

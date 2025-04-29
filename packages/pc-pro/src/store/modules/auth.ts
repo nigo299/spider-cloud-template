@@ -4,19 +4,27 @@ import { nextTick } from 'vue'
 
 interface AuthState {
   accessToken: string | undefined
+  userName: string | undefined
+  userAccount: string | undefined
 }
 
 interface TokenData {
   accessToken: string
+  userName?: string
+  userAccount?: string
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     accessToken: undefined,
+    userName: undefined,
+    userAccount: undefined,
   }),
   actions: {
-    setToken({ accessToken }: TokenData): void {
+    setToken({ accessToken, userName, userAccount }: TokenData): void {
       this.accessToken = accessToken
+      this.userName = userName
+      this.userAccount = userAccount
     },
     resetToken(): void {
       this.$reset()

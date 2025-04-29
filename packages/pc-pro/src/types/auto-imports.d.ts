@@ -6,7 +6,10 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const Api: typeof import('../utils/http/index')['Api']
   const EffectScope: typeof import('vue')['EffectScope']
+  const FileOSS: typeof import('../utils/http/index')['FileOSS']
+  const MapApi: typeof import('../utils/http/index')['MapApi']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
@@ -42,6 +45,7 @@ declare global {
   const defineStore: typeof import('pinia')['defineStore']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
+  const encrypt: typeof import('../utils/encrypt')['encrypt']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const formatDate: typeof import('../utils/common')['formatDate']
   const formatDateTime: typeof import('../utils/common')['formatDateTime']
@@ -49,6 +53,7 @@ declare global {
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
+  const http: typeof import('../utils/http/index')['default']
   const ifNull: typeof import('../utils/is')['ifNull']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -89,8 +94,10 @@ declare global {
   const mapStores: typeof import('pinia')['mapStores']
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
-  const mockRequest: typeof import('../utils/http/index')['mockRequest']
+  const message: typeof import('../utils/http/index')['message']
+  const mockRequest: (typeof import('../utils/http/index'))['mockRequest']
   const nextTick: typeof import('vue')['nextTick']
+  const notification: typeof import('../utils/http/index')['notification']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
   const onBeforeRouteLeave: typeof import('vue-router')['onBeforeRouteLeave']
@@ -149,6 +156,7 @@ declare global {
   const throttle: typeof import('../utils/common')['throttle']
   const throttledRef: typeof import('@vueuse/core')['throttledRef']
   const throttledWatch: typeof import('@vueuse/core')['throttledWatch']
+  const to: typeof import('../utils/to')['to']
   const toRaw: typeof import('vue')['toRaw']
   const toReactive: typeof import('@vueuse/core')['toReactive']
   const toRef: typeof import('vue')['toRef']
@@ -386,7 +394,10 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly Api: UnwrapRef<typeof import('../utils/http/index')['Api']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly FileOSS: UnwrapRef<typeof import('../utils/http/index')['FileOSS']>
+    readonly MapApi: UnwrapRef<typeof import('../utils/http/index')['MapApi']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
@@ -422,6 +433,7 @@ declare module 'vue' {
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly encrypt: UnwrapRef<typeof import('../utils/encrypt')['encrypt']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly formatDate: UnwrapRef<typeof import('../utils/common')['formatDate']>
     readonly formatDateTime: UnwrapRef<typeof import('../utils/common')['formatDateTime']>
@@ -429,6 +441,7 @@ declare module 'vue' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
+    readonly http: UnwrapRef<typeof import('../utils/http/index')['default']>
     readonly ifNull: UnwrapRef<typeof import('../utils/is')['ifNull']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -469,8 +482,9 @@ declare module 'vue' {
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly mockRequest: UnwrapRef<typeof import('../utils/http/index')['mockRequest']>
+    readonly message: UnwrapRef<typeof import('../utils/http/index')['message']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
+    readonly notification: UnwrapRef<typeof import('../utils/http/index')['notification']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
     readonly onBeforeRouteLeave: UnwrapRef<typeof import('vue-router')['onBeforeRouteLeave']>
@@ -529,6 +543,7 @@ declare module 'vue' {
     readonly throttle: UnwrapRef<typeof import('../utils/common')['throttle']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
+    readonly to: UnwrapRef<typeof import('../utils/to')['to']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toReactive: UnwrapRef<typeof import('@vueuse/core')['toReactive']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>

@@ -37,28 +37,6 @@
           </template>
         </n-input>
 
-        <div class="mt-20 flex items-center">
-          <n-input
-            v-model:value="loginInfo.captcha"
-            class="h-40 items-center"
-            placeholder="请输入验证码"
-            :maxlength="4"
-            @keydown.enter="handleLogin()"
-          >
-            <template #prefix>
-              <i class="i-fe:key mr-12 opacity-20" />
-            </template>
-          </n-input>
-          <img
-            v-if="captchaUrl"
-            :src="captchaUrl"
-            alt="验证码"
-            height="40"
-            class="ml-12 w-80 cursor-pointer"
-            @click="initCaptcha"
-          />
-        </div>
-
         <n-checkbox
           class="mt-20"
           :checked="isRemember"
@@ -69,15 +47,6 @@
         <div class="mt-20 flex items-center">
           <n-button
             class="h-40 flex-1 rounded-5 text-16"
-            type="primary"
-            ghost
-            @click="quickLogin()"
-          >
-            一键体验
-          </n-button>
-
-          <n-button
-            class="ml-32 h-40 flex-1 rounded-5 text-16"
             type="primary"
             :loading="loading"
             @click="handleLogin()"
@@ -96,67 +65,75 @@
 import { useAuthStore } from '@/store'
 import { lStorage, throttle } from '@/utils'
 import { useStorage } from '@vueuse/core'
-import api from './api'
+import { login, type LoginParam } from './api'
+import { encrypt } from '@/utils/encrypt'
+import { to } from '@/utils/to'
+import { useUserStore } from '@/store'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 const title = import.meta.env.VITE_TITLE
+const userStore = useUserStore()
 
 const loginInfo = ref({
   username: '',
   password: '',
-  captcha: '',
 })
-
-const captchaUrl = ref('')
-const initCaptcha = throttle(() => {
-  captchaUrl.value = `${import.meta.env.VITE_AXIOS_BASE_URL}/auth/captcha?${Date.now()}`
-}, 500)
 
 const localLoginInfo = lStorage.get('loginInfo')
 if (localLoginInfo) {
   loginInfo.value.username = localLoginInfo.username || ''
   loginInfo.value.password = localLoginInfo.password || ''
 }
-initCaptcha()
-
-function quickLogin() {
-  loginInfo.value.username = 'admin'
-  loginInfo.value.password = '123456'
-  handleLogin(true)
-}
 
 const isRemember = useStorage('isRemember', true)
 const loading = ref(false)
-async function handleLogin(isQuick = false) {
-  const { username, password, captcha } = loginInfo.value
+
+function convertLoginParams(params: typeof loginInfo.value): LoginParam {
+  return {
+    account: params.username,
+    password: encrypt(params.password) || '',
+    loginType: 1,
+  }
+}
+
+async function handleLogin() {
+  const { username, password } = loginInfo.value
   if (!username || !password) return window.$message.warning('请输入用户名和密码')
-  if (!isQuick && !captcha) return window.$message.warning('请输入验证码')
   try {
     loading.value = true
     window.$message.loading('正在验证，请稍后...', { key: 'login' })
-    const { data } = await api.login({ username, password: password.toString(), captcha, isQuick })
-    if (isRemember.value) {
-      lStorage.set('loginInfo', { username, password })
+    const params = convertLoginParams(loginInfo.value)
+    const [data, err] = await to(login(params))
+    if (!err) {
+      const token = data?.data?.token
+      const userName = data?.data?.name
+      const userAccount = data?.data?.account
+      if (isRemember.value) {
+        lStorage.set('loginInfo', { username, password })
+      } else {
+        lStorage.remove('loginInfo')
+      }
+      onLoginSuccess(token, userName, userAccount)
     } else {
-      lStorage.remove('loginInfo')
+      window.$message.destroy('login')
+      window.$message.error(err.message)
+      console.error(err)
     }
-    onLoginSuccess(data)
-  } catch (error: any) {
-    // 10003为验证码错误专属业务码
-    if (error?.code === 10003) {
-      // 为防止爆破，验证码错误则刷新验证码
-      initCaptcha()
-    }
-    window.$message.destroy('login')
-    console.error(error)
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 
-async function onLoginSuccess(data: any) {
-  authStore.setToken(data)
+async function onLoginSuccess(token: string, userName?: string, userAccount?: string) {
+  authStore.setToken({ accessToken: token, userName, userAccount })
+  sessionStorage.setItem(import.meta.env.VITE_TOKEN, token)
+  if (userName) {
+    sessionStorage.setItem('userName', userName)
+  }
+  // 调试：打印 token
+  console.log('登录成功，token:', token)
   window.$message.loading('登录中...', { key: 'login' })
   try {
     window.$message.success('登录成功', { key: 'login' })
