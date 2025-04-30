@@ -196,6 +196,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           keepAlive: false,
         },
       },
+      {
+        name: 'DictionaryManage',
+        path: 'dictionary',
+        component: () => import('@/views/systemSettings/dictionaryManage/index.vue'),
+        meta: {
+          title: '字典管理',
+          icon: 'i-fe:database',
+          keepAlive: false,
+        },
+      },
     ],
   },
   {

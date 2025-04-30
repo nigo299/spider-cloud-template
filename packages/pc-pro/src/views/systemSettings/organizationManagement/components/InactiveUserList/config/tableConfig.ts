@@ -1,8 +1,7 @@
 import { type Ref, ref } from 'vue'
 import type { DataTableColumn, PaginationProps } from 'naive-ui'
 
-import { TableColumnTypeEnum } from '@/enums'
-import type { TableColumnAllType, TableConfigType } from '@/interface/table'
+import type { TableConfigType } from '@/interface/table'
 
 export const tableConfig: Ref<TableConfigType> = ref({
   scroll: {
