@@ -156,16 +156,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           keepAlive: false,
         },
       },
-      {
-        name: 'RoleManage',
-        path: 'role',
-        component: () => import('@/views/pms/role/index.vue'),
-        meta: {
-          title: '角色管理',
-          icon: 'i-fe:user-check',
-          keepAlive: false,
-        },
-      },
+      // {
+      //   name: 'RoleManage',
+      //   path: 'role',
+      //   component: () => import('@/views/pms/role/index.vue'),
+      //   meta: {
+      //     title: '角色管理',
+      //     icon: 'i-fe:user-check',
+      //     keepAlive: false,
+      //   },
+      // },
       {
         name: 'ResourceManage',
         path: 'resource',
@@ -182,6 +182,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/organizationManagement/index.vue'),
         meta: {
           title: '组织管理',
+          icon: 'i-fe:database',
+          keepAlive: false,
+        },
+      },
+      {
+        name: 'RoleManage',
+        path: 'role',
+        component: () => import('@/views/systemSettings/roleManagement/index.vue'),
+        meta: {
+          title: '角色管理',
           icon: 'i-fe:database',
           keepAlive: false,
         },
