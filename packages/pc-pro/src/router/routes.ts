@@ -176,6 +176,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           keepAlive: false,
         },
       },
+      {
+        name: 'OrganizationManage',
+        path: 'organization',
+        component: () => import('@/views/systemSettings/organizationManagement/index.vue'),
+        meta: {
+          title: '组织管理',
+          icon: 'i-fe:database',
+          keepAlive: false,
+        },
+      },
     ],
   },
   {

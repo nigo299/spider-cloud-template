@@ -1,6 +1,4 @@
-import type { TreeSelectProps } from 'ant-design-vue'
-import type { Rule } from 'ant-design-vue/es/form'
-import type { PickerMode } from 'ant-design-vue/es/vc-picker/interface'
+import type { TreeSelectProps, FormItemRule, DatePickerProps } from 'naive-ui'
 import type { Dayjs } from 'dayjs'
 
 import type { FormColumnTypeEnum } from '@/enums'
@@ -12,7 +10,7 @@ export interface FormConfigType {
   labelCol?: Record<string, any>
   row?: Record<string, any>
   col?: Record<string, any>
-  rules?: Record<string, Rule[]>
+  rules?: Record<string, FormItemRule[]>
   isEmbedded?: boolean
   hasValidator?: boolean
 }
@@ -25,8 +23,8 @@ export interface FormColumnType {
   options?: CommonListType[]
   disabled?: boolean
   name?: string
-  rules?: Rule | Rule[]
-  picker?: PickerMode
+  rules?: FormItemRule | FormItemRule[]
+  picker?: DatePickerProps['type']
   valueFormat?: string
   showTime?: boolean | Record<string, any>
   disabledDate?: (current: Dayjs) => boolean
@@ -49,5 +47,5 @@ export interface FormColumnType {
   /** 是否隐藏form-item */
   hidden?: boolean
   /** 树形选择器数据 */
-  treeData?: TreeSelectProps['treeData']
+  treeData?: TreeSelectProps['options']
 }

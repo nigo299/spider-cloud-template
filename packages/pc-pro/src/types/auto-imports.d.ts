@@ -10,10 +10,12 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const FileOSS: typeof import('../utils/http/index')['FileOSS']
   const MapApi: typeof import('../utils/http/index')['MapApi']
+  const NotRevalidateOption: typeof import('../utils/to')['NotRevalidateOption']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const axios: typeof import('axios')['default']
+  const clearCookie: typeof import('../utils/format')['clearCookie']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -43,12 +45,16 @@ declare global {
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const defineStore: typeof import('pinia')['defineStore']
+  const download: typeof import('../utils/download')['download']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const encrypt: typeof import('../utils/encrypt')['encrypt']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const formatDate: typeof import('../utils/common')['formatDate']
   const formatDateTime: typeof import('../utils/common')['formatDateTime']
+  const formatExecuteTime: typeof import('../utils/format')['formatExecuteTime']
+  const formatTime: typeof import('../utils/format')['formatTime']
+  const formatUTC: typeof import('../utils/format')['formatUTC']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -98,6 +104,7 @@ declare global {
   const mockRequest: (typeof import('../utils/http/index'))['mockRequest']
   const nextTick: typeof import('vue')['nextTick']
   const notification: typeof import('../utils/http/index')['notification']
+  const numAddUnit: typeof import('../utils/format')['numAddUnit']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
   const onBeforeRouteLeave: typeof import('vue-router')['onBeforeRouteLeave']
@@ -120,6 +127,7 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
+  const phoneFormat: typeof import('../utils/format')['phoneFormat']
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
   const reactify: typeof import('@vueuse/core')['reactify']
@@ -149,6 +157,9 @@ declare global {
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
   const sleep: typeof import('../utils/common')['sleep']
+  const sm2Encrypt: typeof import('../utils/gmCrypto')['sm2Encrypt']
+  const sm4Decrypt: typeof import('../utils/gmCrypto')['sm4Decrypt']
+  const sm4Encrypt: typeof import('../utils/gmCrypto')['sm4Encrypt']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
@@ -278,6 +289,7 @@ declare global {
   const useObjectUrl: typeof import('@vueuse/core')['useObjectUrl']
   const useOffsetPagination: typeof import('@vueuse/core')['useOffsetPagination']
   const useOnline: typeof import('@vueuse/core')['useOnline']
+  const useOrgTableStore: typeof import('../store/modules/innerOrganization')['useOrgTableStore']
   const usePageLeave: typeof import('@vueuse/core')['usePageLeave']
   const useParallax: typeof import('@vueuse/core')['useParallax']
   const useParentElement: typeof import('@vueuse/core')['useParentElement']
@@ -307,6 +319,7 @@ declare global {
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
+  const useSecretKeyStore: typeof import('../store/modules/secretKey')['useSecretKeyStore']
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useShare: typeof import('@vueuse/core')['useShare']
   const useSlots: typeof import('vue')['useSlots']
@@ -353,6 +366,8 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const validateIgw: typeof import('../utils/validate')['validateIgw']
+  const validatePhone: typeof import('../utils/validate')['validatePhone']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -398,10 +413,12 @@ declare module 'vue' {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly FileOSS: UnwrapRef<typeof import('../utils/http/index')['FileOSS']>
     readonly MapApi: UnwrapRef<typeof import('../utils/http/index')['MapApi']>
+    readonly NotRevalidateOption: UnwrapRef<typeof import('../utils/to')['NotRevalidateOption']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly axios: UnwrapRef<typeof import('axios')['default']>
+    readonly clearCookie: UnwrapRef<typeof import('../utils/format')['clearCookie']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -431,12 +448,16 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
+    readonly download: UnwrapRef<typeof import('../utils/download')['download']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly encrypt: UnwrapRef<typeof import('../utils/encrypt')['encrypt']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly formatDate: UnwrapRef<typeof import('../utils/common')['formatDate']>
     readonly formatDateTime: UnwrapRef<typeof import('../utils/common')['formatDateTime']>
+    readonly formatExecuteTime: UnwrapRef<typeof import('../utils/format')['formatExecuteTime']>
+    readonly formatTime: UnwrapRef<typeof import('../utils/format')['formatTime']>
+    readonly formatUTC: UnwrapRef<typeof import('../utils/format')['formatUTC']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -485,6 +506,7 @@ declare module 'vue' {
     readonly message: UnwrapRef<typeof import('../utils/http/index')['message']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly notification: UnwrapRef<typeof import('../utils/http/index')['notification']>
+    readonly numAddUnit: UnwrapRef<typeof import('../utils/format')['numAddUnit']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
     readonly onBeforeRouteLeave: UnwrapRef<typeof import('vue-router')['onBeforeRouteLeave']>
@@ -507,6 +529,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly phoneFormat: UnwrapRef<typeof import('../utils/format')['phoneFormat']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
     readonly reactify: UnwrapRef<typeof import('@vueuse/core')['reactify']>
@@ -536,6 +559,9 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly sleep: UnwrapRef<typeof import('../utils/common')['sleep']>
+    readonly sm2Encrypt: UnwrapRef<typeof import('../utils/gmCrypto')['sm2Encrypt']>
+    readonly sm4Decrypt: UnwrapRef<typeof import('../utils/gmCrypto')['sm4Decrypt']>
+    readonly sm4Encrypt: UnwrapRef<typeof import('../utils/gmCrypto')['sm4Encrypt']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
@@ -665,6 +691,7 @@ declare module 'vue' {
     readonly useObjectUrl: UnwrapRef<typeof import('@vueuse/core')['useObjectUrl']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
+    readonly useOrgTableStore: UnwrapRef<typeof import('../store/modules/innerOrganization')['useOrgTableStore']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
@@ -694,6 +721,7 @@ declare module 'vue' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
+    readonly useSecretKeyStore: UnwrapRef<typeof import('../store/modules/secretKey')['useSecretKeyStore']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -740,6 +768,8 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly validateIgw: UnwrapRef<typeof import('../utils/validate')['validateIgw']>
+    readonly validatePhone: UnwrapRef<typeof import('../utils/validate')['validatePhone']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

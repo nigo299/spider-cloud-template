@@ -15,3 +15,8 @@ export async function to<T, E = Error>(promise: Promise<T>): Promise<[T, E]> {
     return [null as unknown as T, e]
   }
 }
+
+export const NotRevalidateOption = {
+  revalidateOnFocus: false, // auto revalidate when window gets focused
+  shouldRetryOnError: false, // retry when fetcher has an error
+}

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@arco-design/color": "^0.4.0",
+    "@vicons/ionicons5": "^0.13.0",
     "@vueuse/core": "^13.1.0",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
@@ -21,6 +22,7 @@
     "naive-ui": "^2.41.0",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",
+    "sm-crypto": "^0.3.13",
     "swrv": "^1.1.0",
     "vue": "^3.5.13",
     "vue-echarts": "^7.0.3",
@@ -31,6 +33,7 @@
     "@antfu/eslint-config": "^4.12.0",
     "@iconify/json": "^2.2.331",
     "@types/node": "^22.15.2",
+    "@types/sm-crypto": "^0.3.4",
     "@unocss/eslint-config": "^66.0.0",
     "@unocss/eslint-plugin": "^66.0.0",
     "@unocss/preset-rem-to-px": "^66.0.0",

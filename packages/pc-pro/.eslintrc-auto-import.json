@@ -388,6 +388,21 @@
     "http": true,
     "message": true,
     "notification": true,
-    "to": true
+    "to": true,
+    "clearCookie": true,
+    "useOrgTableStore": true,
+    "validateIgw": true,
+    "validatePhone": true,
+    "download": true,
+    "formatExecuteTime": true,
+    "formatTime": true,
+    "formatUTC": true,
+    "numAddUnit": true,
+    "phoneFormat": true,
+    "sm2Encrypt": true,
+    "sm4Decrypt": true,
+    "sm4Encrypt": true,
+    "useSecretKeyStore": true,
+    "NotRevalidateOption": true
   }
 }

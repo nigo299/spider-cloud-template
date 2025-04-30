@@ -1,28 +1,42 @@
-import type { TableProps } from 'ant-design-vue/es/table/Table'
-import type {
-  ColumnType,
-  ColumnsType,
-  TablePaginationConfig,
-  TableRowSelection,
-} from 'ant-design-vue/es/table/interface'
+import type { DataTableProps, DataTableColumn, DataTableBaseColumn } from 'naive-ui'
 
 import type { TableColumnTypeEnum } from '@/enums'
 
-export interface TableConfigType extends Omit<TableProps, 'rowSelection'> {
-  columns?: ColumnsType
-  rowKey?: string
+// 定义CreateRowKey类型以匹配Naive UI
+type CreateRowKey<T = any> = (rowData: T, rowIndex: number) => string | number
+
+export interface TableConfigType extends Omit<DataTableProps, 'columns' | 'rowKey'> {
+  columns?: DataTableColumn[]
+  rowKey?: string | CreateRowKey
   bordered?: boolean
   loading?: boolean
-  pagination?: TablePaginationConfig
-  scroll?: {
-    scrollToFirstRowOnChange?: boolean
-    x?: string | number | true
-    y?: string | number
+  pagination?: {
+    page?: number
+    pageSize?: number
+    itemCount?: number
+    pageCount?: number
+    showSizePicker?: boolean
+    pageSlot?: number
+    onUpdatePage?: (page: number) => void
+    onUpdatePageSize?: (pageSize: number) => void
+    pageSizes?: number[]
   }
-  rowSelection?: TableRowSelection<any>
+  scroll?: {
+    x?: number | string
+    y?: number | string
+  }
+  rowSelection?: {
+    selectedRowKeys?: Array<string | number>
+    selectedRows?: Array<any>
+    onChange?: (selectedRowKeys: Array<string | number>, selectedRows: Array<any>) => void
+  }
   sticky?:
     | boolean
-    | { offsetHeader?: number, offsetScroll?: number, getContainer?: () => HTMLElement }
+    | {
+        offsetTop?: number
+        offsetBottom?: number
+        getContainer?: () => HTMLElement
+      }
   isChildren?: boolean
 }
 
@@ -35,4 +49,4 @@ export interface TableColumnExtendType {
   field?: string[]
 }
 
-export type TableColumnAllType = ColumnType & TableColumnExtendType
+export type TableColumnAllType = DataTableBaseColumn & TableColumnExtendType

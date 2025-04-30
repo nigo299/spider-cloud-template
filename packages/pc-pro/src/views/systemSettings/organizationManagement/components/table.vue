@@ -1,0 +1,694 @@
+<script setup lang="ts">
+import { useElementSize, useToggle } from '@vueuse/core'
+import { to } from '@/utils/to'
+import dayjs from 'dayjs'
+import { storeToRefs } from 'pinia'
+import { computed, ref, h } from 'vue'
+
+import type { DataTableColumn, PaginationProps, SelectOption } from 'naive-ui'
+
+import {
+  postBatchExportLock,
+  postDeleteOrgMemberById,
+  postDestroyUser,
+  postOrgChangeStatus,
+} from '@/api/system/organization'
+import { customPaginationOptions, titleAndPaginationHeight } from '@/common/js/config'
+import { withPermission } from '@/directives'
+import deleteModal from './deleteModal.vue'
+import secretKeyModal from './secretKey.vue'
+import type { ITableList, ITreeSelect } from '@/interface/system/organization'
+import type { TablePageChange } from '@/interface/system/roleManage'
+import { useOrgTableStore } from '@/store/modules/innerOrganization'
+import { download } from '@/utils/download'
+import { phoneFormat } from '@/utils/format'
+import { sm4Encrypt } from '@/utils/gmCrypto'
+
+import InactiveUserList from './InactiveUserList/index.vue'
+import detailDialog from './detailDialog.vue'
+import RoleStatusModal from './roleStatusModal.vue'
+
+const emits = defineEmits(['addOrEditListEmit', 'editListEmit'])
+const orgTableStore = useOrgTableStore()
+const { orgTableList, loading, total } = storeToRefs(orgTableStore)
+
+// const { SecretKey } = useSecretKeyStore()
+const validityPeriodType = ref<number | null>(null)
+const secretKeyType = ref('')
+const [keyInput, keyInputToggle] = useToggle(true)
+const secretKeyPhone = ref('')
+const secretKeyIdCard = ref('')
+const secretKeyIndex = ref<number>()
+const [roleStatusVisible, changeRoleStatusVisible] = useToggle(false)
+const [roleStatusLoading, changeRoleStatusLoading] = useToggle(false)
+const [isBatch, changeIsBatch] = useToggle(false)
+const [detailDialogOpen, openDetailDialogToggle] = useToggle(false)
+const [InactiveUserVis, InactiveUserVisChange] = useToggle(false)
+const roleStatusTitle = ref<string>()
+// 列表状态显示枚举
+enum EStatus {
+  nomarl = '开启',
+  close = '锁定',
+}
+const btnText: Record<number, EStatus> = {
+  0: EStatus.close,
+  1: EStatus.nomarl,
+} as const
+const roleStatusRef = ref<InstanceType<typeof RoleStatusModal>>()
+const pageNum = ref(1)
+const pageSize = ref(10)
+const detailData = ref({})
+const columns: DataTableColumn[] = [
+  {
+    title: '序号',
+    key: 'index',
+    width: 50,
+    align: 'center',
+    render: (row, index) => {
+      return `${index + 1 + (pageNum.value - 1) * pageSize.value}`
+    },
+    fixed: 'left',
+  },
+  {
+    title: '姓名',
+    align: 'center',
+    key: 'name',
+    width: 80,
+    fixed: 'left',
+  },
+  // {
+  //   title: '联系电话',
+  //   key: 'phone',
+  //   width: 120,
+  // },
+  {
+    align: 'center',
+    title: 'i国网账号',
+    key: 'account',
+    width: 100,
+  },
+  {
+    align: 'center',
+    title: '账号类型',
+    key: 'validityPeriodType',
+    width: 100,
+  },
+  {
+    title: '有限期',
+    align: 'center',
+    key: 'expirationDate',
+    width: 100,
+  },
+  {
+    title: '所属组织',
+    align: 'center',
+    key: 'orgTreeNamePathMapping',
+    ellipsis: {
+      tooltip: true,
+    },
+    width: 160,
+  },
+  {
+    title: '角色名称',
+    align: 'center',
+    key: 'roleName',
+    width: 100,
+  },
+  {
+    title: '状态',
+    align: 'center',
+    key: 'status',
+    width: 100,
+  },
+  // {
+  //   title: '锁定时长',
+  //   key: 'lockDurationDate',
+  //   width: 100,
+  // },
+  {
+    align: 'center',
+    title: '最后登录时间',
+    key: 'lastLoginTime',
+    width: 130,
+  },
+]
+const tableKeyword = ref('')
+const memberTable = ref(null)
+const { height } = useElementSize(memberTable)
+const scrollHeight = computed(() => {
+  return height.value - titleAndPaginationHeight.common
+})
+
+const roleStatusSelect = ref<number | null>(null)
+const roleStatusList: SelectOption[] = [
+  {
+    label: '全部',
+    value: null as any,
+  },
+  {
+    label: '正常',
+    value: 0,
+  },
+  {
+    label: '锁定',
+    value: 1,
+  },
+  {
+    label: '注销',
+    value: 2,
+  },
+]
+const validityPeriodTypeList: SelectOption[] = [
+  {
+    label: '全部',
+    value: null as any,
+  },
+  {
+    label: '永久账号',
+    value: 0,
+  },
+  {
+    label: '临时账号',
+    value: 1,
+  },
+]
+const orgId = ref('')
+const userIds = ref<string[]>([])
+const deleteId = ref('')
+const tableUserId = ref('')
+const pagination = computed<PaginationProps>(() => ({
+  itemCount: total.value,
+  page: pageNum.value,
+  pageSize: pageSize.value,
+  showSizePicker: true,
+  pageSizes: customPaginationOptions.pageSizeOptions?.map(Number) || [10, 20, 50, 100],
+  onUpdatePage: (page: number) => handleTableChange({ current: page, pageSize: pageSize.value }),
+  onUpdatePageSize: (size: number) => handleTableChange({ current: 1, pageSize: size }),
+  prefix: (info) => `共 ${info.itemCount} 条`,
+}))
+
+// page变化
+function handleTableChange({ current, pageSize: pageSizeValue }: TablePageChange) {
+  pageNum.value = current ?? 1
+  pageSize.value = pageSizeValue ?? 10
+  refresh()
+}
+
+// 删除数据
+const [delVisible, delVisibleToggle] = useToggle()
+const [delLoading, delLoadingToggle] = useToggle()
+const warningTitle = ref('')
+const warningHint = ref('')
+const warningMess = ref('')
+const warnStatus = ref('')
+
+function openSingleDelModal(id: string) {
+  warnStatus.value = 'single'
+  warningTitle.value = '删除操作'
+  warningMess.value = '你确定需要删除此数据么？'
+  warningHint.value = '请确保该角色是否被账号使用，若删除后数据将无法恢复'
+  delVisibleToggle(true)
+  deleteId.value = id
+}
+
+function openBatchDelModal() {
+  if (userIds.value.length === 0) {
+    window.$message.warning('请先选择账号')
+    return
+  }
+  warningTitle.value = '删除操作'
+  warnStatus.value = 'all'
+  warningMess.value = '你确定需要删除这些数据么？'
+  warningHint.value = '请确保这些角色是否被账号使用，若删除后数据将无法恢复'
+  delVisibleToggle(true)
+}
+
+function handleDeleteCancel() {
+  delVisibleToggle(false)
+  delLoadingToggle(false)
+  warnStatus.value = ''
+  warningTitle.value = ''
+  warningMess.value = ''
+  warningHint.value = ''
+  deleteId.value = ''
+}
+
+async function handleDeleteClick() {
+  delLoadingToggle(true)
+  const params = {
+    userIds: [deleteId.value],
+  }
+  const [, err] = await to(postDeleteOrgMemberById(params))
+
+  if (!err) {
+    window.$message.success('删除成功')
+    userIds.value = []
+    pageNum.value = 1
+    refresh()
+  } else {
+    window.$message.error(err.message)
+  }
+  handleDeleteCancel()
+}
+
+async function handleDeleteAllMember() {
+  delLoadingToggle(true)
+  const params = {
+    userIds: userIds.value,
+  }
+  const [, err] = await to(postDeleteOrgMemberById(params))
+
+  if (!err) {
+    window.$message.success('删除成功')
+    userIds.value = []
+    pageNum.value = 1
+    refresh()
+  } else {
+    window.$message.error(err.message ?? '删除失败')
+  }
+  handleDeleteCancel()
+}
+
+async function handleDeregistration() {
+  delLoadingToggle(true)
+  const params = {
+    userId: deleteId.value,
+  }
+  const [, err] = await to(postDestroyUser(params))
+
+  if (!err) {
+    window.$message.success('注销成功')
+    pageNum.value = 1
+    refresh()
+  } else {
+    window.$message.error(err.message ?? '注销失败')
+  }
+  handleDeleteCancel()
+}
+
+function handleDeleteConfirm() {
+  switch (warnStatus.value) {
+    case 'single':
+      handleDeleteClick()
+      break
+    case 'all':
+      handleDeleteAllMember()
+      break
+    case 'deregistration':
+      handleDeregistration()
+      break
+
+    default:
+      break
+  }
+}
+
+function rowSelection(selectedRowKeys: (string | number)[]): void {
+  userIds.value = selectedRowKeys.map((key) => String(key))
+}
+
+function handleAddOrEditListClick(isEdit = false, record?: ITableList) {
+  emits('addOrEditListEmit', isEdit, record)
+}
+
+// 单独改变状态
+function handleChangeStatus(userId: string, status: number) {
+  tableUserId.value = userId
+  changeIsBatch(false)
+  roleStatusTitle.value = status ? btnText[1] : btnText[0]
+  changeRoleStatusVisible(true)
+}
+
+// 批量改变状态
+async function handleChangeAllStatus(type: number) {
+  if (userIds.value.length === 0) {
+    window.$message.warning('请先选择账号')
+    return
+  }
+  changeIsBatch(true)
+  const params = {
+    status: 1,
+    userIds: userIds.value,
+  }
+  // 批量开启
+  if (type === 0) params.status = 0
+  roleStatusTitle.value = type ? btnText[0] : btnText[1]
+  changeRoleStatusVisible(true)
+}
+
+const statusConfirmEmit = async (val: { [key: string]: number }) => {
+  changeRoleStatusLoading(true)
+  const { lockDuration, lockType, validDuration, validityPeriodType } = val
+  const params = {
+    userIds: isBatch.value ? userIds.value : [tableUserId.value],
+    status: roleStatusTitle.value === btnText[1] ? 0 : 1,
+  }
+  if (roleStatusTitle.value === btnText[1])
+    Object.assign(params, { validDuration, validityPeriodType })
+  else Object.assign(params, { lockDuration, lockType })
+  const [, err] = await to(postOrgChangeStatus(params))
+
+  if (!err) {
+    window.$message.success('状态更改成功')
+    roleStatusRef.value?.resetForm()
+    refresh()
+  } else {
+    window.$message.error(err.message)
+  }
+  changeRoleStatusVisible(false)
+  changeRoleStatusLoading(false)
+}
+
+const statusCancelEmit = () => {
+  tableUserId.value = ''
+  roleStatusRef.value?.resetForm()
+  changeRoleStatusVisible(false)
+}
+
+function refresh() {
+  const params = {
+    orgId: orgId.value,
+    pageNum: pageNum.value,
+    pageSize: pageSize.value,
+    status: roleStatusSelect.value,
+    keyword: tableKeyword.value,
+    validityPeriodType: validityPeriodType.value,
+  }
+  orgTableStore.getTableListAction({
+    ...params,
+    status: params.status || 0,
+  })
+}
+
+function openDeregistrationModal(id: string) {
+  warnStatus.value = 'deregistration'
+  warningTitle.value = '注销操作'
+  warningMess.value = '你确定需要注销该账号么？'
+  warningHint.value = '此账号注销后其数据将无法恢复，请谨慎操作！'
+  delVisibleToggle(true)
+  deleteId.value = id
+}
+
+function selectOrgGetTableList(orgParams: ITreeSelect) {
+  tableKeyword.value = orgParams.memberName
+  orgId.value = orgParams.orgId
+  pageNum.value = 1
+  pageSize.value = 10
+  tableUserId.value = ''
+  refresh()
+}
+
+const handleBatchExport = async () => {
+  const [data, err] = await to(postBatchExportLock())
+  if (!err) download('不活跃账号.xlsx', 'blob' as any, data as Blob)
+}
+
+const handleChangeSecret = (index: number, secret: string, type: string) => {
+  if (orgTableList.value && orgTableList.value[index][type]) {
+    orgTableList.value[index][type] = false
+  } else {
+    secretKeyType.value = type
+    secretKeyIndex.value = index
+
+    if (type === 'phoneVisible') {
+      secretKeyPhone.value = secret
+      secretKeyIdCard.value = ''
+    } else {
+      secretKeyPhone.value = ''
+      secretKeyIdCard.value = secret
+    }
+    keyInputToggle(true)
+  }
+}
+
+const secretKeyConfirm = ({ phone }: { phone: string }) => {
+  if (!orgTableList.value) return
+  const decryptPhone = atob(phone)
+  orgTableList.value[secretKeyIndex.value as number].phone = sm4Encrypt(decryptPhone)
+  orgTableList.value[secretKeyIndex.value as number][secretKeyType.value] = true
+}
+
+defineExpose({
+  selectOrgGetTableList,
+  refresh,
+})
+
+// 渲染名称列
+function renderNameColumn(row: any) {
+  return h('a', {}, { default: () => row.name })
+}
+
+// 渲染组织列
+function renderOrgColumn(row: any) {
+  return row.departmentInfo.map((item: any) => {
+    return h('div', { class: 'my-1 truncate' }, [
+      h(
+        'n-tooltip',
+        { placement: 'top' },
+        {
+          trigger: () => h('div', { class: 'truncate' }, item.orgTreeNamePathMapping),
+          default: () => item.orgTreeNamePathMapping,
+        }
+      ),
+    ])
+  })
+}
+
+// 渲染角色列
+function renderRoleColumn(row: any) {
+  return h('div', {}, (row.roleInfo || []).map((item: any) => {
+      return h('n-tag', { class: 'max-w-full my-[2px] truncate' }, { default: () => item.roleName })
+    }))
+}
+
+// 渲染状态列
+function renderStatusColumn(row: any) {
+  const tagType = row.statusCode === 0 ? 'success' : row.statusCode === 1 ? 'error' : 'warning'
+  return h('n-tag', { type: tagType }, { default: () => row.statusValue })
+}
+
+// 渲染有效期列
+function renderExpirationDateColumn(row: any) {
+  if (!row.expirationDate) {
+    return '永久'
+  }
+  return dayjs(Number(row.expirationDate)).format('YYYY-MM-DD HH:mm')
+}
+
+// 渲染最后登录时间列
+function renderLastLoginTimeColumn(row: any) {
+  return dayjs(Number(row.lastLoginTime)).format('YYYY-MM-DD HH:mm')
+}
+
+// 渲染操作列
+function renderOperationColumn(row: any) {
+  if (row.statusCode === 2) return null
+
+  return h('span', { class: 'actions' }, [
+    withPermission(
+      h(
+        'n-button',
+        {
+          text: true,
+          type: 'primary',
+          class: 'px-0',
+          onClick: () => handleAddOrEditListClick(true, row as ITableList),
+        },
+        { default: () => '编辑' }
+      ),
+      'button_contact_department_edit'
+    ),
+    withPermission(
+      h(
+        'n-button',
+        {
+          text: true,
+          type: 'primary',
+          class: 'px-0',
+          onClick: () => handleChangeStatus(row.userId, row.statusCode),
+        },
+        { default: () => btnText[row.statusCode as number] }
+      ),
+      'button_contact_department_status'
+    ),
+    withPermission(
+      h(
+        'n-button',
+        {
+          text: true,
+          type: 'error',
+          class: 'px-0',
+          onClick: () => openDeregistrationModal(row.userId),
+        },
+        { default: () => '注销' }
+      ),
+      'button_contact_department_destroy'
+    ),
+    withPermission(
+      h(
+        'n-button',
+        {
+          text: true,
+          type: 'error',
+          class: 'px-0',
+          onClick: () => openSingleDelModal(row.userId),
+        },
+        { default: () => '删除' }
+      ),
+      'button_contact_department_delete'
+    ),
+  ])
+}
+</script>
+
+<template>
+  <div class="h-full w-full">
+    <h3 class="font-600 mb-3">账号列表</h3>
+    <div v-if="orgId" class="btn flex justify-between">
+      <n-space>
+        <n-input
+          v-model:value="tableKeyword"
+          class="h-40px"
+          placeholder="请输入关键字"
+          @update:value="() => refresh()"
+        />
+        <n-select
+          v-model:value="validityPeriodType"
+          placeholder="账号类型"
+          class="min-w-100px"
+          size="small"
+          :options="validityPeriodTypeList"
+          @update:value="() => refresh()"
+        />
+        <n-select
+          v-model:value="roleStatusSelect"
+          placeholder="账号状态"
+          class="min-w-100px"
+          size="small"
+          :options="roleStatusList"
+          @update:value="() => refresh()"
+        />
+      </n-space>
+      <n-space>
+        <n-popover placement="bottom">
+          <template #trigger>
+            <n-button type="primary" size="small" ghost> 批量操作 </n-button>
+          </template>
+          <n-space vertical>
+            <div class="cursor-pointer hover p-2" @click.stop="openBatchDelModal">
+              {{ withPermission(h('span', null, '批量删除'), 'button_contact_department_delete') }}
+            </div>
+            <div class="cursor-pointer hover p-2" @click.stop="handleChangeAllStatus(1)">
+              {{ withPermission(h('span', null, '批量锁定'), 'button_contact_department_status') }}
+            </div>
+            <div class="cursor-pointer hover p-2" @click.stop="handleChangeAllStatus(0)">
+              {{ withPermission(h('span', null, '批量开启'), 'button_contact_department_status') }}
+            </div>
+          </n-space>
+        </n-popover>
+        {{
+          withPermission(
+            h(
+              'n-button',
+              {
+                type: 'primary',
+                size: 'small',
+                ghost: true,
+                onClick: () => handleAddOrEditListClick(false),
+              },
+              { default: () => '新增' }
+            ),
+            'button_contact_department_add'
+          )
+        }}
+        {{
+          withPermission(
+            h(
+              'n-button',
+              {
+                type: 'primary',
+                size: 'small',
+                ghost: true,
+                onClick: () => InactiveUserVisChange(true),
+              },
+              { default: () => '不活跃账号' }
+            ),
+            'button_contact_department_locked_user_export'
+          )
+        }}
+      </n-space>
+    </div>
+    <div ref="memberTable" class="tableContent">
+      <n-data-table
+        size="small"
+        bordered
+        :columns="columns"
+        :data="orgTableList"
+        :loading="loading"
+        :pagination="pagination"
+        :scroll-x="1000"
+        :row-key="(row) => row.userId"
+        @update:checked-row-keys="rowSelection"
+      >
+        <template #empty>
+          <n-empty description="暂无数据" />
+        </template>
+      </n-data-table>
+    </div>
+    <deleteModal
+      :visible="delVisible"
+      :loading="delLoading"
+      :title="warningTitle"
+      :hint="warningHint"
+      :message="warningMess"
+      @confirm="handleDeleteConfirm"
+      @cancel="handleDeleteCancel"
+    />
+    <RoleStatusModal
+      ref="roleStatusRef"
+      :status-visible="roleStatusVisible"
+      :title="roleStatusTitle"
+      :is-batch="isBatch"
+      :loading="roleStatusLoading"
+      @status-cancel-emit="statusCancelEmit"
+      @status-confirm-emit="statusConfirmEmit"
+    />
+    <secretKeyModal
+      :visible="keyInput"
+      title="查看"
+      :secret-key-type="secretKeyType"
+      :secret-key-phone="secretKeyPhone"
+      :secret-key-id-card="secretKeyIdCard"
+      @cancel="keyInputToggle(false)"
+      @confirm="secretKeyConfirm"
+    />
+    <detailDialog
+      :visible="detailDialogOpen"
+      :detail-data="detailData as ITableList"
+      @close="openDetailDialogToggle(false)"
+    />
+    <InactiveUserList v-model="InactiveUserVis" @export="handleBatchExport" />
+  </div>
+</template>
+
+<style lang="less" scoped>
+.tableContent {
+  min-height: calc(200px - 36px);
+  overflow-y: hidden;
+  margin-top: 10px;
+}
+.actions {
+  :deep(.n-button::after) {
+    content: ' | ';
+    display: inline-block;
+    margin: 0 8px;
+    color: #e5e7eb;
+  }
+  :deep(.n-button:last-child::after) {
+    content: '';
+  }
+}
+.cursor-pointer {
+  padding: 5px;
+}
+</style>
