@@ -63,6 +63,7 @@ function handleSelect(key: string): void {
           const [, err] = await to(logOut())
 
           if (!err) {
+            // 先清除所有状态
             sessionStorage.clear()
             clearCookie()
 
@@ -70,7 +71,8 @@ function handleSelect(key: string): void {
               window.location.href =
                 'http://portalnew.cq.sgcc.com.cn/up/pweb/desktop/pweb/login/logout'
             } else {
-              router.replace({ path: '/login' })
+              // 使用window.location.href确保完全刷新页面
+              window.location.href = '/login'
             }
             window.$message.success('已退出登录')
           } else {

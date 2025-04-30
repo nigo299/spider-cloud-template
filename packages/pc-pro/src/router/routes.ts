@@ -147,36 +147,6 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
     },
     children: [
       {
-        name: 'UserManage',
-        path: 'user',
-        component: () => import('@/views/pms/user/index.vue'),
-        meta: {
-          title: '用户管理',
-          icon: 'i-fe:users',
-          keepAlive: false,
-        },
-      },
-      // {
-      //   name: 'RoleManage',
-      //   path: 'role',
-      //   component: () => import('@/views/pms/role/index.vue'),
-      //   meta: {
-      //     title: '角色管理',
-      //     icon: 'i-fe:user-check',
-      //     keepAlive: false,
-      //   },
-      // },
-      {
-        name: 'ResourceManage',
-        path: 'resource',
-        component: () => import('@/views/pms/resource/index.vue'),
-        meta: {
-          title: '资源管理',
-          icon: 'i-fe:database',
-          keepAlive: false,
-        },
-      },
-      {
         name: 'OrganizationManage',
         path: 'organization',
         component: () => import('@/views/systemSettings/organizationManagement/index.vue'),
@@ -212,6 +182,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/menuManage/index.vue'),
         meta: {
           title: '菜单管理',
+          icon: 'i-fe:database',
+          keepAlive: false,
+        },
+      },
+      {
+        name: 'SystemLog',
+        path: 'system-log',
+        component: () => import('@/views/systemSettings/systemLog/index.vue'),
+        meta: {
+          title: '系统日志',
           icon: 'i-fe:database',
           keepAlive: false,
         },

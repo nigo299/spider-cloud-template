@@ -21,29 +21,34 @@ onMounted(() => {
 
 function isTooltip() {
   const nodeWidth = ghostMessage.value?.clientWidth
-  if (nodeWidth && nodeWidth > props.width - 10)
-    toolTipVisible.value = true
+  if (nodeWidth && nodeWidth > props.width - 10) toolTipVisible.value = true
 }
 </script>
 
 <template>
-  <div v-if="!toolTipVisible" class="ant-table-cell-ellipsis relative">
+  <div v-if="!toolTipVisible" class="ellipsis-cell relative">
     {{ props.message }}
     <div ref="ghostMessage" class="absolute top-0 opacity-0 pointer-events-none">
       {{ props.message }}
     </div>
   </div>
-  <a-tooltip v-else placement="topLeft">
-    <template #title>
-      {{ props.message }}
+  <n-tooltip v-else placement="top-start">
+    <template #trigger>
+      <div class="text">
+        {{ props.message }}
+      </div>
     </template>
-    <div class="text">
-      {{ props.message }}
-    </div>
-  </a-tooltip>
+    {{ props.message }}
+  </n-tooltip>
 </template>
 
 <style>
+.ellipsis-cell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .text {
   overflow: hidden;
   text-overflow: ellipsis;

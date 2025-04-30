@@ -83,8 +83,13 @@ function handleMenuSelect(key: string): void {
       positiveText: '外链打开',
       negativeText: '在本站内嵌打开',
       confirm() {
-        if (item.originPath) {
-          window.open(item.originPath)
+        // 使用item.originPath或者item.path，确保有URL可用
+        const externalUrl = item.originPath || item.path
+        if (externalUrl) {
+          window.open(externalUrl, '_blank')
+          console.log('打开外链:', externalUrl)
+        } else {
+          window.$message.error('无效的外部链接')
         }
       },
       cancel: () => {
@@ -104,11 +109,20 @@ function handleMenuSelect(key: string): void {
           }
           return null
         }
+
         const parentKey = findParentKey(permissionStore.menus, item.key)
+        const externalUrl = item.originPath || item.path
+
+        if (!externalUrl) {
+          window.$message.error('无效的外部链接')
+          return
+        }
+
+        console.log('在iframe中打开外链:', externalUrl)
         router.push({
           path: '/iframe',
           query: {
-            url: item.path,
+            url: externalUrl,
             title: item.label,
             icon: item.iconClass,
             key: item.key,

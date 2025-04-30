@@ -2,14 +2,14 @@
 import { to, NotRevalidateOption } from '@/utils/to'
 import useSWRV from 'swrv'
 import { ref, h } from 'vue'
-import { NButton, NSpace, NTag } from 'naive-ui'
+import { DataTableColumns, NButton, NSpace, NTag } from 'naive-ui'
 
 import { deleteMenu, getMenuList } from '@/api/system/menuManage'
 import type { IMenuTreeRecord } from '@/interface/system/menuManage'
 
 import AddOrEditModal from './addOrEditModal.vue'
 import { formColumns } from './config/editFormConfig'
-import { tableColumns, MENU_TYPE_STATUS, MENU_TYPE_TAG_STATUS } from './config/tableConfig'
+import { MENU_TYPE_STATUS, MENU_TYPE_TAG_STATUS } from './config/tableConfig'
 
 const modalRef = ref<InstanceType<typeof AddOrEditModal>>()
 
@@ -168,7 +168,7 @@ const columns = ref([
         <n-button type="primary" @click="toAdd()"> 新增主目录 </n-button>
       </div>
       <n-data-table
-        :columns="columns"
+        :columns="columns as unknown as DataTableColumns<IMenuTreeRecord>"
         :data="dataSource ? dataSource : []"
         :loading="loading"
         :single-line="false"
