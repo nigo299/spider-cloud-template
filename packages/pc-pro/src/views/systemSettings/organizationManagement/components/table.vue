@@ -6,6 +6,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref, h } from 'vue'
 
 import type { DataTableColumn, PaginationProps, SelectOption } from 'naive-ui'
+import { NTag, NTooltip } from 'naive-ui'
 
 import {
   postBatchExportLock,
@@ -92,12 +93,14 @@ const columns: DataTableColumn[] = [
     title: '账号类型',
     key: 'validityPeriodType',
     width: 100,
+    render: renderAccountTypeColumn,
   },
   {
     title: '有限期',
     align: 'center',
     key: 'expirationDate',
     width: 100,
+    render: renderExpirationDateColumn,
   },
   {
     title: '所属组织',
@@ -107,18 +110,21 @@ const columns: DataTableColumn[] = [
       tooltip: true,
     },
     width: 160,
+    render: renderOrgColumn,
   },
   {
     title: '角色名称',
     align: 'center',
     key: 'roleName',
     width: 100,
+    render: renderRoleColumn,
   },
   {
     title: '状态',
     align: 'center',
     key: 'status',
     width: 100,
+    render: renderStatusColumn,
   },
   // {
   //   title: '锁定时长',
@@ -130,6 +136,7 @@ const columns: DataTableColumn[] = [
     title: '最后登录时间',
     key: 'lastLoginTime',
     width: 130,
+    render: renderLastLoginTimeColumn,
   },
 ]
 const tableKeyword = ref('')
@@ -390,6 +397,7 @@ function openDeregistrationModal(id: string) {
 }
 
 function selectOrgGetTableList(orgParams: ITreeSelect) {
+  console.log('orgParams', orgParams)
   tableKeyword.value = orgParams.memberName
   orgId.value = orgParams.orgId
   pageNum.value = 1
@@ -440,13 +448,21 @@ function renderNameColumn(row: any) {
 
 // 渲染组织列
 function renderOrgColumn(row: any) {
+  if (
+    !row.departmentInfo ||
+    !Array.isArray(row.departmentInfo) ||
+    row.departmentInfo.length === 0
+  ) {
+    return '-'
+  }
+
   return row.departmentInfo.map((item: any) => {
-    return h('div', { class: 'my-1 truncate' }, [
+    return h('div', { class: 'my-1' }, [
       h(
-        'n-tooltip',
-        { placement: 'top' },
+        NTooltip,
+        { placement: 'top', trigger: 'hover' },
         {
-          trigger: () => h('div', { class: 'truncate' }, item.orgTreeNamePathMapping),
+          trigger: () => h('div', { class: 'truncate max-w-full' }, item.orgTreeNamePathMapping),
           default: () => item.orgTreeNamePathMapping,
         }
       ),
@@ -456,15 +472,77 @@ function renderOrgColumn(row: any) {
 
 // 渲染角色列
 function renderRoleColumn(row: any) {
-  return h('div', {}, (row.roleInfo || []).map((item: any) => {
-      return h('n-tag', { class: 'max-w-full my-[2px] truncate' }, { default: () => item.roleName })
-    }))
+  if (!row.roleInfo || !Array.isArray(row.roleInfo) || row.roleInfo.length === 0) {
+    return '-'
+  }
+
+  return h(
+    'div',
+    { class: 'flex flex-wrap gap-1' },
+    row.roleInfo.map((item: any) => {
+      // 截断长文本，确保在Tag中显示得当
+      const displayName =
+        item.roleName.length > 10 ? item.roleName.slice(0, 10) + '...' : item.roleName
+
+      return h(
+        NTag,
+        {
+          type: 'info',
+          size: 'small',
+          round: true,
+          bordered: false,
+          class: 'inline-flex items-center',
+          style: 'max-width: 150px; white-space: nowrap;',
+        },
+        {
+          default: () =>
+            h(
+              NTooltip,
+              { placement: 'top', trigger: 'hover' },
+              {
+                trigger: () =>
+                  h(
+                    'span',
+                    {
+                      class: 'truncate inline-block',
+                      style: 'max-width: 100%; overflow: hidden;',
+                    },
+                    displayName
+                  ),
+                default: () => item.roleName,
+              }
+            ),
+        }
+      )
+    })
+  )
 }
 
 // 渲染状态列
 function renderStatusColumn(row: any) {
-  const tagType = row.statusCode === 0 ? 'success' : row.statusCode === 1 ? 'error' : 'warning'
-  return h('n-tag', { type: tagType }, { default: () => row.statusValue })
+  const statusMap = {
+    0: { type: 'success', text: '正常' },
+    1: { type: 'error', text: '锁定' },
+    2: { type: 'warning', text: '注销' },
+  }
+
+  const statusConfig = statusMap[row.statusCode as keyof typeof statusMap] || {
+    type: 'default',
+    text: row.statusValue || '未知',
+  }
+
+  return h(
+    NTag,
+    {
+      type: statusConfig.type as 'success' | 'error' | 'warning' | 'default',
+      size: 'small',
+      round: true,
+      bordered: false,
+      class: 'inline-flex items-center justify-center',
+      style: 'min-width: 60px;',
+    },
+    { default: () => statusConfig.text }
+  )
 }
 
 // 渲染有效期列
@@ -478,6 +556,32 @@ function renderExpirationDateColumn(row: any) {
 // 渲染最后登录时间列
 function renderLastLoginTimeColumn(row: any) {
   return dayjs(Number(row.lastLoginTime)).format('YYYY-MM-DD HH:mm')
+}
+
+// 渲染账号类型列
+function renderAccountTypeColumn(row: any) {
+  const typeConfig = {
+    0: { type: 'success', text: '永久账号' },
+    1: { type: 'info', text: '临时账号' },
+  }
+
+  const config = typeConfig[row.validityPeriodType as keyof typeof typeConfig] || {
+    type: 'default',
+    text: '未知类型',
+  }
+
+  return h(
+    NTag,
+    {
+      type: config.type as 'success' | 'info' | 'default',
+      size: 'small',
+      round: true,
+      bordered: false,
+      class: 'inline-flex items-center justify-center',
+      style: 'min-width: 80px;',
+    },
+    { default: () => config.text }
+  )
 }
 
 // 渲染操作列
@@ -543,80 +647,103 @@ function renderOperationColumn(row: any) {
 
 <template>
   <div class="h-full w-full">
-    <h3 class="font-600 mb-3">账号列表</h3>
-    <div v-if="orgId" class="btn flex justify-between">
-      <n-space>
-        <n-input
-          v-model:value="tableKeyword"
-          class="h-40px"
-          placeholder="请输入关键字"
-          @update:value="() => refresh()"
-        />
-        <n-select
-          v-model:value="validityPeriodType"
-          placeholder="账号类型"
-          class="min-w-100px"
-          size="small"
-          :options="validityPeriodTypeList"
-          @update:value="() => refresh()"
-        />
-        <n-select
-          v-model:value="roleStatusSelect"
-          placeholder="账号状态"
-          class="min-w-100px"
-          size="small"
-          :options="roleStatusList"
-          @update:value="() => refresh()"
-        />
-      </n-space>
-      <n-space>
-        <n-popover placement="bottom">
-          <template #trigger>
-            <n-button type="primary" size="small" ghost> 批量操作 </n-button>
-          </template>
-          <n-space vertical>
-            <div class="cursor-pointer hover p-2" @click.stop="openBatchDelModal">
-              {{ withPermission(h('span', null, '批量删除'), 'button_contact_department_delete') }}
-            </div>
-            <div class="cursor-pointer hover p-2" @click.stop="handleChangeAllStatus(1)">
-              {{ withPermission(h('span', null, '批量锁定'), 'button_contact_department_status') }}
-            </div>
-            <div class="cursor-pointer hover p-2" @click.stop="handleChangeAllStatus(0)">
-              {{ withPermission(h('span', null, '批量开启'), 'button_contact_department_status') }}
-            </div>
-          </n-space>
-        </n-popover>
-        {{
-          withPermission(
-            h(
-              'n-button',
-              {
-                type: 'primary',
-                size: 'small',
-                ghost: true,
-                onClick: () => handleAddOrEditListClick(false),
-              },
-              { default: () => '新增' }
-            ),
-            'button_contact_department_add'
-          )
-        }}
-        {{
-          withPermission(
-            h(
-              'n-button',
-              {
-                type: 'primary',
-                size: 'small',
-                ghost: true,
-                onClick: () => InactiveUserVisChange(true),
-              },
-              { default: () => '不活跃账号' }
-            ),
-            'button_contact_department_locked_user_export'
-          )
-        }}
-      </n-space>
+    <h3 class="font-600 mb-4">账号列表</h3>
+    <div v-if="orgId" class="search-box mb-5">
+      <div class="flex items-center justify-between">
+        <!-- 左侧搜索区域 -->
+        <div class="flex items-center gap-4">
+          <n-input
+            v-model:value="tableKeyword"
+            placeholder="请输入关键字"
+            class="w-240px"
+            @update:value="() => refresh()"
+          >
+            <template #suffix>
+              <n-icon class="cursor-pointer">
+                <SearchOutline />
+              </n-icon>
+            </template>
+          </n-input>
+          <n-select
+            v-model:value="validityPeriodType"
+            placeholder="账号类型"
+            class="w-160px"
+            :options="validityPeriodTypeList"
+            @update:value="() => refresh()"
+          />
+          <n-select
+            v-model:value="roleStatusSelect"
+            placeholder="账号状态"
+            class="w-160px"
+            :options="roleStatusList"
+            @update:value="() => refresh()"
+          />
+        </div>
+
+        <!-- 右侧操作按钮 -->
+        <div class="flex items-center gap-3">
+          <n-popover placement="bottom">
+            <template #trigger>
+              <n-button type="primary" ghost> 批量操作 </n-button>
+            </template>
+            <n-space vertical>
+              <div class="cursor-pointer hover-item" @click.stop="openBatchDelModal">
+                <component
+                  :is="
+                    withPermission(h('span', null, '批量删除'), 'button_contact_department_delete')
+                  "
+                />
+              </div>
+              <div class="cursor-pointer hover-item" @click.stop="handleChangeAllStatus(1)">
+                <component
+                  :is="
+                    withPermission(h('span', null, '批量锁定'), 'button_contact_department_status')
+                  "
+                />
+              </div>
+              <div class="cursor-pointer hover-item" @click.stop="handleChangeAllStatus(0)">
+                <component
+                  :is="
+                    withPermission(h('span', null, '批量开启'), 'button_contact_department_status')
+                  "
+                />
+              </div>
+            </n-space>
+          </n-popover>
+          <component
+            :is="
+              withPermission(
+                h(
+                  'n-button',
+                  {
+                    type: 'primary',
+                    ghost: true,
+                    onClick: () => handleAddOrEditListClick(false),
+                  },
+                  { default: () => '新增' }
+                ),
+                'button_contact_department_add'
+              )
+            "
+          />
+          <component
+            :is="
+              withPermission(
+                h(
+                  'n-button',
+                  {
+                    type: 'primary',
+                    ghost: true,
+                    onClick: () => InactiveUserVisChange(true),
+                  },
+                  { default: () => '不活跃账号' }
+                ),
+                'button_contact_department_locked_user_export'
+              )
+            "
+          />
+        </div>
+      </div>
     </div>
     <div ref="memberTable" class="tableContent">
       <n-data-table
@@ -677,6 +804,23 @@ function renderOperationColumn(row: any) {
   overflow-y: hidden;
   margin-top: 10px;
 }
+
+.search-box {
+  background-color: #f7f7f9;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.hover-item {
+  padding: 8px 12px;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
 .actions {
   :deep(.n-button::after) {
     content: ' | ';
