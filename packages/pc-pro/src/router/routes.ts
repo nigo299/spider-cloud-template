@@ -206,6 +206,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           keepAlive: false,
         },
       },
+      {
+        name: 'MenuManage',
+        path: 'menu',
+        component: () => import('@/views/systemSettings/menuManage/index.vue'),
+        meta: {
+          title: '菜单管理',
+          icon: 'i-fe:database',
+          keepAlive: false,
+        },
+      },
     ],
   },
   {
