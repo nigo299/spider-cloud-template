@@ -33,6 +33,16 @@ const valueHtml = ref('')
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
 }
+onMounted(() => {
+  setTimeout(() => {
+    valueHtml.value = '<p>模拟 Ajax 异步设置内容</p>'
+  }, 1500)
+})
+onBeforeUnmount(() => {
+  const editor = editorRef.value
+  if (editor == null) return
+  editor.destroy()
+})
 </script>
 
 <style>
