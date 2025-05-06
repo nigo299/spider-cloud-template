@@ -404,6 +404,7 @@
     "sm4Encrypt": true,
     "useSecretKeyStore": true,
     "NotRevalidateOption": true,
-    "handleLogout": true
+    "handleLogout": true,
+    "useUser": true
   }
 }

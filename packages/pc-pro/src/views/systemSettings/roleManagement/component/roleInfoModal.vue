@@ -3,7 +3,7 @@ import { pick, uniq, isEmpty } from 'lodash-es'
 import { computed, ref, watch, h } from 'vue'
 import { HelpCircleOutline } from '@vicons/ionicons5'
 
-import useUser from '@/hooks/useUser'
+import useUser from '@/composables/useUser'
 import {
   DATA_PERMISSION_TYPE,
   FEATURES_PERMISSIONS_TYPE,

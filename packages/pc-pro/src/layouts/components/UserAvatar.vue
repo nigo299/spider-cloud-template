@@ -12,7 +12,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { h } from 'vue'
 
-import useUser from '@/hooks/useUser'
+import useUser from '@/composables/useUser/index'
 import { handleLogout } from '@/utils/auth'
 
 defineOptions({
