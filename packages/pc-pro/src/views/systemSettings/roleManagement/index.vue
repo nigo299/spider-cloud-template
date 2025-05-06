@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { to } from '@/utils/to'
-import type { PaginationProps } from 'naive-ui'
+
 import dayjs from 'dayjs'
-import { ref, reactive, h, onMounted } from 'vue'
+import { ref, h, onMounted } from 'vue'
 import { NTag, NButton, NTooltip } from 'naive-ui'
 
 import { deleteRole, getRoleList } from '@/api/system/roleManage'
@@ -22,7 +22,7 @@ interface SearchFormStateFixed {
 
 const addModalRef = ref<InstanceType<typeof AddOrEditModal>>()
 const crudRef = ref<any>()
-const searchParam = reactive<SearchFormStateFixed>({ time: null })
+const searchParam = ref<SearchFormStateFixed>({ time: null })
 const selectList = ref<(string | number)[]>([])
 
 onMounted(() => {
@@ -40,6 +40,16 @@ function handleSearchParams(params: any) {
     params.endTime = null
   }
   return params
+}
+
+// 重置搜索条件
+function resetSearchParam() {
+  // 使用Object.assign而不是直接赋值
+  Object.keys(searchParam).forEach((key) => {
+    delete searchParam[key as keyof SearchFormStateFixed]
+  })
+  Object.assign(searchParam, { time: null })
+  crudRef.value?.handleSearch()
 }
 
 async function getData(params: any) {
@@ -235,15 +245,7 @@ const columns = [
         />
       </MeQueryItem>
       <template #buttons>
-        <n-button
-          @click="
-            () => {
-              searchParam = { time: null }
-              crudRef.value?.handleSearch()
-            }
-          "
-          >重置</n-button
-        >
+        <n-button @click="resetSearchParam">重置</n-button>
         <n-button type="primary" @click="() => crudRef.value?.handleSearch()">搜索</n-button>
       </template>
     </MeCrud>

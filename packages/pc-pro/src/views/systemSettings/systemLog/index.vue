@@ -572,7 +572,7 @@ function onDataChange(data: any) {
     >
       <template #default>
         <div>{{ customMessage }}</div>
-        <div class="text-gray-400 mt-2 text-sm">{{ customHint }}</div>
+        <div class="text-gray-400 mt-2">{{ customHint }}</div>
       </template>
     </NModal>
 

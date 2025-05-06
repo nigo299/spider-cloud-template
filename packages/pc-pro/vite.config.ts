@@ -20,13 +20,17 @@ import { pluginIcons, pluginPagePathes } from './build/plugin-isme'
 interface ViteEnv {
   VITE_PUBLIC_PATH: string
   VITE_PROXY_TARGET: string
+  VITE_DROP_CONSOLE: string
   [key: string]: string
 }
 
 // 注意：如果遇到类型错误，请确保在 tsconfig.json 中设置了 "skipLibCheck": true
 export default defineConfig(({ mode }): UserConfig => {
   const viteEnv = loadEnv(mode, process.cwd()) as unknown as ViteEnv
-  const { VITE_PUBLIC_PATH, VITE_PROXY_TARGET } = viteEnv
+  const { VITE_PUBLIC_PATH, VITE_PROXY_TARGET, VITE_DROP_CONSOLE } = viteEnv
+
+  // 是否删除console，默认生产环境删除
+  const dropConsole = VITE_DROP_CONSOLE ? VITE_DROP_CONSOLE === 'true' : mode === 'production'
 
   return {
     base: VITE_PUBLIC_PATH || '/',
@@ -99,6 +103,13 @@ export default defineConfig(({ mode }): UserConfig => {
     },
     build: {
       chunkSizeWarningLimit: 1024, // chunk 大小警告的限制（单位kb）
+      terserOptions: {
+        compress: {
+          // 根据环境变量决定是否删除console
+          drop_console: dropConsole,
+          drop_debugger: dropConsole,
+        },
+      },
     },
   }
 })

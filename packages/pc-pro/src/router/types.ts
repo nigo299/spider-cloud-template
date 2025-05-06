@@ -23,7 +23,7 @@ export interface AppRouteRecordRaw {
   meta: {
     title?: string
     icon?: string
-    layout?: string
+    layout?: 'normal' | 'simple' | 'empty' | 'full'
     keepAlive?: boolean
     requiresAuth?: boolean
     permissions?: string[]
