@@ -7,7 +7,7 @@ import { setupRouterGuards } from './guards'
 export const router: Router = createRouter({
   history:
     import.meta.env.VITE_USE_HASH === 'true'
-      ? createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH || '/')
+      ? createWebHashHistory('')
       : createWebHistory(import.meta.env.VITE_PUBLIC_PATH || '/'),
   routes: constantRoutes as any,
   scrollBehavior: () => ({ left: 0, top: 0 }),
