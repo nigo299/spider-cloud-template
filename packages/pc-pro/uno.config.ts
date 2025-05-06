@@ -1,4 +1,5 @@
 import type { UserConfig } from 'unocss'
+// @ts-expect-error 忽略类型错误
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import presetRemToPx from '@unocss/preset-rem-to-px'
 import { defineConfig, presetAttributify, presetIcons, presetWind3 } from 'unocss'
@@ -25,7 +26,7 @@ export default defineConfig({
     }),
     presetRemToPx({ baseFontSize: 4 }),
   ],
-  safelist: icons.map(icon => `${icon} ${icon}?mask`.split(' ')).flat(),
+  safelist: icons.map((icon) => `${icon} ${icon}?mask`.split(' ')).flat(),
   shortcuts: [
     ['wh-full', 'w-full h-full'],
     ['f-c-c', 'flex justify-center items-center'],

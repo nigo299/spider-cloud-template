@@ -1,4 +1,4 @@
-import type { DialogApiInjection, MessageApiInjection } from 'naive-ui'
+import type { MessageApi, DialogApi, ConfigProviderProps } from 'naive-ui'
 import type { DialogOptions } from 'naive-ui/es/dialog'
 import type { MessageOptions, MessageType } from 'naive-ui/es/message'
 import { useAppStore } from '@/store'
@@ -32,7 +32,7 @@ interface ExtendedMessageOptions extends MessageOptions {
  * @param NMessage naive-ui消息实例
  * @returns 消息实例
  */
-export function setupMessage(NMessage: MessageApiInjection): {
+export function setupMessage(NMessage: MessageApi): {
   loading: (content: string | string[], option?: ExtendedMessageOptions) => void
   success: (content: string | string[], option?: ExtendedMessageOptions) => void
   error: (content: string | string[], option?: ExtendedMessageOptions) => void
@@ -47,8 +47,7 @@ export function setupMessage(NMessage: MessageApiInjection): {
 
     constructor() {
       // 单例模式
-      if (Message.instance)
-        return Message.instance
+      if (Message.instance) return Message.instance
       Message.instance = this
     }
 
@@ -65,23 +64,22 @@ export function setupMessage(NMessage: MessageApiInjection): {
       }, duration)
     }
 
-    showMessage(type: MessageType, content: string | string[], option: ExtendedMessageOptions = {}): void {
+    showMessage(
+      type: MessageType,
+      content: string | string[],
+      option: ExtendedMessageOptions = {}
+    ): void {
       if (Array.isArray(content)) {
-        content.forEach(msg => this.showMessage(type, msg, option))
+        content.forEach((msg) => this.showMessage(type, msg, option))
         return
       }
 
       if (!option.key) {
-        if (type === 'loading')
-          NMessage.loading(content, option)
-        else if (type === 'success')
-          NMessage.success(content, option)
-        else if (type === 'error')
-          NMessage.error(content, option)
-        else if (type === 'info')
-          NMessage.info(content, option)
-        else if (type === 'warning')
-          NMessage.warning(content, option)
+        if (type === 'loading') NMessage.loading(content, option)
+        else if (type === 'success') NMessage.success(content, option)
+        else if (type === 'error') NMessage.error(content, option)
+        else if (type === 'info') NMessage.info(content, option)
+        else if (type === 'warning') NMessage.warning(content, option)
         return
       }
 
@@ -89,17 +87,17 @@ export function setupMessage(NMessage: MessageApiInjection): {
       if (currentMessage) {
         currentMessage.type = type
         currentMessage.content = content
-      }
-      else {
-        const messageMethod = type === 'loading'
-          ? NMessage.loading
-          : type === 'success'
-            ? NMessage.success
-            : type === 'error'
-              ? NMessage.error
-              : type === 'info'
-                ? NMessage.info
-                : NMessage.warning
+      } else {
+        const messageMethod =
+          type === 'loading'
+            ? NMessage.loading
+            : type === 'success'
+              ? NMessage.success
+              : type === 'error'
+                ? NMessage.error
+                : type === 'info'
+                  ? NMessage.info
+                  : NMessage.warning
 
         this.message[option.key] = messageMethod(content, {
           ...option,
@@ -141,16 +139,22 @@ export function setupMessage(NMessage: MessageApiInjection): {
  * @param NDialog naive-ui对话框实例
  * @returns 对话框实例
  */
-export function setupDialog(NDialog: DialogApiInjection): DialogApiInjection & {
-  confirm: (option?: DialogOptions & { confirm?: () => void, cancel?: () => void, type?: string }) => any
+export function setupDialog(NDialog: DialogApi): DialogApi & {
+  confirm: (
+    option?: DialogOptions & { confirm?: () => void; cancel?: () => void; type?: string }
+  ) => any
 } {
-  const dialog = NDialog as DialogApiInjection & {
-    confirm: (option?: DialogOptions & { confirm?: () => void, cancel?: () => void, type?: string }) => any
+  const dialog = NDialog as DialogApi & {
+    confirm: (
+      option?: DialogOptions & { confirm?: () => void; cancel?: () => void; type?: string }
+    ) => any
   }
 
-  dialog.confirm = function (option: DialogOptions & { confirm?: () => void, cancel?: () => void, type?: string } = {}): any {
+  dialog.confirm = function (
+    option: DialogOptions & { confirm?: () => void; cancel?: () => void; type?: string } = {}
+  ): any {
     const showIcon = !isNullOrUndef(option.title)
-    const type = option.type as 'info' | 'success' | 'warning' | 'error' || 'warning'
+    const type = (option.type as 'info' | 'success' | 'warning' | 'error') || 'warning'
 
     return type === 'info'
       ? NDialog.info({
@@ -201,15 +205,14 @@ export function setupDialog(NDialog: DialogApiInjection): DialogApiInjection & {
  */
 export function setupNaiveDiscreteApi(): void {
   const appStore = useAppStore()
-  const configProviderProps = computed(() => ({
-    // @ts-expect-error darkTheme类型错误
+  const configProviderProps = computed<ConfigProviderProps>(() => ({
     theme: appStore.isDark ? naiveUI.darkTheme : undefined,
     themeOverrides: useAppStore().naiveThemeOverrides,
   }))
-  // @ts-expect-error createDiscreteApi类型错误
+
   const { message, dialog, notification, loadingBar } = naiveUI.createDiscreteApi(
     ['message', 'dialog', 'notification', 'loadingBar'],
-    { configProviderProps },
+    { configProviderProps }
   )
 
   window.$loadingBar = loadingBar

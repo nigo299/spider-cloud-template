@@ -78,8 +78,7 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
       async onOk() {
         if (typeof onOk === 'function') {
           return await onOk()
-        }
-        else {
+        } else {
           return await handleSave()
         }
       },
@@ -98,8 +97,7 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
     const actions: Record<string, ActionConfig> = {
       add: {
         api: () => {
-          if (doCreate)
-            return doCreate(modalForm.value)
+          if (doCreate) return doCreate(modalForm.value)
           return Promise.resolve() as Promise<any>
         },
         cb: () => {
@@ -108,8 +106,7 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
       },
       edit: {
         api: () => {
-          if (doUpdate)
-            return doUpdate(modalForm.value)
+          if (doUpdate) return doUpdate(modalForm.value)
           return Promise.resolve() as Promise<any>
         },
         cb: () => {
@@ -120,22 +117,18 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
 
     const action = customAction || actions[modalAction.value]
 
-    if (!action)
-      return false
+    if (!action) return false
 
     try {
-      // @ts-expect-error okLoading is a computed property with get/set
       okLoading.value = true
       const data = await action.api()
       action.cb()
-      // @ts-expect-error okLoading is a computed property with get/set
+
       okLoading.value = false
       data && refresh(data)
       return true
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error)
-      // @ts-expect-error okLoading is a computed property with get/set
       okLoading.value = false
       return false
     }
@@ -143,8 +136,7 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
 
   /** 删除 */
   function handleDelete(id: number | string, confirmOptions?: DialogConfirmOptions): void {
-    if (id === undefined && id !== 0)
-      return
+    if (id === undefined && id !== 0) return
 
     const d = window.$dialog?.warning({
       content: '确定删除？',
@@ -160,8 +152,7 @@ export function useCrud<T extends Record<string, any>, D = any>(options: CrudOpt
             refresh(data, true)
           }
           d.loading = false
-        }
-        catch (error) {
+        } catch (error) {
           console.error(error)
           d.loading = false
         }
