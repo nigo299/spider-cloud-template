@@ -117,7 +117,6 @@ async function handleLogin() {
       onLoginSuccess(token, userName, userAccount)
     } else {
       window.$message.destroy('login')
-      window.$message.error(err.message)
     }
   } finally {
     loading.value = false
