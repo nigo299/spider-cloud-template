@@ -12,10 +12,8 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { h } from 'vue'
 
-import { logOut } from '@/api/login'
 import useUser from '@/hooks/useUser'
-import { clearCookie } from '@/utils/format'
-import { to } from '@/utils/to'
+import { handleLogout } from '@/utils/auth'
 
 defineOptions({
   name: 'UserAvatar',
@@ -59,26 +57,7 @@ function handleSelect(key: string): void {
         title: '提示',
         type: 'info',
         content: '确认退出？',
-        async confirm() {
-          const [, err] = await to(logOut())
-
-          if (!err) {
-            // 先清除所有状态
-            sessionStorage.clear()
-            clearCookie()
-
-            if (import.meta.env.MODE === 'build') {
-              window.location.href =
-                'http://portalnew.cq.sgcc.com.cn/up/pweb/desktop/pweb/login/logout'
-            } else {
-              // 使用window.location.href确保完全刷新页面
-              window.location.href = '/login'
-            }
-            window.$message.success('已退出登录')
-          } else {
-            window.$message.error(err.message)
-          }
-        },
+        confirm: handleLogout,
       })
       break
   }

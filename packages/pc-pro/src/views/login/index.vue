@@ -74,7 +74,6 @@ const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 const title = import.meta.env.VITE_TITLE
-const userStore = useUserStore()
 
 const loginInfo = ref({
   username: '',
@@ -131,8 +130,6 @@ async function onLoginSuccess(token: string, userName?: string, userAccount?: st
   if (userName) {
     sessionStorage.setItem('userName', userName)
   }
-  // 调试：打印 token
-  console.log('登录成功，token:', token)
   window.$message.loading('登录中...', { key: 'login' })
   try {
     window.$message.success('登录成功', { key: 'login' })
