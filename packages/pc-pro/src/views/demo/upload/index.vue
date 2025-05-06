@@ -10,9 +10,7 @@
       <n-upload-dragger>
         <div class="h-150 f-c-c flex-col">
           <i class="i-mdi:upload mb-12 text-68 color-primary" />
-          <n-text class="text-14 color-gray">
-            点击或者拖动文件到该区域来上传
-          </n-text>
+          <n-text class="text-14 color-gray"> 点击或者拖动文件到该区域来上传 </n-text>
         </div>
       </n-upload-dragger>
     </n-upload>
@@ -25,9 +23,7 @@
               <n-image width="200" :src="item.url" />
             </div>
             <n-space class="mt-16" justify="space-evenly">
-              <n-button dashed type="primary" @click="copy(item.url)">
-                url
-              </n-button>
+              <n-button dashed type="primary" @click="copy(item.url)"> url </n-button>
               <n-button dashed type="primary" @click="copy(`![${item.fileName}](${item.url})`)">
                 MD
               </n-button>
@@ -51,7 +47,8 @@
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import type { Ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
-import { reactive, watch } from 'vue'
+import { reactive, watch, onMounted } from 'vue'
+import logoImg from '@/assets/images/logo.png'
 
 defineOptions({ name: 'ImgUpload' })
 
@@ -77,16 +74,18 @@ interface ClipboardReturn {
 const { copy, copied }: ClipboardReturn = useClipboard()
 
 // 图片列表
-const imgList = reactive<ImageItem[]>([
-  { url: 'https://img.isme.top/isme/67208863145ef.jpg' },
-  { url: 'https://img.isme.top/isme/67208ab2a9de0.jpg' },
-  { url: 'https://img.isme.top/isme/67208ab4c6596.jpg' },
-])
+const imgList = reactive<ImageItem[]>([])
+
+onMounted(() => {
+  imgList.push({
+    url: logoImg,
+    fileName: 'logo.png',
+  })
+})
 
 // 监听复制状态
 watch(copied, (val: boolean) => {
-  if (val)
-    window.$message.success('已复制到剪切板')
+  if (val) window.$message.success('已复制到剪切板')
 })
 
 /**
