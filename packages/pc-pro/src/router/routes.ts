@@ -62,7 +62,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/base/index.vue'),
         meta: {
           title: '基础组件',
-          icon: 'i-me:awesome',
+          icon: 'i-fe:home',
           keepAlive: false,
         },
       },
@@ -72,7 +72,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/base/unocss.vue'),
         meta: {
           title: 'Unocss',
-          icon: 'i-me:awesome',
+          icon: 'i-fe:search',
           keepAlive: false,
         },
       },
@@ -92,7 +92,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/base/unocss-icon.vue'),
         meta: {
           title: '图标 Icon',
-          icon: 'i-me:awesome',
+          icon: 'i-fe:figma',
           keepAlive: false,
         },
       },
@@ -102,7 +102,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/base/test-modal.vue'),
         meta: {
           title: 'Memodal',
-          icon: 'i-me:awesome',
+          icon: 'i-fe:tool',
           keepAlive: false,
         },
       },
@@ -113,7 +113,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
     path: '/demo',
     meta: {
       title: '示例页面',
-      icon: 'i-fe:settings',
+      icon: 'i-fe:slack',
     },
     children: [
       {
@@ -162,7 +162,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/organizationManagement/index.vue'),
         meta: {
           title: '组织管理',
-          icon: 'i-fe:database',
+          icon: 'i-fe:home',
           keepAlive: false,
         },
       },
@@ -172,7 +172,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/roleManagement/index.vue'),
         meta: {
           title: '角色管理',
-          icon: 'i-fe:database',
+          icon: 'i-fe:command',
           keepAlive: false,
         },
       },
@@ -182,7 +182,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/dictionaryManage/index.vue'),
         meta: {
           title: '字典管理',
-          icon: 'i-fe:database',
+          icon: 'i-fe:book-open',
           keepAlive: false,
         },
       },
@@ -192,7 +192,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/menuManage/index.vue'),
         meta: {
           title: '菜单管理',
-          icon: 'i-fe:database',
+          icon: 'i-fe:menu',
           keepAlive: false,
         },
       },
@@ -202,7 +202,7 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
         component: () => import('@/views/systemSettings/systemLog/index.vue'),
         meta: {
           title: '系统日志',
-          icon: 'i-fe:database',
+          icon: 'i-fe:package',
           keepAlive: false,
         },
       },
