@@ -45,7 +45,7 @@ export const constantRoutes: AppRouteRecordRaw[] = [
 ]
 
 /**
- * 异步路由 - 需要根据权限动态加载
+ * 异步路由 - 根据权限加载
  */
 export const asyncRoutes: AppRouteRecordRaw[] = [
   {
@@ -134,6 +134,16 @@ export const asyncRoutes: AppRouteRecordRaw[] = [
           title: 'CRUD 表格',
           icon: 'i-fe:database',
           keepAlive: false,
+        },
+      },
+      {
+        name: 'RichTextEditor',
+        path: 'rich-text',
+        component: () => import('@/views/demo/rich-text/index.vue'),
+        meta: {
+          title: '富文本编辑器',
+          icon: 'i-fe:file-text',
+          keepAlive: true,
         },
       },
     ],

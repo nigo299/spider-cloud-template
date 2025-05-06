@@ -112,6 +112,7 @@ declare module 'vue' {
     QuestionLabel: typeof import('./../views/pms/resource/components/QuestionLabel.vue')['default']
     ResAddOrEdit: typeof import('./../views/pms/resource/components/ResAddOrEdit.vue')['default']
     Resource: typeof import('./../views/pms/resource/index.vue')['default']
+    RichText: typeof import('./../views/demo/rich-text/index.vue')['default']
     Role: typeof import('./../views/pms/role/index.vue')['default']
     RoleInfoModal: typeof import('./../views/systemSettings/roleManagement/component/roleInfoModal.vue')['default']
     RoleListTable: typeof import('./../views/systemSettings/roleManagement/component/roleListTable.vue')['default']

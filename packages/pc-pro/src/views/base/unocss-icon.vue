@@ -1,12 +1,13 @@
 <template>
   <CommonPage show-footer>
     <template #title-suffix>
-      <n-tooltip
-        placement="bottom"
-        trigger="hover"
-      >
+      <n-tooltip placement="bottom" trigger="hover">
         <template #trigger>
-          <a href="https://juejin.cn/post/7394789388154241033" target="_blank" class="ml-12 flex cursor-pointer items-center hover:underline">
+          <a
+            href="https://juejin.cn/post/7394789388154241033"
+            target="_blank"
+            class="ml-12 flex cursor-pointer items-center hover:underline"
+          >
             <i class="i-simple-icons:juejin text-#1E80FF" />
             <span class="ml-4">Unocss 图标</span>
           </a>
@@ -49,7 +50,6 @@ interface ClipboardReturn {
 const { copy, copied }: ClipboardReturn = useClipboard()
 
 watch(copied, (val: boolean) => {
-  if (val)
-    window.$message.success('已复制到剪切板')
+  if (val) window.$message.success('已复制到剪切板')
 })
 </script>
