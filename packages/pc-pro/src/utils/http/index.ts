@@ -98,7 +98,7 @@ export function createAxios(options: AxiosRequestConfig = {}): AxiosInstance {
         const needTip = (config as any)?.needTip !== false
         const message = resolveResError(
           code,
-          (data as HttpResponse)?.message ?? statusText,
+          (data as HttpResponse)?.msg ?? statusText,
           needTip
         )
         return Promise.reject({ code, message, error: data ?? response })

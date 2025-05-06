@@ -119,7 +119,6 @@ async function handleLogin() {
     } else {
       window.$message.destroy('login')
       window.$message.error(err.message)
-      console.error(err)
     }
   } finally {
     loading.value = false

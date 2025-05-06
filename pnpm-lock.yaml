@@ -231,6 +231,9 @@ importers:
 
   packages/ie:
     dependencies:
+      '@types/sm-crypto':
+        specifier: ^0.3.4
+        version: 0.3.4
       '@vueuse/core':
         specifier: ^10.9.0
         version: 10.11.1(vue@2.7.16)
