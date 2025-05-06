@@ -351,34 +351,54 @@ function renderTreeNodeLabel(info: { option: TreeOption }) {
 
   return renderNodeContent()
 }
+
+// 添加node-props函数来设置节点样式
+function nodeProps({ option }: { option: TreeOption }) {
+  return {
+    class: 'w-full custom-tree-node',
+    style: selectedKeys.value?.includes(option.key as string)
+      ? 'background-color: rgba(0, 112, 107, 0.1); color: #00706b;'
+      : '',
+  }
+}
 </script>
 
 <template>
   <div class="h-full w-full tree">
     <!-- 标题 -->
-    <div class="flex mb-3 title justify-between">
-      <h3 class="font-600">组织机构</h3>
+    <div class="mb-6 title">
+      <h3 class="text-18 font-bold text-gray-800 dark:text-gray-200 flex items-center">
+        <div class="bg-[#00706b] h-20px w-4px rounded-sm mr-10"></div>
+        <span>组织机构</span>
+      </h3>
     </div>
-    <div v-if="props.showSearch" class="my-3">
+    <div v-if="props.showSearch" class="mb-4">
       <n-input
         v-model:value="keyword"
         placeholder="请输入组织/姓名关键词"
         clearable
+        class="search-input"
         @update:value="debounceHandleSearchClick"
       >
         <template #suffix>
-          <n-icon @click="debounceHandleSearchClick">
+          <n-icon
+            class="flex items-center justify-center cursor-pointer text-[#00706b]"
+            @click="debounceHandleSearchClick"
+          >
             <SearchOutline />
           </n-icon>
         </template>
       </n-input>
     </div>
     <!-- 搜索树形  -->
-    <div v-if="!keyword" class="flex my-3 pr-[24%] pl-2 justify-between">
-      <div class="font-600">组织名称</div>
-      <div class="font-600">组织类型</div>
+    <div v-if="!keyword" class="flex mt-4 mb-3 px-2 justify-between text-gray-500 font-medium">
+      <div>组织名称</div>
+      <div class="mr-8">组织类型</div>
     </div>
-    <div v-if="!keyword" class="w-full max-h-[calc(90vh-130px)] overflow-hidden overflow-y-auto">
+    <div
+      v-if="!keyword"
+      class="w-full max-h-[calc(90vh-160px)] overflow-hidden overflow-y-auto custom-scrollbar"
+    >
       <n-tree
         v-model:selected-keys="selectedKeys"
         v-model:expanded-keys="expandedKeys"
@@ -387,7 +407,7 @@ function renderTreeNodeLabel(info: { option: TreeOption }) {
         show-irrelevant-nodes
         selectable
         :keyboard="false"
-        :node-props="() => ({ class: 'w-full' })"
+        :node-props="nodeProps"
         :expand-on-click="false"
         :virtual-scroll="false"
         :pattern="keyword"
@@ -396,24 +416,24 @@ function renderTreeNodeLabel(info: { option: TreeOption }) {
         @update:selected-keys="handleSelectKeys"
       />
     </div>
-    <div v-else class="w-full max-h-[calc(100%)] overflow-hidden overflow-y-auto">
+    <div v-else class="w-full max-h-[calc(100%)] overflow-hidden overflow-y-auto custom-scrollbar">
       <template v-for="(item, index) in searchList" :key="index">
         <div
-          class="cursor-pointer flex w-full items-center hover:(bg-[#bae7ff])"
+          class="search-item cursor-pointer flex w-full items-center p-3 rounded-md mb-1 hover:(bg-[rgba(0,112,107,0.08)])"
           @click="handleSearchMemberDetail(item)"
         >
-          <div class="mr-2 text-xl py-2">
-            <n-icon class="text-gray-400">
+          <div class="mr-3 text-xl text-[#00706b]">
+            <n-icon>
               <i class="i-fe:user" />
             </n-icon>
           </div>
-          <div class="text-xs text-slate-400 w-9/10 truncate">
-            <div v-if="item.memberName">
+          <div class="w-9/10 truncate">
+            <div v-if="item.memberName" class="text-gray-800 dark:text-gray-200 font-medium">
               {{ item.memberName }}
             </div>
             <n-tooltip placement="top">
               <template #trigger>
-                <span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
                   {{ item.orgTreeNamePathMapping }}
                 </span>
               </template>
@@ -439,11 +459,69 @@ function renderTreeNodeLabel(info: { option: TreeOption }) {
 .tree {
   :deep(.n-tree .n-tree-node-wrapper) {
     width: 100%;
+    margin-bottom: 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 4px;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  :deep(.n-tree .n-tree-node-wrapper:hover) {
+    background-color: rgba(0, 112, 107, 0.05);
   }
 
   :deep(.n-tree-node-content) {
     flex: 1;
     overflow: auto;
+  }
+
+  :deep(.n-tree .n-tree-node-content .n-tree-node-content__prefix) {
+    color: #00706b;
+  }
+
+  :deep(.n-tree .n-tree-node--selected > .n-tree-node-wrapper) {
+    background-color: rgba(0, 112, 107, 0.1);
+    color: #00706b;
+  }
+}
+
+.search-input {
+  :deep(.n-input__border),
+  :deep(.n-input__state-border) {
+    border-color: #e5e7eb;
+  }
+
+  :deep(.n-input:hover .n-input__border) {
+    border-color: #00706b;
+  }
+
+  :deep(.n-input--focus .n-input__state-border) {
+    box-shadow: 0 0 0 2px rgba(0, 112, 107, 0.2);
+    border-color: #00706b;
+  }
+}
+
+.search-item {
+  transition: background-color 0.2s;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 112, 107, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 112, 107, 0.3);
+    border-radius: 6px;
   }
 }
 </style>

@@ -50,10 +50,10 @@ function isBusinessRole() {
 </script>
 
 <template>
-  <Page>
-    <div class="bg-[#fff] flex h-full py-3 px-3 radius-5">
-      <!-- 左侧：机构 -->
-      <div class="border-r-1 left min-w-4/12 max-w-4/12 pr-2">
+  <CommonPage>
+    <div class="bg-white flex h-full rounded-lg shadow-md">
+      <!-- 左侧：机构树 -->
+      <div class="left min-w-3/12 max-w-3/12 px-5 py-6 bg-gray-50 dark:bg-dark-800 rounded-l-lg">
         <Tree
           ref="treeRef"
           :show-search="isBusinessRole()"
@@ -62,15 +62,40 @@ function isBusinessRole() {
           @on-select-org="handleOnSelectOrg"
         />
       </div>
-      <!-- 分割线 -->
-      <!-- 右侧；表格 -->
-      <div class="h-full max-w-8/12 pl-2 overflow-hidden">
+      <!-- 右侧：表格 -->
+      <div class="h-full flex-1 px-6 py-6 overflow-hidden">
         <Table ref="tableRef" @add-or-edit-list-emit="handleAddOrEditListEmit" />
       </div>
       <TreeModal ref="treeModalRef" />
       <TableModal ref="tableModalRef" @refresh-table="handleRefreshTable" />
     </div>
-  </Page>
+  </CommonPage>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.n-button.n-button--primary-type) {
+  background-color: #00706b;
+}
+
+:deep(.n-button.n-button--primary-type:hover),
+:deep(.n-button.n-button--primary-type:focus) {
+  background-color: #005a56;
+}
+
+:deep(.n-button.n-button--primary-type.n-button--ghost) {
+  color: #00706b;
+  border-color: #00706b;
+}
+
+:deep(.n-button.n-button--primary-type.n-button--ghost:hover),
+:deep(.n-button.n-button--primary-type.n-button--ghost:focus) {
+  color: #005a56;
+  border-color: #005a56;
+}
+
+:deep(.n-tag.n-tag--success-type) {
+  background-color: rgba(0, 112, 107, 0.1);
+  color: #00706b;
+  border-color: rgba(0, 112, 107, 0.3);
+}
+</style>

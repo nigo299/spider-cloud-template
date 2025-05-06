@@ -647,34 +647,34 @@ function renderOperationColumn(row: any) {
 
 <template>
   <div class="h-full w-full">
-    <h3 class="font-600 mb-4">账号列表</h3>
+    <div class="mb-6">
+      <h3 class="text-18 font-bold text-gray-800 dark:text-gray-200 flex items-center">
+        <div class="bg-[#00706b] h-20px w-4px rounded-sm mr-10 ml-6"></div>
+        <span>账号列表</span>
+      </h3>
+    </div>
     <div v-if="orgId" class="search-box mb-5">
       <div class="flex items-center justify-between">
         <!-- 左侧搜索区域 -->
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-6">
           <n-input
             v-model:value="tableKeyword"
             placeholder="请输入关键字"
-            class="w-240px"
+            class="!w-200px search-input"
             @update:value="() => refresh()"
           >
-            <template #suffix>
-              <n-icon class="cursor-pointer">
-                <SearchOutline />
-              </n-icon>
-            </template>
           </n-input>
           <n-select
             v-model:value="validityPeriodType"
             placeholder="账号类型"
-            class="w-160px"
+            class="w-160px custom-select"
             :options="validityPeriodTypeList"
             @update:value="() => refresh()"
           />
           <n-select
             v-model:value="roleStatusSelect"
             placeholder="账号状态"
-            class="w-160px"
+            class="w-160px custom-select"
             :options="roleStatusList"
             @update:value="() => refresh()"
           />
@@ -682,11 +682,11 @@ function renderOperationColumn(row: any) {
 
         <!-- 右侧操作按钮 -->
         <div class="flex items-center gap-3">
-          <n-popover placement="bottom">
+          <n-popover placement="bottom" trigger="hover">
             <template #trigger>
-              <n-button type="primary" ghost> 批量操作 </n-button>
+              <n-button type="primary" class="custom-button"> 批量操作 </n-button>
             </template>
-            <n-space vertical>
+            <n-space vertical class="custom-popover">
               <div class="cursor-pointer hover-item" @click.stop="openBatchDelModal">
                 <component
                   :is="
@@ -718,6 +718,7 @@ function renderOperationColumn(row: any) {
                   {
                     type: 'primary',
                     ghost: true,
+                    class: 'custom-button',
                     onClick: () => handleAddOrEditListClick(false),
                   },
                   { default: () => '新增' }
@@ -734,6 +735,7 @@ function renderOperationColumn(row: any) {
                   {
                     type: 'primary',
                     ghost: true,
+                    class: 'custom-button',
                     onClick: () => InactiveUserVisChange(true),
                   },
                   { default: () => '不活跃账号' }
@@ -745,16 +747,16 @@ function renderOperationColumn(row: any) {
         </div>
       </div>
     </div>
-    <div ref="memberTable" class="tableContent">
+    <div ref="memberTable" class="tableContent custom-scrollbar">
       <n-data-table
-        size="small"
-        bordered
+        size="medium"
         :columns="columns"
         :data="orgTableList"
         :loading="loading"
         :pagination="pagination"
         :scroll-x="1000"
         :row-key="(row) => row.userId"
+        class="custom-table"
         @update:checked-row-keys="rowSelection"
       >
         <template #empty>
@@ -803,21 +805,31 @@ function renderOperationColumn(row: any) {
   min-height: calc(200px - 36px);
   overflow-y: hidden;
   margin-top: 10px;
+  height: calc(100% - 170px);
 }
 
 .search-box {
-  background-color: #f7f7f9;
+  background-color: #f8f9fa;
   border-radius: 8px;
   padding: 16px 20px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .hover-item {
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: 4px;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 
   &:hover {
-    background-color: #f3f3f3;
+    background-color: rgba(0, 112, 107, 0.08);
+    color: #00706b;
   }
 }
 
@@ -832,7 +844,118 @@ function renderOperationColumn(row: any) {
     content: '';
   }
 }
+
 .cursor-pointer {
   padding: 5px;
+}
+
+.search-input {
+  :deep(.n-input__border),
+  :deep(.n-input__state-border) {
+    border-color: #e5e7eb;
+  }
+
+  :deep(.n-input:hover .n-input__border) {
+    border-color: #00706b;
+  }
+
+  :deep(.n-input--focus .n-input__state-border) {
+    box-shadow: 0 0 0 2px rgba(0, 112, 107, 0.2);
+    border-color: #00706b;
+  }
+}
+
+.custom-select {
+  :deep(.n-base-selection) {
+    border-color: #e5e7eb;
+  }
+
+  :deep(.n-base-selection:hover) {
+    border-color: #00706b;
+  }
+
+  :deep(.n-base-selection--focus) {
+    box-shadow: 0 0 0 2px rgba(0, 112, 107, 0.2);
+    border-color: #00706b;
+  }
+
+  :deep(.n-base-selection-tags__wrapper .n-tag) {
+    background-color: rgba(0, 112, 107, 0.1);
+    color: #00706b;
+    border-color: rgba(0, 112, 107, 0.3);
+  }
+}
+
+.custom-button {
+  :deep(&.n-button--primary-type.n-button--ghost) {
+    color: #00706b;
+    border-color: #00706b;
+  }
+
+  :deep(&.n-button--primary-type.n-button--ghost:hover) {
+    color: white;
+    background-color: #00706b;
+  }
+}
+
+.custom-table {
+  :deep(.n-data-table-thead) {
+    background-color: #f8f9fa;
+  }
+
+  :deep(.n-data-table-tr:hover) {
+    background-color: rgba(0, 112, 107, 0.05);
+  }
+
+  :deep(.n-button--primary-type) {
+    color: #00706b;
+  }
+
+  :deep(.n-button--primary-type:hover) {
+    color: #005a56;
+  }
+
+  :deep(.n-button--error-type) {
+    color: #d03050;
+  }
+
+  :deep(.n-button--error-type:hover) {
+    color: #ab2440;
+  }
+
+  :deep(.n-pagination .n-pagination-item--active) {
+    background-color: #00706b;
+    color: white;
+  }
+
+  :deep(.n-checkbox-box--checked) {
+    background-color: #00706b;
+    border-color: #00706b;
+  }
+}
+
+.custom-popover {
+  :deep(.n-popover-content) {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 112, 107, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 112, 107, 0.3);
+    border-radius: 6px;
+  }
 }
 </style>
