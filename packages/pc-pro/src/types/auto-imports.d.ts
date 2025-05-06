@@ -59,6 +59,7 @@ declare global {
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
+  const handleLogout: typeof import('../utils/auth')['handleLogout']
   const http: typeof import('../utils/http/index')['default']
   const ifNull: typeof import('../utils/is')['ifNull']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
@@ -462,6 +463,7 @@ declare module 'vue' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
+    readonly handleLogout: UnwrapRef<typeof import('../utils/auth')['handleLogout']>
     readonly http: UnwrapRef<typeof import('../utils/http/index')['default']>
     readonly ifNull: UnwrapRef<typeof import('../utils/is')['ifNull']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>

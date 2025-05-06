@@ -403,6 +403,7 @@
     "sm4Decrypt": true,
     "sm4Encrypt": true,
     "useSecretKeyStore": true,
-    "NotRevalidateOption": true
+    "NotRevalidateOption": true,
+    "handleLogout": true
   }
 }
