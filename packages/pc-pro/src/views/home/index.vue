@@ -2,9 +2,7 @@
   <AppPage show-footer>
     <div class="flex">
       <n-card class="w-full" title="✨ 欢迎使用 Naive Spider Admin">
-        <p class="opacity-60">
-          这是一款极简风格的后台管理模板，包含前后端解决方案，前端使用 Vite + Vue3 + Pinia + Unocss
-        </p>
+        <p class="opacity-60">后台管理模板，使用 Vite + Vue3 + Pinia + Unocss</p>
         <footer class="mt-12 flex items-center justify-end" />
       </n-card>
     </div>
