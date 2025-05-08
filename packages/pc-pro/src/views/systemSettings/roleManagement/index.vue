@@ -44,11 +44,11 @@ function handleSearchParams(params: any) {
 
 // 重置搜索条件
 function resetSearchParam() {
-  // 使用Object.assign而不是直接赋值
-  Object.keys(searchParam).forEach((key) => {
-    delete searchParam[key as keyof SearchFormStateFixed]
+  Object.keys(searchParam.value).forEach((key) => {
+    // @ts-expect-error: 动态删除属性
+    delete searchParam.value[key]
   })
-  Object.assign(searchParam, { time: null })
+  Object.assign(searchParam.value, { time: null })
   crudRef.value?.handleSearch()
 }
 

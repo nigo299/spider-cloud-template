@@ -12,7 +12,6 @@ import type { IDictionaryAddOrEditParams } from '@/interface/system/dictionary'
 
 import AddOrEditModal from './addOrEditModal.vue'
 import { headerColumns, headerConfig } from './config/detailFormConfig'
-import { tableColumns, tableConfig } from './config/detailTableConfig'
 
 const formState = ref<Record<string, any>>({})
 const params: Record<string, string | null> = useUrlSearchParams('hash')
