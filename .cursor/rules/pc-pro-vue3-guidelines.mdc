@@ -1,0 +1,508 @@
+---
+description: PC-Pro项目 Vue 3开发规范
+globs:
+alwaysApply: false
+---
+# 智网PC-Pro项目 Vue 3开发规范
+
+## Vue 3概述
+智网PC-Pro项目采用Vue 3作为前端框架，结合TypeScript、Vite、Pinia和Vue Router构建现代化的Web应用。本规范旨在统一项目的Vue 3开发实践。
+
+## 组件编写规范
+
+### 1. 组件结构
+使用`<script setup>`语法，示例：
+```vue
+<script setup lang="ts">
+// 导入
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+// 接收Props
+const props = defineProps<{
+  title: string
+  count?: number
+}>()
+
+// 定义事件
+const emit = defineEmits<{
+  (e: 'update', value: number): void
+  (e: 'delete'): void
+}>()
+
+// 响应式状态
+const isLoading = ref(false)
+const inputValue = ref('')
+
+// 计算属性
+const displayCount = computed(() => {
+  return props.count ? `计数: ${props.count}` : '无计数'
+})
+
+// 方法
+function handleClick() {
+  isLoading.value = true
+  // 处理点击事件
+  setTimeout(() => {
+    isLoading.value = false
+    emit('update', 100)
+  }, 1000)
+}
+</script>
+
+<template>
+  <div class="component-container">
+    <h2 class="title">{{ title }}</h2>
+    <p>{{ displayCount }}</p>
+    <input v-model="inputValue" placeholder="请输入..." />
+    <button
+      :disabled="isLoading"
+      @click="handleClick"
+    >
+      {{ isLoading ? '加载中...' : '提交' }}
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.component-container {
+  padding: 16px;
+}
+.title {
+  font-weight: bold;
+}
+</style>
+```
+
+### 2. 组件命名
+- 组件文件名使用PascalCase (如`UserList.vue`)
+- 组件名应当是多个单词，以避免与HTML元素冲突
+- 组件应当有明确的职责，避免过大的组件
+
+### 3. Props定义
+- 使用TypeScript接口或类型定义Props
+- 指定默认值和必填项
+- 定义清晰的prop名称，避免缩写
+
+```typescript
+// 方式1：使用运行时校验
+const props = defineProps({
+  status: {
+    type: String as PropType<'active' | 'inactive' | 'pending'>,
+    required: true,
+    validator: (value: string) => ['active', 'inactive', 'pending'].includes(value)
+  },
+  list: {
+    type: Array as PropType<Item[]>,
+    default: () => []
+  }
+})
+
+// 方式2：使用类型校验（推荐）
+const props = defineProps<{
+  status: 'active' | 'inactive' | 'pending'
+  list?: Item[] // 可选属性
+}>()
+
+// 为方式2添加默认值
+withDefaults(defineProps<{
+  status: 'active' | 'inactive' | 'pending'
+  list?: Item[]
+}>(), {
+  list: () => []
+})
+```
+
+### 4. 事件定义
+使用defineEmits定义组件事件：
+
+```typescript
+// 方式1：运行时
+const emit = defineEmits(['update', 'delete'])
+
+// 方式2：类型声明（推荐）
+const emit = defineEmits<{
+  (e: 'update', value: number): void
+  (e: 'delete', id: string): void
+}>()
+```
+
+## 响应式系统使用规范
+
+### 1. ref和reactive
+- 优先使用`ref`管理基本类型和对象类型的响应式状态
+- 使用`reactive`管理复杂的嵌套对象
+- 避免解构`reactive`对象（会丢失响应性）
+
+```typescript
+// 推荐
+const count = ref(0)
+const user = ref({
+  name: '张三',
+  age: 25,
+})
+
+// 访问和修改
+console.log(count.value)
+count.value++
+console.log(user.value.name)
+user.value.age = 26
+
+// 对于复杂嵌套对象
+const state = reactive({
+  user: {
+    profile: {
+      name: '张三',
+      address: {
+        city: '北京',
+      },
+    },
+  },
+  settings: {
+    theme: 'dark',
+  },
+})
+
+// 访问和修改
+console.log(state.user.profile.name)
+state.settings.theme = 'light'
+```
+
+### 2. computed和watch
+- 使用`computed`处理派生状态
+- 使用`watch`和`watchEffect`处理副作用
+
+```typescript
+// computed示例
+const firstName = ref('张')
+const lastName = ref('三')
+const fullName = computed(() => {
+  return `${firstName.value}${lastName.value}`
+})
+
+// watch示例
+watch(fullName, (newValue, oldValue) => {
+  console.log(`名字从 ${oldValue} 变成了 ${newValue}`)
+}, { immediate: true })
+
+// watchEffect示例
+watchEffect(() => {
+  console.log(`当前全名: ${fullName.value}`)
+  // 会自动追踪fullName的依赖
+})
+```
+
+### 3. 生命周期钩子
+```typescript
+import { onMounted, onUpdated, onUnmounted } from 'vue'
+
+// 组件挂载后
+onMounted(() => {
+  console.log('组件已挂载')
+  // 初始化数据、添加事件监听等
+})
+
+// 组件更新后
+onUpdated(() => {
+  console.log('组件已更新')
+})
+
+// 组件卸载前
+onUnmounted(() => {
+  console.log('组件即将卸载')
+  // 清理事件监听、定时器等
+})
+```
+
+## 组合式API最佳实践
+
+### 1. Composable函数
+- 将可复用的逻辑提取为Composable函数
+- Composable函数命名使用camelCase，以`use`开头
+- 放置在`src/composables`目录下
+
+```typescript
+// useCounter.ts
+export function useCounter(initialValue = 0) {
+  const count = ref(initialValue)
+
+  function increment() {
+    count.value++
+  }
+
+  function decrement() {
+    count.value--
+  }
+
+  function reset() {
+    count.value = initialValue
+  }
+
+  return {
+    count,
+    increment,
+    decrement,
+    reset
+  }
+}
+
+// 使用
+import { useCounter } from '@/composables/useCounter'
+
+const { count, increment, decrement } = useCounter(10)
+```
+
+### 2. 依赖注入
+使用`provide`和`inject`进行深层组件通信：
+
+```typescript
+// 在父组件中
+import { provide } from 'vue'
+
+const theme = ref('light')
+provide('theme', theme) // 提供响应式值
+
+// 在子组件中
+import { inject } from 'vue'
+
+const theme = inject('theme', ref('light')) // 注入，提供默认值
+```
+
+### 3. Async组件
+使用`defineAsyncComponent`进行组件懒加载：
+
+```typescript
+import { defineAsyncComponent } from 'vue'
+
+// 基本用法
+const AsyncComp = defineAsyncComponent(() => import('./components/HeavyComponent.vue'))
+
+// 高级用法，带加载和错误状态
+const AsyncCompWithOptions = defineAsyncComponent({
+  loader: () => import('./components/HeavyComponent.vue'),
+  loadingComponent: LoadingComponent,
+  errorComponent: ErrorComponent,
+  delay: 200, // 显示加载组件前的延迟
+  timeout: 3000 // 超时时间
+})
+```
+
+## 路由和状态管理规范
+
+### 1. Vue Router
+- 路由配置放在`src/router`目录下
+- 使用`<router-view>`和`<router-link>`组件
+- 使用`useRouter`和`useRoute`组合式API
+
+```typescript
+import { useRouter, useRoute } from 'vue-router'
+
+// 在组件中
+const router = useRouter()
+const route = useRoute()
+
+// 获取路由参数
+const id = route.params.id
+const query = route.query.search
+
+// 导航
+function navigateTo() {
+  router.push({
+    name: 'user-profile',
+    params: { id: '123' },
+    query: { tab: 'posts' }
+  })
+}
+```
+
+### 2. Pinia状态管理
+- Store定义放在`src/store/modules`目录下
+- 使用组合式API风格定义Store
+- 使用`storeToRefs`解构Store状态
+
+```typescript
+// 定义Store：src/store/modules/user.ts
+import { defineStore } from 'pinia'
+
+export const useUserStore = defineStore('user', () => {
+  // 状态
+  const user = ref<User | null>(null)
+  const loading = ref(false)
+
+  // Getters
+  const isLoggedIn = computed(() => !!user.value)
+  const userDisplayName = computed(() => user.value?.name || '游客')
+
+  // Actions
+  async function fetchUser() {
+    loading.value = true
+    try {
+      user.value = await api.getUser()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  function logout() {
+    user.value = null
+  }
+
+  return {
+    user,
+    loading,
+    isLoggedIn,
+    userDisplayName,
+    fetchUser,
+    logout
+  }
+}, {
+  persist: {
+    key: 'user-store',
+    paths: ['user'],
+  }
+})
+
+// 使用Store
+import { useUserStore } from '@/store/modules/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+// 使用storeToRefs保持响应性
+const { user, loading, isLoggedIn } = storeToRefs(userStore)
+// 直接解构actions
+const { fetchUser, logout } = userStore
+
+// 调用actions
+fetchUser()
+```
+
+## 性能优化
+
+### 1. 虚拟列表
+对于大数据列表，使用虚拟滚动技术：
+```vue
+<template>
+  <n-scrollbar style="max-height: 400px">
+    <n-virtual-list
+      :items="items"
+      :item-size="60"
+    >
+      <template #default="{ item }">
+        <div class="list-item">
+          {{ item.label }}
+        </div>
+      </template>
+    </n-virtual-list>
+  </n-scrollbar>
+</template>
+```
+
+### 2. 组件缓存
+使用`<keep-alive>`缓存组件状态：
+```vue
+<template>
+  <keep-alive :include="['UserList', 'ProductList']">
+    <router-view />
+  </keep-alive>
+</template>
+```
+
+### 3. 避免不必要的渲染
+- 使用`v-show`替代频繁切换的`v-if`
+- 使用`computed`缓存计算结果
+- 使用`v-once`渲染静态内容
+```vue
+<template>
+  <!-- 频繁切换的内容 -->
+  <div v-show="isVisible">频繁切换的内容</div>
+
+  <!-- 静态内容 -->
+  <div v-once>
+    <h1>应用标题</h1>
+    <p>这是一段静态文本</p>
+  </div>
+</template>
+```
+
+## TypeScript集成
+
+### 1. 类型定义
+- 接口和类型定义放在`src/interface`和`src/types`目录下
+- 为API响应定义明确的类型
+
+```typescript
+// src/interface/user.ts
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: 'admin' | 'user' | 'guest'
+  created_at: string
+}
+
+// 请求参数类型
+export interface LoginParams {
+  username: string
+  password: string
+  remember?: boolean
+}
+
+// API响应类型
+export interface ApiResponse<T> {
+  code: number
+  data: T
+  message: string
+}
+```
+
+### 2. 类型断言
+谨慎使用类型断言，优先使用类型守卫：
+
+```typescript
+// 类型守卫（推荐）
+function isUser(obj: any): obj is User {
+  return obj && typeof obj === 'object' && 'id' in obj && 'name' in obj
+}
+
+// 使用类型守卫
+function processItem(item: unknown) {
+  if (isUser(item)) {
+    // 此处item被推断为User类型
+    console.log(item.name)
+  }
+}
+
+// 类型断言（谨慎使用）
+const userData = response.data as User
+```
+
+## 代码组织和模块化
+
+### 1. 目录结构
+遵循项目的目录结构约定：
+- `src/components`: 可复用组件
+- `src/views`: 页面组件
+- `src/composables`: 组合式API逻辑
+- `src/store`: 状态管理
+- `src/utils`: 工具函数
+- `src/api`: API请求
+- `src/interface`: 类型定义
+
+### 2. 按功能模块组织代码
+复杂功能按模块组织代码，如`systemSettings`模块：
+```
+src/
+└── views/
+    └── systemSettings/
+        ├── index.vue             # 主入口
+        ├── components/           # 模块专用组件
+        │   ├── UserForm.vue
+        │   └── RoleSelector.vue
+        ├── config/               # 模块配置
+        │   ├── columns.ts        # 表格列配置
+        │   └── form-rules.ts     # 表单验证规则
+        └── composables/          # 模块专用的组合式API
+            └── useSystemSettings.ts
+```

@@ -1,0 +1,208 @@
+---
+description: PC-Pro项目 UnoCSS使用规范
+globs:
+alwaysApply: false
+---
+# PC-Pro项目 UnoCSS使用规范
+
+## UnoCSS概述
+PC-Pro项目使用[UnoCSS](mdc:https:/unocss.dev)作为原子化CSS引擎。UnoCSS是一种高性能且极其灵活的即时原子CSS引擎，配置文件位于[packages/pc-pro/uno.config.ts](mdc:packages/pc-pro/uno.config.ts)。
+
+## 基本用法
+
+### 1. 间距与尺寸
+```html
+<!-- 内边距 -->
+<div class="p-4">                <!-- padding: 1rem -->
+<div class="px-4 py-2">          <!-- padding-left: 1rem; padding-right: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem -->
+
+<!-- 外边距 -->
+<div class="m-4">                <!-- margin: 1rem -->
+<div class="mx-auto">            <!-- margin-left: auto; margin-right: auto -->
+<div class="mt-4 mb-2">          <!-- margin-top: 1rem; margin-bottom: 0.5rem -->
+
+<!-- 宽度与高度 -->
+<div class="w-full">             <!-- width: 100% -->
+<div class="h-screen">           <!-- height: 100vh -->
+<div class="w-1/2">              <!-- width: 50% -->
+<div class="h-32">               <!-- height: 8rem -->
+<div class="min-w-min">          <!-- min-width: min-content -->
+<div class="max-h-screen">       <!-- max-height: 100vh -->
+```
+
+### 2. 布局
+```html
+<!-- 显示模式 -->
+<div class="block">              <!-- display: block -->
+<div class="flex">               <!-- display: flex -->
+<div class="inline-flex">        <!-- display: inline-flex -->
+<div class="grid">               <!-- display: grid -->
+<div class="hidden">             <!-- display: none -->
+
+<!-- Flexbox -->
+<div class="flex items-center justify-between">
+<!-- display: flex; align-items: center; justify-content: space-between -->
+
+<!-- Grid -->
+<div class="grid grid-cols-3 gap-4">
+<!-- display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem -->
+
+<!-- 定位 -->
+<div class="relative">           <!-- position: relative -->
+<div class="absolute">           <!-- position: absolute -->
+<div class="fixed">              <!-- position: fixed -->
+<div class="sticky top-0">       <!-- position: sticky; top: 0 -->
+```
+
+### 3. 字体与文本
+```html
+<!-- 字体大小 -->
+<div class="text-xs">            <!-- font-size: 0.75rem; line-height: 1rem -->
+<div class="text-sm">            <!-- font-size: 0.875rem; line-height: 1.25rem -->
+<div class="text-base">          <!-- font-size: 1rem; line-height: 1.5rem -->
+<div class="text-lg">            <!-- font-size: 1.125rem; line-height: 1.75rem -->
+<div class="text-xl">            <!-- font-size: 1.25rem; line-height: 1.75rem -->
+
+<!-- 字体粗细 -->
+<div class="font-normal">        <!-- font-weight: 400 -->
+<div class="font-medium">        <!-- font-weight: 500 -->
+<div class="font-semibold">      <!-- font-weight: 600 -->
+<div class="font-bold">          <!-- font-weight: 700 -->
+
+<!-- 文本颜色 -->
+<div class="text-primary">       <!-- color: var(--color-primary) -->
+<div class="text-gray-500">      <!-- color: rgba(107, 114, 128, 1) -->
+
+<!-- 文本对齐 -->
+<div class="text-left">          <!-- text-align: left -->
+<div class="text-center">        <!-- text-align: center -->
+<div class="text-right">         <!-- text-align: right -->
+
+<!-- 文本溢出 -->
+<div class="truncate">           <!-- overflow: hidden; text-overflow: ellipsis; white-space: nowrap -->
+<div class="line-clamp-2">       <!-- display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; -->
+```
+
+### 4. 背景与边框
+```html
+<!-- 背景颜色 -->
+<div class="bg-white">           <!-- background-color: #ffffff -->
+<div class="bg-gray-100">        <!-- background-color: rgba(243, 244, 246, 1) -->
+<div class="bg-primary">         <!-- background-color: var(--color-primary) -->
+
+<!-- 边框 -->
+<div class="border">             <!-- border-width: 1px; border-style: solid -->
+<div class="border-2">           <!-- border-width: 2px; border-style: solid -->
+<div class="border-t">           <!-- border-top-width: 1px; border-style: solid -->
+<div class="border-gray-200">    <!-- border-color: rgba(229, 231, 235, 1) -->
+<div class="rounded">            <!-- border-radius: 0.25rem -->
+<div class="rounded-lg">         <!-- border-radius: 0.5rem -->
+<div class="rounded-full">       <!-- border-radius: 9999px -->
+```
+
+### 5. 交互
+```html
+<!-- 鼠标悬停 -->
+<div class="hover:bg-gray-100">  <!-- 鼠标悬停时背景色变为灰色 -->
+<div class="hover:scale-105">    <!-- 鼠标悬停时元素缩放为105% -->
+
+<!-- 焦点 -->
+<div class="focus:ring-2">       <!-- 聚焦时显示环形轮廓 -->
+
+<!-- 活动状态 -->
+<div class="active:bg-gray-200"> <!-- 点击时背景色变为深灰色 -->
+```
+
+## 响应式设计
+
+### 1. 断点
+项目配置的断点：
+- `sm`: 640px
+- `md`: 768px
+- `lg`: 1024px
+- `xl`: 1280px
+- `2xl`: 1536px
+
+### 2. 响应式类
+```html
+<!-- 在小屏幕上隐藏，中等屏幕以上显示 -->
+<div class="hidden md:block">
+
+<!-- 在小屏幕上排成列，大屏幕上排成行 -->
+<div class="flex flex-col lg:flex-row">
+
+<!-- 小屏幕一列，中屏幕两列，大屏幕四列 -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+```
+
+## 组件与布局开发
+
+### 1. 组件样式模式
+```html
+<!-- 按钮组件示例 -->
+<button class="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors">
+  按钮文本
+</button>
+
+<!-- 卡片组件示例 -->
+<div class="p-4 bg-white rounded-lg shadow-md">
+  <h3 class="text-lg font-semibold mb-2">卡片标题</h3>
+  <p class="text-gray-600">卡片内容</p>
+</div>
+```
+
+### 2. 布局示例
+```html
+<!-- 固定宽度居中布局 -->
+<div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- 内容 -->
+</div>
+
+<!-- 两列布局 -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <!-- 侧边栏 -->
+  <div class="md:col-span-1">
+    <!-- 侧边栏内容 -->
+  </div>
+  <!-- 主内容区 -->
+  <div class="md:col-span-2">
+    <!-- 主要内容 -->
+  </div>
+</div>
+```
+
+## 定制与扩展
+
+### 1. 自定义规则
+项目中自定义了一些常用规则，在UnoCSS配置文件中定义。
+
+### 2. 自定义快捷方式
+```typescript
+// uno.config.ts 中的自定义快捷方式
+shortcuts: {
+  'btn': 'px-4 py-2 rounded inline-block bg-primary text-white cursor-pointer hover:bg-primary-dark focus:outline-none',
+  'btn-gray': 'px-4 py-2 rounded inline-block bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200 focus:outline-none',
+},
+```
+
+### 3. 与Naive UI结合使用
+UnoCSS与Naive UI结合使用时，注意避免样式冲突：
+```html
+<!-- 正确示例：给NaiveUI组件添加外部容器样式 -->
+<div class="mt-4">
+  <n-button type="primary">按钮</n-button>
+</div>
+
+<!-- 错误示例：直接给组件添加UnoCSS类 -->
+<n-button class="mt-4" type="primary">按钮</n-button>
+```
+
+## 性能最佳实践
+
+### 1. 缓存与重用
+- 对于反复使用的样式组合，使用快捷方式定义
+- 利用UnoCSS的预生成功能减少运行时开销
+
+### 2. 避免过度使用
+- 避免在同一元素上使用过多的原子类
+- 对于复杂样式组合，考虑使用组件级别的样式定义
