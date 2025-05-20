@@ -8,4 +8,13 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.{md,markdown}]
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.{json,js,jsx,ts,tsx,vue,css,scss,less}]
+indent_size = 2
+
 

@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.{js,jsx,ts,tsx,vue,json,css,less,scss,html,md,yml,yaml} text eol=lf
+
+# 二进制文件不应该修改
+*.{png,jpg,jpeg,gif,webp,svg,ico,ttf,otf,woff,woff2} binary

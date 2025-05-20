@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "👉 正在执行 rebase 前的代码格式化..."
+pnpm format
+pnpm format:eol
+echo "✅ 代码格式化完成！"

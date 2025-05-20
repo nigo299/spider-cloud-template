@@ -2,19 +2,44 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "files": {
     "include": ["**/*.{js,jsx,ts,tsx,vue}"],
-    "ignore": ["**/node_modules/**", "**/dist/**", "**/.nuxt/**"]
+    "ignore": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.nuxt/**",
+      "**/.vite/**",
+      "**/patches/**",
+      "**/pnpm-lock.yaml"
+    ]
   },
-  "plugins": ["import", "unicorn"],
+  "plugins": ["import", "unicorn", "vue"],
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
-  "globals": {},
+  "globals": {
+    "defineProps": "readonly",
+    "defineEmits": "readonly",
+    "defineExpose": "readonly",
+    "withDefaults": "readonly"
+  },
   "settings": {},
   "rules": {
     "no-console": "warn",
     "no-debugger": "error",
     "no-unused-vars": "warn",
-    "no-undef": "off"
+    "no-undef": "off",
+    "no-empty": "warn",
+    "no-use-before-define": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "vue/no-mutating-props": "error",
+    "vue/multi-word-component-names": "off",
+    "vue/component-tags-order": [
+      "error",
+      {
+        "order": ["script", "template", "style"]
+      }
+    ]
   }
 }
